@@ -1,4 +1,4 @@
-// require('dotenv').config()
+require('dotenv').config()
 const postCssPresetEnv = require(`postcss-preset-env`)
 const postCSSNested = require('postcss-nested')
 const postCSSUrl = require('postcss-url')
@@ -6,9 +6,11 @@ const postCSSImports = require('postcss-import')
 const cssnano = require('cssnano')
 const postCSSMixins = require('postcss-mixins')
 
+const siteAddress = new URL('https://w11i.me')
+
 module.exports = {
   siteMetadata: {
-    siteUrl: 'https://w11i.me',
+    siteUrl: siteAddress.href,
     title: `w11i's blog`,
     description: `A personal blog featuring writing on my two hobbies: coding and books.`,
     copyrights: `Text copyright @ ${new Date().getFullYear()}, Filip Wojciechowski.`,
@@ -33,7 +35,6 @@ module.exports = {
     'babel-preset-gatsby',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-react-helmet',
-    'gatsby-plugin-netlify',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
@@ -119,6 +120,22 @@ module.exports = {
         theme_color: '#292a2d',
         display: 'minimal-ui',
         icon: 'src/images/w11i-icon.png'
+      }
+    },
+    {
+      resolve: 'gatsby-plugin-s3',
+      options: {
+        bucketName: process.env.S3_BUCKET_NAME,
+        region: process.env.AWS_REGION,
+        protocol: siteAddress.protocol.slice(0, -1),
+        hostname: siteAddress.hostname,
+        acl: null
+      }
+    },
+    {
+      resolve: 'gatsby-plugin-canonical-urls',
+      options: {
+        siteUrl: siteAddress.href.slice(0, -1)
       }
     }
   ]

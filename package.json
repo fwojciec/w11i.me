@@ -5,18 +5,22 @@
   "author": "Filip Wojciechowski <fwojciec@gmail.com>",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "gatsby clean && gatsby build",
-    "dev": "gatsby clean && gatsby develop"
+    "clean": "gatsby clean",
+    "build": "gatsby build",
+    "dev": "gatsby develop",
+    "deploy": "npx -n \"-r dotenv/config\" gatsby-plugin-s3 deploy --yes",
+    "invalidate": "aws cloudfront create-invalidation --distribution-id E69NAE2UGJI09 --paths \"/*\""
   },
   "dependencies": {
     "gatsby": "^2.0.76",
     "gatsby-awesome-pagination": "^0.3.3",
     "gatsby-image": "^2.0.20",
+    "gatsby-plugin-canonical-urls": "^2.1.2",
     "gatsby-plugin-manifest": "^2.0.9",
-    "gatsby-plugin-netlify": "^2.1.1",
     "gatsby-plugin-offline": "^2.0.16",
     "gatsby-plugin-postcss": "^2.0.2",
     "gatsby-plugin-react-helmet": "^3.0.2",
+    "gatsby-plugin-s3": "^0.3.1",
     "gatsby-plugin-sharp": "^2.0.17",
     "gatsby-plugin-sitemap": "^2.2.2",
     "gatsby-remark-images": "^3.0.1",
