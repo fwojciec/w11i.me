@@ -33,6 +33,7 @@ module.exports = {
     'babel-preset-gatsby',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-react-helmet',
+    'gatsby-plugin-netlify',
     // {
     //   resolve: 'gatsby-plugin-s3',
     //   options: {
