@@ -3,12 +3,10 @@
   "description": "Personal blog of Filip Wojciechowski",
   "version": "0.1.0",
   "author": "Filip Wojciechowski <fwojciec@gmail.com>",
+  "license": "UNLICENSED",
   "scripts": {
     "build": "gatsby clean && gatsby build",
-    "dev": "gatsby clean && gatsby develop",
-    "format": "prettier --write \"src/**/*.js\"",
-    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\"",
-    "deploy": "npx -n \"-r dotenv/config\" gatsby-plugin-s3 deploy --yes"
+    "dev": "gatsby clean && gatsby develop"
   },
   "dependencies": {
     "gatsby": "^2.0.76",
@@ -19,7 +17,6 @@
     "gatsby-plugin-offline": "^2.0.16",
     "gatsby-plugin-postcss": "^2.0.2",
     "gatsby-plugin-react-helmet": "^3.0.2",
-    "gatsby-plugin-s3": "^0.3.1",
     "gatsby-plugin-sharp": "^2.0.17",
     "gatsby-plugin-sitemap": "^2.2.2",
     "gatsby-remark-images": "^3.0.1",

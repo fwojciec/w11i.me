@@ -34,14 +34,6 @@ module.exports = {
     'gatsby-plugin-sitemap',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-netlify',
-    // {
-    //   resolve: 'gatsby-plugin-s3',
-    //   options: {
-    //     bucketName: process.env.S3_BUCKET_NAME,
-    //     protocol: 'https',
-    //     hostname: 'w11i.me'
-    //   }
-    // },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
