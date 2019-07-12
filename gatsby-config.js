@@ -1,4 +1,4 @@
-require('dotenv').config()
+// require('dotenv').config()
 const postCssPresetEnv = require(`postcss-preset-env`)
 const postCSSNested = require('postcss-nested')
 const postCSSUrl = require('postcss-url')
@@ -33,14 +33,14 @@ module.exports = {
     'babel-preset-gatsby',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-react-helmet',
-    {
-      resolve: 'gatsby-plugin-s3',
-      options: {
-        bucketName: process.env.S3_BUCKET_NAME,
-        protocol: 'https',
-        hostname: 'w11i.me'
-      }
-    },
+    // {
+    //   resolve: 'gatsby-plugin-s3',
+    //   options: {
+    //     bucketName: process.env.S3_BUCKET_NAME,
+    //     protocol: 'https',
+    //     hostname: 'w11i.me'
+    //   }
+    // },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
