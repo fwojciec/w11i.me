@@ -11,8 +11,9 @@ const siteAddress = new URL('https://w11i.me')
 module.exports = {
   siteMetadata: {
     siteUrl: siteAddress.href,
-    title: `w11i's blog`,
-    description: `A personal blog featuring writing on my two hobbies: coding and books.`,
+    title: "w11i's blog",
+    description:
+      'A personal blog featuring writing on my two hobbies: coding and books.',
     copyrights: `Text copyright @ ${new Date().getFullYear()}, Filip Wojciechowski.`,
     author: 'Filip Wojciechowski',
     logo: {
@@ -113,7 +114,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        name: `w11i's blog`,
+        name: "w11i's blog",
         short_name: 'w11i',
         start_url: '/',
         background_color: '#292a2d',
