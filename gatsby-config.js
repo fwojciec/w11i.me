@@ -1,5 +1,5 @@
 require('dotenv').config()
-const postCssPresetEnv = require(`postcss-preset-env`)
+const postCssPresetEnv = require('postcss-preset-env')
 const postCSSNested = require('postcss-nested')
 const postCSSUrl = require('postcss-url')
 const postCSSImports = require('postcss-import')
