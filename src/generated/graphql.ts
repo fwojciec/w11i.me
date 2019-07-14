@@ -2139,6 +2139,10 @@ export enum SitePageFieldsEnum {
   PluginCreatorPluginOptionsQuality = "pluginCreator___pluginOptions___quality",
   PluginCreatorPluginOptionsShowCaptions = "pluginCreator___pluginOptions___showCaptions",
   PluginCreatorPluginOptionsLinkImagesToOriginal = "pluginCreator___pluginOptions___linkImagesToOriginal",
+  PluginCreatorPluginOptionsWrapperStyle = "pluginCreator___pluginOptions___wrapperStyle",
+  PluginCreatorPluginOptionsBackgroundColor = "pluginCreator___pluginOptions___backgroundColor",
+  PluginCreatorPluginOptionsWithWebp = "pluginCreator___pluginOptions___withWebp",
+  PluginCreatorPluginOptionsTracedSvg = "pluginCreator___pluginOptions___tracedSVG",
   PluginCreatorPluginOptionsClassPrefix = "pluginCreator___pluginOptions___classPrefix",
   PluginCreatorPluginOptionsShowLineNumbers = "pluginCreator___pluginOptions___showLineNumbers",
   PluginCreatorPluginOptionsNoInlineHighlight = "pluginCreator___pluginOptions___noInlineHighlight",
@@ -2350,6 +2354,10 @@ export enum SitePluginFieldsEnum {
   PluginOptionsPluginsPluginOptionsQuality = "pluginOptions___plugins___pluginOptions___quality",
   PluginOptionsPluginsPluginOptionsShowCaptions = "pluginOptions___plugins___pluginOptions___showCaptions",
   PluginOptionsPluginsPluginOptionsLinkImagesToOriginal = "pluginOptions___plugins___pluginOptions___linkImagesToOriginal",
+  PluginOptionsPluginsPluginOptionsWrapperStyle = "pluginOptions___plugins___pluginOptions___wrapperStyle",
+  PluginOptionsPluginsPluginOptionsBackgroundColor = "pluginOptions___plugins___pluginOptions___backgroundColor",
+  PluginOptionsPluginsPluginOptionsWithWebp = "pluginOptions___plugins___pluginOptions___withWebp",
+  PluginOptionsPluginsPluginOptionsTracedSvg = "pluginOptions___plugins___pluginOptions___tracedSVG",
   PluginOptionsPluginsPluginOptionsClassPrefix = "pluginOptions___plugins___pluginOptions___classPrefix",
   PluginOptionsPluginsPluginOptionsShowLineNumbers = "pluginOptions___plugins___pluginOptions___showLineNumbers",
   PluginOptionsPluginsPluginOptionsNoInlineHighlight = "pluginOptions___plugins___pluginOptions___noInlineHighlight",
@@ -2364,6 +2372,10 @@ export enum SitePluginFieldsEnum {
   PluginOptionsQuality = "pluginOptions___quality",
   PluginOptionsShowCaptions = "pluginOptions___showCaptions",
   PluginOptionsLinkImagesToOriginal = "pluginOptions___linkImagesToOriginal",
+  PluginOptionsWrapperStyle = "pluginOptions___wrapperStyle",
+  PluginOptionsBackgroundColor = "pluginOptions___backgroundColor",
+  PluginOptionsWithWebp = "pluginOptions___withWebp",
+  PluginOptionsTracedSvg = "pluginOptions___tracedSVG",
   PluginOptionsClassPrefix = "pluginOptions___classPrefix",
   PluginOptionsShowLineNumbers = "pluginOptions___showLineNumbers",
   PluginOptionsNoInlineHighlight = "pluginOptions___noInlineHighlight",
@@ -2506,6 +2518,10 @@ export type SitePluginPluginOptions = {
   quality?: Maybe<Scalars["Int"]>;
   showCaptions?: Maybe<Scalars["Boolean"]>;
   linkImagesToOriginal?: Maybe<Scalars["Boolean"]>;
+  wrapperStyle?: Maybe<Scalars["String"]>;
+  backgroundColor?: Maybe<Scalars["String"]>;
+  withWebp?: Maybe<Scalars["Boolean"]>;
+  tracedSVG?: Maybe<Scalars["Boolean"]>;
   classPrefix?: Maybe<Scalars["String"]>;
   showLineNumbers?: Maybe<Scalars["Boolean"]>;
   noInlineHighlight?: Maybe<Scalars["Boolean"]>;
@@ -2533,6 +2549,10 @@ export type SitePluginPluginOptionsFilterInput = {
   quality?: Maybe<IntQueryOperatorInput>;
   showCaptions?: Maybe<BooleanQueryOperatorInput>;
   linkImagesToOriginal?: Maybe<BooleanQueryOperatorInput>;
+  wrapperStyle?: Maybe<StringQueryOperatorInput>;
+  backgroundColor?: Maybe<StringQueryOperatorInput>;
+  withWebp?: Maybe<BooleanQueryOperatorInput>;
+  tracedSVG?: Maybe<BooleanQueryOperatorInput>;
   classPrefix?: Maybe<StringQueryOperatorInput>;
   showLineNumbers?: Maybe<BooleanQueryOperatorInput>;
   noInlineHighlight?: Maybe<BooleanQueryOperatorInput>;
@@ -2583,6 +2603,10 @@ export type SitePluginPluginOptionsPluginsPluginOptions = {
   quality?: Maybe<Scalars["Int"]>;
   showCaptions?: Maybe<Scalars["Boolean"]>;
   linkImagesToOriginal?: Maybe<Scalars["Boolean"]>;
+  wrapperStyle?: Maybe<Scalars["String"]>;
+  backgroundColor?: Maybe<Scalars["String"]>;
+  withWebp?: Maybe<Scalars["Boolean"]>;
+  tracedSVG?: Maybe<Scalars["Boolean"]>;
   classPrefix?: Maybe<Scalars["String"]>;
   showLineNumbers?: Maybe<Scalars["Boolean"]>;
   noInlineHighlight?: Maybe<Scalars["Boolean"]>;
@@ -2595,6 +2619,10 @@ export type SitePluginPluginOptionsPluginsPluginOptionsFilterInput = {
   quality?: Maybe<IntQueryOperatorInput>;
   showCaptions?: Maybe<BooleanQueryOperatorInput>;
   linkImagesToOriginal?: Maybe<BooleanQueryOperatorInput>;
+  wrapperStyle?: Maybe<StringQueryOperatorInput>;
+  backgroundColor?: Maybe<StringQueryOperatorInput>;
+  withWebp?: Maybe<BooleanQueryOperatorInput>;
+  tracedSVG?: Maybe<BooleanQueryOperatorInput>;
   classPrefix?: Maybe<StringQueryOperatorInput>;
   showLineNumbers?: Maybe<BooleanQueryOperatorInput>;
   noInlineHighlight?: Maybe<BooleanQueryOperatorInput>;
@@ -2689,9 +2717,9 @@ export type WordCountFilterInput = {
   sentences?: Maybe<IntQueryOperatorInput>;
   words?: Maybe<IntQueryOperatorInput>;
 };
-export type ImgQueryQueryVariables = {};
+export type GetImgQueryVariables = {};
 
-export type ImgQueryQuery = {
+export type GetImgQuery = {
   placeholderImage: Maybe<{
     childImageSharp: Maybe<{ fluid: Maybe<GatsbyImageSharpFluidFragment> }>;
   }>;

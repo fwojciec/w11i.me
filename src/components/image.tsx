@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useStaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
-import { ImgQueryQuery } from '../generated/graphql'
+import { GetImgQuery } from '../generated/graphql'
 import { fixCoverImage } from '../helpers/fixTypes'
 
 /*
@@ -16,12 +16,12 @@ import { fixCoverImage } from '../helpers/fixTypes'
  */
 
 interface Props {
-  data: ImgQueryQuery
+  data: GetImgQuery
 }
 
 const Image: React.FC = () => {
-  const data = useStaticQuery<ImgQueryQuery>(graphql`
-    query ImgQuery {
+  const data = useStaticQuery<GetImgQuery>(graphql`
+    query GetImg {
       placeholderImage: file(relativePath: { eq: "images" }) {
         childImageSharp {
           fluid(maxWidth: 800) {

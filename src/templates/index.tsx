@@ -33,7 +33,9 @@ const Index: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPag
               date={frontmatter.date}
               path={frontmatter.path}
               author={frontmatter.author || undefined}
-              coverImage={fixCoverImage(frontmatter.coverImage)}
+              coverImage={
+                frontmatter.coverImage ? fixCoverImage(frontmatter.coverImage) : undefined
+              }
               tags={frontmatter.tags || undefined}
               excerpt={excerpt || frontmatter.excerpt || undefined}
             />
