@@ -1,20 +1,26 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 import { graphql } from 'gatsby'
 import SEO from '../components/seo'
 import Layout from '../components/layout'
 import Post from '../components/post'
 import Navigation from '../components/navigation'
-
+import { GetTagsQuery } from '../generated/graphql'
+import { fixCoverImage } from '../helpers/fixTypes'
 import '../styles/layout.css'
 
-const Tags = ({
-  data,
-  pageContext: { nextPagePath, previousPagePath, tag },
-}) => {
-  const {
-    allMarkdownRemark: { edges: posts },
-  } = data
+interface Props {
+  data: GetTagsQuery
+  pageContext: {
+    nextPagePath: string
+    previousPagePath: string
+    tag: string
+  }
+}
+
+const Tags: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPagePath, tag } }) => {
+  if (!data.allMarkdownRemark || !data.allMarkdownRemark.edges) {
+    return null
+  }
 
   return (
     <>
@@ -24,31 +30,17 @@ const Tags = ({
           Posts with tag: <span>#{tag}</span>
         </div>
 
-        {posts.map(({ node }) => {
-          const {
-            id,
-            excerpt: autoExcerpt,
-            frontmatter: {
-              title,
-              date,
-              path,
-              author,
-              coverImage,
-              excerpt,
-              tags,
-            },
-          } = node
-
+        {data.allMarkdownRemark.edges.map(({ node: { id, excerpt, frontmatter } }) => {
           return (
             <Post
               key={id}
-              title={title}
-              date={date}
-              path={path}
-              author={author}
-              tags={tags}
-              coverImage={coverImage}
-              excerpt={excerpt || autoExcerpt}
+              title={frontmatter.title}
+              date={frontmatter.date}
+              path={frontmatter.path}
+              author={frontmatter.author || undefined}
+              tags={frontmatter.tags || undefined}
+              coverImage={fixCoverImage(frontmatter.coverImage)}
+              excerpt={frontmatter.excerpt || excerpt || undefined}
             />
           )
         })}
@@ -64,16 +56,8 @@ const Tags = ({
   )
 }
 
-Tags.propTypes = {
-  data: PropTypes.object.isRequired,
-  pageContext: PropTypes.shape({
-    nextPagePath: PropTypes.string,
-    previousPagePath: PropTypes.string,
-  }),
-}
-
 export const postsQuery = graphql`
-  query($limit: Int!, $skip: Int!, $tag: String!) {
+  query GetTags($limit: Int!, $skip: Int!, $tag: String!) {
     allMarkdownRemark(
       filter: { frontmatter: { tags: { in: [$tag] } } }
       sort: { fields: [frontmatter___date], order: DESC }

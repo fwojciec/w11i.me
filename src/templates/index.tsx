@@ -1,37 +1,41 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 import { graphql } from 'gatsby'
 import SEO from '../components/seo'
 import Layout from '../components/layout'
 import Post from '../components/post'
 import Navigation from '../components/navigation'
+import { GetPostsQuery } from '../generated/graphql'
+import { fixCoverImage } from '../helpers/fixTypes'
 
-const Index = ({ data, pageContext: { nextPagePath, previousPagePath } }) => {
-  const {
-    allMarkdownRemark: { edges: posts }
-  } = data
+interface Props {
+  data: GetPostsQuery
+  pageContext: {
+    nextPagePath: string
+    previousPagePath: string
+  }
+}
+
+const Index: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPagePath } }) => {
+  if (!data.allMarkdownRemark || !data.allMarkdownRemark.edges) {
+    throw new Error('MarkdownRemark data is missing')
+  }
 
   return (
     <>
       <SEO />
       <Layout>
-        {posts.map(({ node }) => {
-          const {
-            id,
-            excerpt: autoExcerpt,
-            frontmatter: { title, date, path, author, coverImage, excerpt, tags }
-          } = node
-
+        {data.allMarkdownRemark.edges.map(({ node }) => {
+          const { id, excerpt, frontmatter } = node
           return (
             <Post
               key={id}
-              title={title}
-              date={date}
-              path={path}
-              author={author}
-              coverImage={coverImage}
-              tags={tags}
-              excerpt={excerpt || autoExcerpt}
+              title={frontmatter.title}
+              date={frontmatter.date}
+              path={frontmatter.path}
+              author={frontmatter.author || undefined}
+              coverImage={fixCoverImage(frontmatter.coverImage)}
+              tags={frontmatter.tags || undefined}
+              excerpt={excerpt || frontmatter.excerpt || undefined}
             />
           )
         })}
@@ -47,16 +51,8 @@ const Index = ({ data, pageContext: { nextPagePath, previousPagePath } }) => {
   )
 }
 
-Index.propTypes = {
-  data: PropTypes.object.isRequired,
-  pageContext: PropTypes.shape({
-    nextPagePath: PropTypes.string,
-    previousPagePath: PropTypes.string
-  })
-}
-
 export const postsQuery = graphql`
-  query($limit: Int!, $skip: Int!) {
+  query GetPosts($limit: Int!, $skip: Int!) {
     allMarkdownRemark(
       filter: { fileAbsolutePath: { regex: "//posts//" } }
       sort: { fields: [frontmatter___date], order: DESC }

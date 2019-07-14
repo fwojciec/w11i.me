@@ -1,23 +1,48 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 import { Link } from 'gatsby'
-
 import Icon from './icon'
-
 import style from '../styles/menu.module.css'
 
-const MainMenu = ({ mainMenu, mainMenuItems, isMobileMenu }) => {
-  const menu = mainMenu.slice(0)
-  !isMobileMenu && menu.splice(mainMenuItems)
-
-  return menu.map((menuItem, index) => (
-    <li key={index}>
-      <Link to={menuItem.path}>{menuItem.title}</Link>
-    </li>
-  ))
+interface MenuProps {
+  mainMenu: { title: string; path: string }[]
+  mainMenuItems: number
+  menuMoreText: string
+  isMobileMenuVisible: boolean
+  isSubMenuVisible: boolean
+  onToggleMobileMenu: () => void
+  onToggleSubMenu: () => void
+  onChangeTheme: () => void
 }
 
-const SubMenu = ({ mainMenu, mainMenuItems, onToggleSubMenu }) => {
+interface MMenuProps {
+  mainMenu: { title: string; path: string }[]
+  mainMenuItems?: number
+  isMobileMenu?: boolean
+}
+
+interface SMenuProps {
+  mainMenu: { title: string; path: string }[]
+  mainMenuItems: number
+  onToggleSubMenu: () => void
+}
+
+const MainMenu = ({ mainMenu, mainMenuItems, isMobileMenu }: MMenuProps) => {
+  const menu = mainMenu.slice(0)
+  if (!isMobileMenu && mainMenuItems) {
+    menu.splice(mainMenuItems)
+  }
+  return (
+    <>
+      {menu.map((menuItem, index) => (
+        <li key={index}>
+          <Link to={menuItem.path}>{menuItem.title}</Link>
+        </li>
+      ))}
+    </>
+  )
+}
+
+const SubMenu = ({ mainMenu, mainMenuItems, onToggleSubMenu }: SMenuProps) => {
   const menu = mainMenu.slice(0)
   menu.splice(0, mainMenuItems)
 
@@ -46,7 +71,7 @@ const toggleIcon = `M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
 3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z`
 
-const Menu = ({
+const Menu: React.FC<MenuProps> = ({
   mainMenu,
   mainMenuItems,
   menuMoreText,
@@ -54,7 +79,7 @@ const Menu = ({
   isSubMenuVisible,
   onToggleMobileMenu,
   onToggleSubMenu,
-  onChangeTheme,
+  onChangeTheme
 }) => {
   const isSubMenu = !(mainMenuItems >= mainMenu.length) && mainMenuItems > 0
 
@@ -64,14 +89,15 @@ const Menu = ({
         <>
           {isMobileMenuVisible ? (
             <>
-              {/* eslint-enable */}
               <ul className={style.mobileMenu}>
                 <MainMenu mainMenu={mainMenu} isMobileMenu />
               </ul>
-              {/* eslint-disable */}
               <div
                 onClick={onToggleMobileMenu}
+                onKeyDown={onToggleMobileMenu}
                 className={style.mobileMenuOverlay}
+                role="button"
+                tabIndex={0}
               />
             </>
           ) : null}
@@ -98,7 +124,7 @@ const Menu = ({
                 aria-label="Menu"
               >
                 {menuMoreText || 'Menu'}{' '}
-                <span className={style.menuArrow}>></span>
+                <span className={style.menuArrow}>&gt;</span>
               </button>
               {isSubMenuVisible ? (
                 <ul className={style.subMenu}>
@@ -123,33 +149,6 @@ const Menu = ({
       </button>
     </>
   )
-}
-
-Menu.propTypes = {
-  mainMenu: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      path: PropTypes.string,
-    }),
-  ),
-  mainMenuItems: PropTypes.number,
-  menuMoreText: PropTypes.string,
-  isMobileMenuVisible: PropTypes.bool,
-  isSubMenuVisible: PropTypes.bool,
-  onToggleMobileMenu: PropTypes.func,
-  onToggleSubMenu: PropTypes.func,
-  onChangeTheme: PropTypes.func,
-}
-
-SubMenu.propTypes = {
-  mainMenu: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      path: PropTypes.string,
-    }),
-  ),
-  mainMenuItems: PropTypes.number,
-  onToggleSubMenu: PropTypes.func,
 }
 
 export default Menu

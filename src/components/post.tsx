@@ -1,13 +1,28 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 import { Link } from 'gatsby'
-import Img from 'gatsby-image'
+import Img, { FluidObject } from 'gatsby-image'
 import Navigation from './navigation'
 import { toKebabCase } from '../helpers'
-
 import style from '../styles/post.module.css'
 
-const Post = ({
+interface Props {
+  title: string
+  date: string
+  path: string
+  coverImage: {
+    childImageSharp: {
+      fluid?: FluidObject | FluidObject[] | undefined
+    }
+  }
+  author?: string
+  excerpt?: string
+  html?: string
+  tags?: string[]
+  previousPost?: { frontmatter: { path: string; title: string } }
+  nextPost?: { frontmatter: { path: string; title: string } }
+}
+
+const Post: React.FC<Props> = ({
   title,
   date,
   path,
@@ -54,31 +69,20 @@ const Post = ({
           </>
         ) : (
           <>
-            <div dangerouslySetInnerHTML={{ __html: html }} />
-            <Navigation
-              previousPath={previousPath}
-              previousLabel={previousLabel}
-              nextPath={nextPath}
-              nextLabel={nextLabel}
-            />
+            {html ? <div dangerouslySetInnerHTML={{ __html: html }} /> : null}
+            {previousPath && previousLabel && nextPath && nextLabel && (
+              <Navigation
+                previousPath={previousPath}
+                previousLabel={previousLabel}
+                nextPath={nextPath}
+                nextLabel={nextLabel}
+              />
+            )}
           </>
         )}
       </div>
     </div>
   )
-}
-
-Post.propTypes = {
-  title: PropTypes.string,
-  date: PropTypes.string,
-  path: PropTypes.string,
-  coverImage: PropTypes.object,
-  author: PropTypes.string,
-  excerpt: PropTypes.string,
-  html: PropTypes.string,
-  tags: PropTypes.arrayOf(PropTypes.string),
-  previousPost: PropTypes.object,
-  nextPost: PropTypes.object
 }
 
 export default Post

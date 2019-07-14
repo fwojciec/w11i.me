@@ -1,10 +1,15 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 import { Link } from 'gatsby'
-
 import style from '../styles/navigation.module.css'
 
-const Navigation = ({ nextPath, previousPath, nextLabel, previousLabel }) =>
+interface Props {
+  nextPath: string
+  previousPath: string
+  nextLabel: string
+  previousLabel: string
+}
+
+const Navigation: React.FC<Props> = ({ nextPath, previousPath, nextLabel, previousLabel }) =>
   previousPath || nextPath ? (
     <div className={style.navigation}>
       {previousPath && (
@@ -25,12 +30,5 @@ const Navigation = ({ nextPath, previousPath, nextLabel, previousLabel }) =>
       )}
     </div>
   ) : null
-
-Navigation.propTypes = {
-  nextPath: PropTypes.string,
-  previousPath: PropTypes.string,
-  nextLabel: PropTypes.string,
-  previousLabel: PropTypes.string,
-}
 
 export default Navigation

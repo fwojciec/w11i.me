@@ -1,3 +1,3 @@
-module.exports.toKebabCase = function(value) {
+export const toKebabCase = (value: string) => {
   return value.replace(new RegExp('(\\s|_|-)+', 'gmi'), '-')
 }

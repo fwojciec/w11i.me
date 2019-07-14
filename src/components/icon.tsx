@@ -1,11 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-
+import * as React from 'react'
 import style from '../styles/icon.module.css'
 
-const Icon = props => {
-  const { d, size = '1em', label, style: styles } = props
+interface Props {
+  d: string
+  size: number
+  label?: string
+  style: React.CSSProperties
+}
 
+const Icon: React.FC<Props> = ({ d, size = '1em', label, style: styles }) => {
   return (
     <span className={style.root} style={styles} role="figure">
       <svg
@@ -20,13 +23,6 @@ const Icon = props => {
       {label && <span className={style.label}>{label}</span>}
     </span>
   )
-}
-
-Icon.propTypes = {
-  d: PropTypes.string,
-  size: PropTypes.number,
-  label: PropTypes.string,
-  style: PropTypes.object,
 }
 
 export default Icon

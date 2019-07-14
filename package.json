@@ -9,7 +9,9 @@
     "build": "gatsby build",
     "dev": "gatsby develop",
     "deploy": "npx -n \"-r dotenv/config\" gatsby-plugin-s3 deploy --yes",
-    "invalidate": "aws cloudfront create-invalidation --distribution-id E69NAE2UGJI09 --paths \"/*\""
+    "invalidate": "aws cloudfront create-invalidation --distribution-id E69NAE2UGJI09 --paths \"/*\"",
+    "gen-types": "graphql-codegen --config codegen.yml",
+    "type-check": "tsc"
   },
   "dependencies": {
     "gatsby": "^2.0.76",
@@ -23,6 +25,7 @@
     "gatsby-plugin-s3": "^0.3.1",
     "gatsby-plugin-sharp": "^2.0.17",
     "gatsby-plugin-sitemap": "^2.2.2",
+    "gatsby-plugin-typescript": "^2.1.2",
     "gatsby-remark-images": "^3.0.1",
     "gatsby-remark-prismjs": "^3.2.0",
     "gatsby-source-filesystem": "^2.0.8",
@@ -37,14 +40,24 @@
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.2.0",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "@graphql-codegen/cli": "^1.4.0",
+    "@graphql-codegen/typescript": "^1.4.0",
+    "@graphql-codegen/typescript-operations": "^1.4.0",
+    "@types/node": "^12.6.2",
+    "@types/react": "^16.8.23",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-helmet": "^5.0.8",
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
     "babel-eslint": "^10.0.1",
     "babel-preset-gatsby": "^0.1.6",
     "cssnano": "^4.1.8",
     "eslint": "^5.12.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-react": "^7.12.3",
-    "eslint-plugin-react-hooks": "^1.4.0",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react-hooks": "^1.6.1",
     "gatsby-remark-embed-video": "^1.7.0",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
@@ -52,6 +65,7 @@
     "postcss-nested": "^4.1.1",
     "postcss-preset-env": "^6.5.0",
     "postcss-url": "^8.0.0",
-    "rambdax": "^1.8.0"
+    "rambdax": "^1.8.0",
+    "typescript": "^3.5.3"
   }
 }

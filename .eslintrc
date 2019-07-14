@@ -1,7 +1,13 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["plugin:react/recommended", "plugin:jsx-a11y/recommended"],
-  "plugins": ["react-hooks", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "plugins": ["@typescript-eslint", "react-hooks", "prettier"],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
@@ -9,8 +15,17 @@
       "jsx": true
     }
   },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
   "rules": {
-    "react/prop-types": "never",
+    "react/prop-types": 0,
+    "@typescript-eslint/camelcase": 0,
+    "@typescript-eslint/no-use-before-define": 0,
+    "@typescript-eslint/explicit-member-accessibility": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
     "jsx-a11y/anchor-is-valid": [
       "error",
       {
@@ -25,5 +40,13 @@
     "react": {
       "version": "detect"
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": 0
+      }
+    }
+  ]
 }

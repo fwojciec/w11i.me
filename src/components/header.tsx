@@ -1,35 +1,34 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 import { Link } from 'gatsby'
 import { Helmet } from 'react-helmet'
-
 import Menu from './menu'
-
 import style from '../styles/header.module.css'
 
-const Header = props => {
-  const {
-    siteLogo,
-    logoText,
-    mainMenu,
-    mainMenuItems,
-    menuMoreText,
-    defaultTheme,
-  } = props
-  const defaultThemeState =
-    (typeof window !== 'undefined' && window.localStorage.getItem('theme')) ||
-    null
-  const [userTheme, changeTheme] = useState(defaultThemeState)
-  const [isMobileMenuVisible, toggleMobileMenu] = useState(false)
-  const [isSubMenuVisible, toggleSubMenu] = useState(false)
+interface Props {
+  siteLogo: { src: string; alt: string }
+  logoText: string
+  defaultTheme: string
+  mainMenu: { title: string; path: string }[]
+  mainMenuItems: number
+  menuMoreText: string
+}
+
+const Header: React.FC<Props> = ({
+  siteLogo,
+  logoText,
+  mainMenu,
+  mainMenuItems,
+  menuMoreText,
+  defaultTheme
+}) => {
+  const storedTheme = typeof window !== 'undefined' && window.localStorage.getItem('theme')
+  const [userTheme, changeTheme] = React.useState(storedTheme)
+  const [isMobileMenuVisible, toggleMobileMenu] = React.useState(false)
+  const [isSubMenuVisible, toggleSubMenu] = React.useState(false)
   const onChangeTheme = () => {
-    const opositeTheme =
-      (userTheme || defaultTheme) === 'light' ? 'dark' : 'light'
-
-    changeTheme(opositeTheme)
-
-    typeof window !== 'undefined' &&
-      window.localStorage.setItem('theme', opositeTheme)
+    const otherTheme = (userTheme || defaultTheme) === 'light' ? 'dark' : 'light'
+    changeTheme(otherTheme)
+    typeof window !== 'undefined' && window.localStorage.setItem('theme', otherTheme)
   }
   const onToggleMobileMenu = () => toggleMobileMenu(!isMobileMenuVisible)
   const onToggleSubMenu = () => toggleSubMenu(!isSubMenuVisible)
@@ -37,13 +36,7 @@ const Header = props => {
   return (
     <>
       <Helmet>
-        <body
-          className={
-            (userTheme || defaultTheme) === 'light'
-              ? 'light-theme'
-              : 'dark-theme'
-          }
-        />
+        <body className={(userTheme || defaultTheme) === 'light' ? 'light-theme' : 'dark-theme'} />
       </Helmet>
       <header className={style.header}>
         <div className={style.inner}>
@@ -53,7 +46,7 @@ const Header = props => {
                 <img src={siteLogo.src} alt={siteLogo.alt} />
               ) : (
                 <>
-                  <span className={style.mark}>></span>
+                  <span className={style.mark}>&gt;</span>
                   <span className={style.text}>{logoText}</span>
                   <span className={style.cursor} />
                 </>
@@ -76,20 +69,6 @@ const Header = props => {
       </header>
     </>
   )
-}
-
-Header.propTypes = {
-  siteLogo: PropTypes.object,
-  logoText: PropTypes.string,
-  defaultTheme: PropTypes.string,
-  mainMenu: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      path: PropTypes.string,
-    }),
-  ),
-  mainMenuItems: PropTypes.number,
-  menuMoreText: PropTypes.string,
 }
 
 export default Header

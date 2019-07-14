@@ -33,6 +33,7 @@ module.exports = {
     ]
   },
   plugins: [
+    'gatsby-plugin-typescript',
     'babel-preset-gatsby',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-react-helmet',
