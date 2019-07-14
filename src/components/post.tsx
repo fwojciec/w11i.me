@@ -9,7 +9,7 @@ interface Props {
   title: string
   date: string
   path: string
-  coverImage: {
+  coverImage?: {
     childImageSharp: {
       fluid?: FluidObject | FluidObject[] | undefined
     }

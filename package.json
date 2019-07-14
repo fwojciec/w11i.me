@@ -9,7 +9,7 @@
     "build": "gatsby build",
     "dev": "gatsby develop",
     "deploy": "npx -n \"-r dotenv/config\" gatsby-plugin-s3 deploy --yes",
-    "invalidate": "aws cloudfront create-invalidation --distribution-id E69NAE2UGJI09 --paths \"/*\"",
+    "invalidate": "aws cloudfront create-invalidation --distribution-id E69NAE2UGJI09 --profile fwojciec --paths \"/*\"",
     "gen-types": "graphql-codegen --config codegen.yml",
     "type-check": "tsc"
   },

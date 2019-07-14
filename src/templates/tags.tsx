@@ -39,7 +39,9 @@ const Tags: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPage
               path={frontmatter.path}
               author={frontmatter.author || undefined}
               tags={frontmatter.tags || undefined}
-              coverImage={fixCoverImage(frontmatter.coverImage)}
+              coverImage={
+                frontmatter.coverImage ? fixCoverImage(frontmatter.coverImage) : undefined
+              }
               excerpt={frontmatter.excerpt || excerpt || undefined}
             />
           )

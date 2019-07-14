@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useStaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
 import { ImgQueryQuery } from '../generated/graphql'
+import { fixCoverImage } from '../helpers/fixTypes'
 
 /*
  * This component is built using `gatsby-image` to automatically serve optimized
@@ -39,19 +40,7 @@ const Image: React.FC = () => {
     return null
   }
 
-  const { fluid } = data.placeholderImage.childImageSharp
-
-  return (
-    <Img
-      fluid={{
-        base64: fluid.base64 || undefined,
-        aspectRatio: fluid.aspectRatio || 1,
-        src: fluid.src || '',
-        srcSet: fluid.srcSet || '',
-        sizes: fluid.sizes || ''
-      }}
-    />
-  )
+  return <Img fluid={fixCoverImage(data.placeholderImage).childImageSharp.fluid} />
 }
 
 export default Image

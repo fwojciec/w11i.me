@@ -13,11 +13,9 @@ interface CoverImageFixed {
   }
 }
 
-export function fixCoverImage(orig: Maybe<CoverImageOriginal>): CoverImageFixed {
-  if (!orig || !orig.childImageSharp || !orig.childImageSharp.fluid) {
-    return {
-      childImageSharp: { fluid: undefined }
-    }
+export function fixCoverImage(orig: CoverImageOriginal): CoverImageFixed {
+  if (!orig.childImageSharp || !orig.childImageSharp.fluid) {
+    throw new Error('Image is missing')
   }
 
   return {
@@ -26,7 +24,7 @@ export function fixCoverImage(orig: Maybe<CoverImageOriginal>): CoverImageFixed 
         base64: orig.childImageSharp.fluid.base64 || '',
         aspectRatio: orig.childImageSharp.fluid.aspectRatio || 1,
         sizes: orig.childImageSharp.fluid.sizes || '',
-        src: orig.childImageSharp.fluid.src || '',
+        src: orig.childImageSharp.fluid.src as string,
         srcSet: orig.childImageSharp.fluid.srcSet || ''
       }
     }

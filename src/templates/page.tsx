@@ -35,7 +35,7 @@ const BlogPostTemplate: React.FC<Props> = ({ data, pageContext }) => {
         date={frontmatter.date}
         path={frontmatter.path}
         author={frontmatter.author || undefined}
-        coverImage={fixCoverImage(frontmatter.coverImage)}
+        coverImage={frontmatter.coverImage ? fixCoverImage(frontmatter.coverImage) : undefined}
         html={html || undefined}
         tags={frontmatter.tags || undefined}
         previousPost={pageContext.previous}
