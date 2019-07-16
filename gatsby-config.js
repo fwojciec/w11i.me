@@ -12,8 +12,7 @@ module.exports = {
   siteMetadata: {
     siteUrl: siteAddress.href,
     title: "w11i's blog",
-    description:
-      'A personal blog featuring writing on my two hobbies: coding and books.',
+    description: 'A personal blog featuring writing on my two hobbies: coding and books.',
     copyrights: `Text copyright @ ${new Date().getFullYear()}, Filip Wojciechowski.`,
     author: 'Filip Wojciechowski',
     logo: {

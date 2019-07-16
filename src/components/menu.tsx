@@ -56,12 +56,7 @@ const SubMenu = ({ mainMenu, mainMenuItems, onToggleSubMenu }: SMenuProps) => {
     <>
       {items}
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
-      <div
-        className={style.subMenuOverlay}
-        role="button"
-        tabIndex={0}
-        onClick={onToggleSubMenu}
-      />
+      <div className={style.subMenuOverlay} role="button" tabIndex={0} onClick={onToggleSubMenu} />
     </>
   )
 }
@@ -123,8 +118,7 @@ const Menu: React.FC<MenuProps> = ({
                 type="button"
                 aria-label="Menu"
               >
-                {menuMoreText || 'Menu'}{' '}
-                <span className={style.menuArrow}>&gt;</span>
+                {menuMoreText || 'Menu'} <span className={style.menuArrow}>&gt;</span>
               </button>
               {isSubMenuVisible ? (
                 <ul className={style.subMenu}>
