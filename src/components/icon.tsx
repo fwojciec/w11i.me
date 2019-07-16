@@ -10,7 +10,7 @@ interface Props {
 
 const Icon: React.FC<Props> = ({ d, size = '1em', label, style: styles }) => {
   return (
-    <span className={style.root} style={styles} role="figure">
+    <span className={style.root} style={styles} role={label ? 'figure' : undefined}>
       <svg
         version="1.1"
         width={size}
