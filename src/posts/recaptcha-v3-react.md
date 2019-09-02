@@ -210,3 +210,7 @@ Again, this is just the basic client-side implementation, an example of how one 
 1. [Google ReCaptcha V3 Docs](https://developers.google.com/recaptcha/docs/v3)
 2. [ReCaptcha discussion group](https://groups.google.com/forum/#!forum/recaptcha)
 3. [Example implementation on CodeSandbox](https://codesandbox.io/s/0m5omor41n)
+
+### Cover photo credit
+
+Cover photo by [Florian Klauer](https://unsplash.com/photos/GG0jOrmwqtw).

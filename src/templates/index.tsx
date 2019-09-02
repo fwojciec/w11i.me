@@ -19,7 +19,7 @@ const Index: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPag
   if (!data.allMarkdownRemark || !data.allMarkdownRemark.edges) {
     throw new Error('MarkdownRemark data is missing')
   }
-
+  console.log(data.allMarkdownRemark.edges)
   return (
     <>
       <SEO />
@@ -37,7 +37,7 @@ const Index: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPag
                 frontmatter.coverImage ? fixCoverImage(frontmatter.coverImage) : undefined
               }
               tags={frontmatter.tags || undefined}
-              excerpt={excerpt || frontmatter.excerpt || undefined}
+              excerpt={frontmatter.excerpt || excerpt || undefined}
             />
           )
         })}
