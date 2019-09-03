@@ -30,7 +30,7 @@ Why does the error occur in the first place? The `useRouter` hook is basically a
 
 My solution to this problem is using a simple higher order function which takes two arguments - a component (or a component tree) and an optional object with optional router prop values - and returns the component passed in as the first argument wrapped in a configured `RouterContext.Provider`. Here's the (TypeScript) code:
 
-```typescript
+```tsx
 import React from 'react'
 import { NextRouter } from 'next/router'
 import { RouterContext } from 'next-server/dist/lib/router-context'
@@ -82,7 +82,7 @@ The nice thing about this approach is that it is possible to optionally set spec
 
 Here is a simplified example from one of my apps which demonstrates how it all works in practice:
 
-```typescript
+```tsx
 (...)
 
 // the mock which will be used instead of the router's push method
