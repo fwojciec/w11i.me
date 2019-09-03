@@ -11,7 +11,7 @@ const siteAddress = new URL('https://w11i.me')
 module.exports = {
   siteMetadata: {
     siteUrl: siteAddress.href,
-    title: "w11i's blog",
+    title: "Filip Wojciechowski's Blog",
     description: 'A personal blog featuring writing on my two hobbies: coding and books.',
     copyrights: `Text copyright @ ${new Date().getFullYear()}, Filip Wojciechowski.`,
     author: 'Filip Wojciechowski',
