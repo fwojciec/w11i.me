@@ -4,12 +4,14 @@ import { useStaticQuery, graphql } from 'gatsby'
 
 const defaultKeywords = [
   'gatsby',
-  'minimal',
-  'starter',
-  'blog',
-  'theme',
-  'dark',
-  'light',
+  'react',
+  'next.js',
+  'typescript',
+  'javascript',
+  'golang',
+  'go',
+  'coding',
+  'programming',
   'personal site'
 ]
 

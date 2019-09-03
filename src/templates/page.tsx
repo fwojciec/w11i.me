@@ -28,7 +28,7 @@ const BlogPostTemplate: React.FC<Props> = ({ data, pageContext }) => {
   const { frontmatter, excerpt, id, html } = data.markdownRemark
   return (
     <Layout>
-      <SEO title={frontmatter.title} description={excerpt || frontmatter.excerpt || undefined} />
+      <SEO title={frontmatter.title} description={frontmatter.excerpt || excerpt || undefined} />
       <Post
         key={id}
         title={frontmatter.title}

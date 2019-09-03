@@ -3,7 +3,7 @@ title: 'Next.js, useRouter hook, and testing'
 path: '/next-js-userouter-testing'
 date: '2019-09-02'
 author: 'Filip'
-excerpt: "Here's a quick tip on how to test Next.js components which utilize the useRouter hook."
+excerpt: 'A quick tip on how to test Next.js components which utilize the useRouter hook.'
 tags: ['next.js', 'react', 'typescript', 'testing', 'useRouter', 'context']
 ---
 
@@ -28,7 +28,7 @@ Different approaches are possible, and some are discussed in an issue in the Nex
 
 Why does the error occur in the first place? The `useRouter` hook is basically a shortcut for accessing values from Next's `RouterContext`. Therefore, in order to be able to test a component which relies on the `useRouter` hook we need to wrap the tested component with a `RouterContext.Provider`.
 
-My solution to this problem is using a simple higher order function which takes two arguments - a component (or a component tree) and an optional object with optional router prop values - and returns a component (or a component tree) wrapped in a configured `RouterContext.Provider`. Here's the (TypeScript) code:
+My solution to this problem is using a simple higher order function which takes two arguments - a component (or a component tree) and an optional object with optional router prop values - and returns the component passed in as the first argument wrapped in a configured `RouterContext.Provider`. Here's the (TypeScript) code:
 
 ```typescript
 import React from 'react'
@@ -76,7 +76,7 @@ export function withTestRouter(tree: React.ReactElement, router: Partial<NextRou
 }
 ```
 
-The nice thing about this approach is that it is possible to optionally set specific values for the various router properties. By default the function sets the router's properties to empty values, and already this silences the previously mentioned error in many cases, but the individual prop values can be also overridden as needed. If the component under test needs specific values to be returned by the router's `asPath` or `pathname` properties, for example, you can just set these values for a given test. You can also set `jest.fn()` mocks as values for the various router methods (`push`, `replace`, etc.) and then check if the methods were called with the correct arguments. It's a very flexible approach.
+The nice thing about this approach is that it is possible to optionally set specific values for the various properties of the router object. By default the function sets the router's props to empty values, and already this silences the previously mentioned error in many cases, but the individual prop values can be also overridden as needed. If the component under test needs specific values to be stored in the router's `asPath` or `pathname` properties, to give an example, you can just set these values for a given test. You can also set `jest.fn()` mocks as values for the various router methods (`push`, `replace`, etc.) and then check if the mocked methods were called correctly. It's a very flexible approach.
 
 ## Example
 

@@ -19,7 +19,6 @@ const Index: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPag
   if (!data.allMarkdownRemark || !data.allMarkdownRemark.edges) {
     throw new Error('MarkdownRemark data is missing')
   }
-  console.log(data.allMarkdownRemark.edges)
   return (
     <>
       <SEO />

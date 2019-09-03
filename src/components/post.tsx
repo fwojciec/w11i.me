@@ -38,7 +38,6 @@ const Post: React.FC<Props> = ({
   const previousLabel = previousPost && previousPost.frontmatter.title
   const nextPath = nextPost && nextPost.frontmatter.path
   const nextLabel = nextPost && nextPost.frontmatter.title
-  console.log(excerpt)
   return (
     <div className={style.post}>
       <div className={style.postContent}>
