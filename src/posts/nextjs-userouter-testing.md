@@ -9,7 +9,7 @@ tags: ['next.js', 'react', 'typescript', 'testing', 'useRouter', 'context']
 
 ## Introduction
 
-If you have tried testing a component which relies on the `useRouter` hook in Next.js, you have likely come accross an error that might look like this:
+If you have tried testing a component which relies on the `useRouter` hook in Next.js, you have likely come across an error that might look like this:
 
 ```
 TypeError: Cannot destructure property `query` of 'undefined' or 'null'.
@@ -22,7 +22,7 @@ TypeError: Cannot destructure property `query` of 'undefined' or 'null'.
 
 During a test the value returned by the `useRouter` hook appears to be either `null` or `undefined`. How to work around this?
 
-Different approaches are possible, and some are discussed in an issue in the Next.js github repo [here](https://github.com/zeit/next.js/issues/7479). The approach I'm about to describe is inspired by [ijjk's comment in that thread](https://github.com/zeit/next.js/issues/7479#issuecomment-498031927).
+Different approaches are possible, and some are discussed in an issue in the Next.js GitHub repo [here](https://github.com/zeit/next.js/issues/7479). The approach I'm about to describe is inspired by [ijjk's comment in that thread](https://github.com/zeit/next.js/issues/7479#issuecomment-498031927).
 
 ## withTestRouter HOC
 
@@ -115,5 +115,5 @@ describe('<LanguageSwitcher />', () => {
 
 ### Additional Resources
 
-1. [The issue discussing the problem in Next's github repo](https://github.com/zeit/next.js/issues/7479)
+1. [The issue discussing the problem in Next's GitHub repo](https://github.com/zeit/next.js/issues/7479)
 2. [React Testing Library docs on testing React Context](https://testing-library.com/docs/example-react-context)

@@ -20,7 +20,7 @@ tags:
 
 # Introduction
 
-The websites I build typically support more than one language. This affects how I think about building websites in general, from data modeling to implementing multiple language support on the frontend. Because full-blown internationalization solutions (like [react-intl](https://github.com/formatjs/react-intl) and others) tend to be way too much for my needs, I prefer to roll my own. While this is relatively easy to do in vanilla client-rendered React, it used to be somewhat difficult in Next.js because of SSR and the way Next used to implemented routing. Version 9 of Next.js, however, features a brand new implementation of [dynamic routing](https://nextjs.org/blog/next-9#dynamic-route-segments). This change makes it much easier to build multi-language websites and webapps in Next.
+The websites I build typically support more than one language. This affects how I think about building websites in general, from data modeling to implementing multiple language support on the frontend. Because full-blown internationalization solutions (like [react-intl](https://github.com/formatjs/react-intl) and others) tend to be way too much for my needs, I prefer to roll my own. While this is relatively easy to do in vanilla client-rendered React, it used to be somewhat difficult in Next.js because of SSR and the way Next used to implemented routing. Version 9 of Next.js, however, features a brand new implementation of [dynamic routing](https://nextjs.org/blog/next-9#dynamic-route-segments). This change makes it much easier to build multi-language websites and web apps in Next.
 
 This post might be of interest to you if you are implementing support for multiple languages in a Next.js website or app. I'm going to discuss building the following features:
 
@@ -47,13 +47,13 @@ Your requirements might be different, but in my case the minimal set of features
 
 ## Example application
 
-I this blog post I'll walk through the code of the example website that implements the abovementioned set of features. It [is deployed here](https://simple-i18n-example.fwojciec.now.sh/) if you'd like to take a look. It's a basic Next.js app, written in TypeScript, that comes in three language versions: English (default), Polish and French (I don't speak French, so please blame Google Translate for any errors). The repository with the source code [is here](https://github.com/fwojciec/simple-i18n-example) - it might be handy to reference it as context for the code snippets below.
+I this blog post I'll walk through the code of the example website that implements the above-mentioned set of features. It [is deployed here](https://simple-i18n-example.fwojciec.now.sh/) if you'd like to take a look. It's a basic Next.js app, written in TypeScript, that comes in three language versions: English (default), Polish and French (I don't speak French, so please blame Google Translate for any errors). The repository with the source code [is here](https://github.com/fwojciec/simple-i18n-example) - it might be handy to reference it as context for the code snippets below.
 
 When you access the root URL (`/`) of the example site for the first time the app will attempt to determine your browser's language setting, and if it matches one of the available locales, you will be redirected to the root locale subpath of the corresponding translation (for example `/fr`). On consecutive runs, the root URL will redirect to the translation used during your previous session. The website defaults to the English language (i.e. it redirects to `/en`) in case it finds no stored preference or a valid browser language setting.
 
 You can switch language using the `<select>` input in the left top corner of the page. The contents of the website, including the `<title>` tag in the header, the URL, the server-side generated code, and the Wikipedia URL on the `/[lang]/artist` page will change based on the selected locale.
 
-It's a straight-forward example, but it encompases the basic functionality described in the prior section.
+It's a straight-forward example, but it encompasses the basic functionality described in the prior section.
 
 ## Configuration and types
 
@@ -78,8 +78,8 @@ Next v9 introduced a new API which makes it possible to use dynamic parameters (
 ```
 pages
 ├── [lang]					<- the dynamic route parameter is defined here
-│   ├── artist.tsx
-│   └── index.tsx
+│   ├── artist.tsx
+│   └── index.tsx
 └── index.tsx				<- this page only redirects to a language-specific subpage
 ```
 
@@ -153,7 +153,7 @@ In the above implementation of the `getInitialLocale` function the `localSetting
 
 ## withLocale higher order component
 
-A higher order component (HOC) is a function that takes a component as it's argument, enhances that component in some way (for example by injecting additional props or wrapping it in another component) before returning it. It's a popular pattern of code reuse in the Next.js community. All language-aware pages of the example application are wrapped with the `withLang` higher order component, like so:
+A higher order component (HOC) is a function that takes a component as its argument, enhances that component in some way (for example by injecting additional props or wrapping it in another component) before returning it. It's a popular pattern of code reuse in the Next.js community. All language-aware pages of the example application are wrapped with the `withLang` higher order component, like so:
 
 ```tsx
 import React from 'react'
@@ -217,7 +217,7 @@ export default (WrappedPage: NextPage<any>) => {
 }
 ```
 
-The HOC takes the page it wrapps (`WrappedPage`) as an argument and returns a new component, called `WithLocale` in the example. This new component defines the `getInitialProps` static method in order to retrieve the language setting during the server rendering phase. We need to know about the language setting already on the server because we want the server-generated HTML to use the correct translations, and to set the `<head>` of the page with the correct metadata (page title, description, or anything else you might need for SEO purposes). First, however, we attempt to run the `getInitialProps` method of the `WrappedPage` component, in case it defines one, and we pass any retrieved values (`pageProps`) to the `WithLocale` component so that they can be eventually passed back to the `WrappedPage`.
+The HOC takes the page it wraps (`WrappedPage`) as an argument and returns a new component, called `WithLocale` in the example. This new component defines the `getInitialProps` static method in order to retrieve the language setting during the server rendering phase. We need to know about the language setting already on the server because we want the server-generated HTML to use the correct translations, and to set the `<head>` of the page with the correct metadata (page title, description, or anything else you might need for SEO purposes). First, however, we attempt to run the `getInitialProps` method of the `WrappedPage` component, in case it defines one, and we pass any retrieved values (`pageProps`) to the `WithLocale` component so that they can be eventually passed back to the `WrappedPage`.
 
 The context passed to the `getInitialProps` method of a Next page includes a `query` prop: an object that stores any query or dynamic route parameters container in the URL of the page. The `pages` directory of our example app defines a `lang` dynamic route parameter, so this is the parameter we need to retrieve from the context (`ctx.query.lang`).
 
@@ -272,7 +272,7 @@ export const LocaleProvider: React.FC<{ lang: Locale }> = ({ lang, children }) =
 
 The context makes use of the `useState` hook to store and expose the value of the currently selected locale along with the `setLocale` function that changes it. The context will generally be initialized in the `LocaleProvider` component, but React expects the context to be created with default values, so we use the English language as the default locale and a noop function as the locale setter.
 
-The `LocaleProvider` is a functional React component that has two side-effects defined in the two respective `useEffect` hooks. The first one stores the user's language preference in `localStorage` when locale is first defined and on each subsequent change. The second one checks the value of the locale URL parameter on every client-side route change and synchronizes the context state with the locale embedded in the URL. The `withLocale` HOC, discussed in the previous section, takes care of setting the initial state of the context during the server-rendering phase, but we also need to account for the possible locale changes that that happened during client-side navigation. The `LocaleProvider` component therefore checks the URL locale on every route change and updates it's state accordingly.
+The `LocaleProvider` is a functional React component that has two side-effects defined in the two respective `useEffect` hooks. The first one stores the user's language preference in `localStorage` when locale is first defined and on each subsequent change. The second one checks the value of the locale URL parameter on every client-side route change and synchronizes the context state with the locale embedded in the URL. The `withLocale` HOC, discussed in the previous section, takes care of setting the initial state of the context during the server-rendering phase, but we also need to account for the possible locale changes that that happened during client-side navigation. The `LocaleProvider` component therefore checks the URL locale on every route change and updates its state accordingly.
 
 ## useTranslation hook
 
@@ -300,7 +300,7 @@ const strings: Strings = {
 }
 ```
 
-If you're website is built on top of a CMS or just stores content in a database you'll likely have some sort of solution for storing translations in the database in addition to the locally stored translations of the interface.
+If your website is built on top of a CMS or just stores content in a database you'll likely have some sort of solution for storing translations in the database in addition to the locally stored translations of the interface.
 
 To access the translations conveniently the example app defines the `useTranslation` custom hook:
 
@@ -493,15 +493,15 @@ export default LocaleSwitcher
 
 The `LanguageSwitcher` is a `<select>` input which lists the possible locales as `options`. To display the name of the language we use the `languageNames` object from the configuration, which is defined there for the sole reason of displaying the language name in this component.
 
-The component uses three hooks: the `useRouter` hooks provided by Next.js so that we are able to navigate programatically to a new URL on language change, the `useContext` hooks to access the current `locale` value, and the `useCallback` hook to define the callback function which will be used by the `onChange` prop of the `<select>` input.
+The component uses three hooks: the `useRouter` hooks provided by Next.js so that we are able to navigate programmatically to a new URL on language change, the `useContext` hooks to access the current `locale` value, and the `useCallback` hook to define the callback function which will be used by the `onChange` prop of the `<select>` input.
 
-The `useCallback` hook is just a slight optimization compared to definiing the callback function inline, directly in the component: the inline function would have been re-initialized every time the component is rendered, which the `useCallback` hook only re-initializes the callback when the value of the `router` changes. I also find defining callbacks using the `useCallback` hook somewhat cleaner and easier to read in the context of the complete component.
+The `useCallback` hook is just a slight optimization compared to defining the callback function inline, directly in the component: the inline function would have been re-initialized every time the component is rendered, which the `useCallback` hook only re-initializes the callback when the value of the `router` changes. I also find defining callbacks using the `useCallback` hook somewhat cleaner and easier to read in the context of the complete component.
 
 The `push` method of Next's router acts very much like the `<Link />` component described in the previous section (in fact the `<Link />` uses this method under the hood to navigate between pages). The two arguments we pass to `push`, therefore, correspond to the `href` and `as` props of the `<Link />` component. When navigating to a different language version of the same page, the `href` (or `pathname`) value doesn't change, since we're still referencing the same file in the `pages` directory. What changes is the actual URL, so we need to transform the `as` (or `asPath`) value of the current route - we use a regular expression for this. The RegExp is dynamically generated based on how the locales are configured in the configuration. In the case of the example website the RegExp will end up defined like this: `/^\/(en|fr|pl)/`. We match a section of the `asPath` value that defines the current locale (for example `/en`) and replace it wit the value of the newly selected locale (for example `/pl`). The router does the rest.
 
 ## Conclusion
 
-At the beginning of this post I have described a minimal list of features required to build a multi-language website. The subsequent sections described how these features are implenmented in the example application. I hope this explanation can serve as basis (or reference) for your own implementations of similar functionality in your projects.
+At the beginning of this post I have described a minimal list of features required to build a multi-language website. The subsequent sections described how these features are implemented in the example application. I hope this explanation can serve as basis (or reference) for your own implementations of similar functionality in your projects.
 
 The above-described implementation is missing many features that can be found in the various internationalization frameworks/libraries available for the React ecosystem:
 
@@ -510,9 +510,9 @@ The above-described implementation is missing many features that can be found in
 - dynamic loading of translations for a specific language (i.e. smaller bundle in case of websites with a lot of content and many translations);
 - separation of translation files from the code of the application so that the team of translators can work independently of developers
 
-You might need this functionality in your application, in which case the various frameworks are likely a better solution to custom code. In small to medium-sized projects, however, a custom implementation of internationalization-related functionality is a viable option. In my experience a custom implementation is often more preformant, easier to understand and significatnly less troublesome to test. YMMV.
+You might need this functionality in your application, in which case the various frameworks are likely a better solution to custom code. In small to medium-sized projects, however, a custom implementation of internationalization-related functionality is a viable option. In my experience a custom implementation is often more performant, easier to understand and significantly less troublesome to test. YMMV.
 
-If you have any questions about this (or suggestions for improvements/bugfixes) please DM me on Twitter or open an issue in the repo of the example application.
+If you have any questions about this (or suggestions for improvements/bug fixes) please DM me on Twitter or open an issue in the repo of the example application.
 
 ### Related resources
 

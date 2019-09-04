@@ -165,7 +165,7 @@ private onLoad = (): void => {
 }
 ```
 
-In step #1 we create a `div` element, define it's id and add it to the DOM. The 'g-recaptcha' is the default id for the widget wrapper div from the ReCaptcha official documentation.
+In step #1 we create a `div` element, define its id and add it to the DOM. The 'g-recaptcha' is the default id for the widget wrapper div from the ReCaptcha official documentation.
 
 In step #2 we execute the `render` method on the grecaptcha instance. This method takes two arguments, the id of the div into which the widget should be rendered and an object with the `sitekey` obtained from Google for a given domain and `size` defined as 'invisible'. Again, the size of the widget must be defined as 'invisible' for the explicit rendering to work. It seems a bit arbitrary, but it's required.
 
