@@ -18,7 +18,7 @@ tags:
   ]
 ---
 
-# Introduction
+## Introduction
 
 The websites I build typically support more than one language. This affects how I think about building websites in general, from data modeling to implementing multiple language support on the frontend. Because full-blown internationalization solutions (like [react-intl](https://github.com/formatjs/react-intl) and others) tend to be way too much for my needs, I prefer to roll my own. While this is relatively easy to do in vanilla client-rendered React, it used to be somewhat difficult in Next.js because of SSR and the way Next used to implemented routing. Version 9 of Next.js, however, features a brand new implementation of [dynamic routing](https://nextjs.org/blog/next-9#dynamic-route-segments). This change makes it much easier to build multi-language websites and web apps in Next.
 
