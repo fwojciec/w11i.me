@@ -2,13 +2,6 @@ import * as React from 'react'
 import { Link } from 'gatsby'
 import style from '../styles/navigation.module.css'
 
-// interface Props {
-//   nextPath?: string
-//   previousPath?: string
-//   nextLabel?: string
-//   previousLabel?: string
-// }
-
 interface Props {
   previousPost?: { frontmatter: { path: string; title: string } }
   nextPost?: { frontmatter: { path: string; title: string } }

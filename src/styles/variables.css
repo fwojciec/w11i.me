@@ -8,10 +8,14 @@
 
   /* dark theme colors */
   --dark-background: #292a2d;
-  --dark-background-secondary: #3b3d42;
+  --dark-background-secondary: #313338;
   --dark-color: #a9a9b3;
   --dark-color-secondary: #73747b;
   --dark-border-color: #4a4b50;
+
+  /* sizes */
+  --content-width: 890px;
+  --line-height: 1.6;
 
   /* variables for js, must be the same as these in @custom-media queries */
   --phoneWidth: (max-width: 684px);
