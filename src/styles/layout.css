@@ -47,6 +47,7 @@ h6 {
   display: flex;
   align-items: center;
   line-height: var(--line-height);
+  font-weight: 600;
 }
 
 h1 {
@@ -143,14 +144,14 @@ figure {
 }
 
 code {
-  font-family: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+  font-family: Iosevka, Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
   font-feature-settings: normal;
   font-weight: normal;
   background: var(--light-background-secondary);
   padding: 1px 4px;
   margin: 0 2px;
   border-radius: 3px;
-  font-size: 0.9rem;
+  font-size: 1rem;
 
   .dark-theme & {
     background: var(--dark-background-secondary);
@@ -226,11 +227,15 @@ th {
 
 ul,
 ol {
-  margin-left: 40px;
+  margin-left: 2rem;
   padding: 0;
 
   @media (--phone) {
-    margin-left: 20px;
+    margin-left: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
   }
 }
 

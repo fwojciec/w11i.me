@@ -36,3 +36,9 @@
   font-weight: 800;
   src: url('../../static/fonts/Inter-UI-BoldItalic.woff') format('woff');
 }
+@font-face {
+  font-family: 'Iosevka';
+  font-style: regular;
+  font-weight: 400;
+  src: url('../../static/fonts/iosevka-ss08-regular.woff2') format('woff2');
+}

@@ -1,72 +1,69 @@
 ---
-title: 'How to Build a GraphQL Server in Go (Part 1)'
+title: "Let's Build a GraphQL Server in Go: Part 1"
 path: '/graphql-server-go-part1'
 date: '2019-12-31'
 author: 'Filip'
-excerpt: 'The first part of a series of tutorials on building GraphQL servers in Go using gqlgen and sqlc. In this part we go from nothing to a working GraphQL server which we will be improving in the upcoming parts of the series.'
+excerpt: 'This is the first in a series of posts covering the process of building a simple yet full featured GraphQL server in Go. In this post we will use gqlgen and sqlc to build a working GraphQL server backed by a PostgreSQL database, and capable of performing basic CRUD operations.'
 coverImage: '../images/joel-filipe-jU9VAZDGMzs-unsplash.jpg'
 tags: ['go', 'golang', 'graphql', 'sqlc', 'gqlgen', 'postgresql']
 ---
 
 ## Introduction
 
-This is going to be a longer tutorial so I will have to split it into multiple parts. My aim is to cover the entire process of building a simple yet full-featured (dataloaders, authentication, testing, etc.) GraphQL server in Go. When I was first learning Go I could find plenty of shorter tutorials and blog posts dealing with specific issues, but I was finding it difficult to find resources explaining how to put together an complete Go application. The goal of this tutorial is therefore two-fold:
+This is the first in a series of posts covering the process of building a simple yet full featured GraphQL server in Go. In this post we will use [gqlgen](https://github.com/99designs/gqlgen) and [sqlc](https://github.com/kyleconroy/sqlc) to build a working GraphQL server backed by a PostgreSQL database, and capable of performing basic CRUD operations. Subsequent posts will discuss:
 
-1. to provide an opinionated guide on how to write a GraphQL server in Go, and
-2. to provide an example of a process of building a complete piece of software in Go.
+- dataloaders [link to come],
+- authentication and authorization [link to come],
+- strategies for testing the server [link to come].
 
-In the first part of the tutorial we will work our way up from scratch to an operational GraphQL server backed by a PostgreSQL database capable of performing basic CRUD operations. In the follow up posts I will be making improvements to the server, adding features, and discussing some strategies for testing the server. This multi-step process will also hopefully demonstrate how organizing a project in a particular way makes it relatively painless to make changes and add features later on.
+I assume a basic familiarity with [GraphQL](https://graphql.org/learn/), [PostgreSQL](http://www.postgresqltutorial.com/) and [Go](https://tour.golang.org). While I will not explain the syntax, I will talk through the logic of particular pieces of code and my design decisions.
 
-This tutorial assumes basic familiarity with [GraphQL](https://graphql.org/learn/), [PostgreSQL](http://www.postgresqltutorial.com/) and [Go](https://tour.golang.org), but it's not necessarily a tutorial aimed at advanced users. I'm writing for someone like myself, a few months ago - someone who knows how to code but is relatively new to Go, its ecosystem and its idioms. I'm still learning, and I feel like there is still a lot I have to learn about Go, but I hope someone will find this tutorial helpful.
+> Before we get started, [here’s the GitHub repository with the code for this series of posts](https://github.com/fwojciec/gqlgen-sqlc-example/tree/part1). You will find the code corresponding to this post under the `part1` tag.
 
-I will link to external resources explaining topic under discussion in greater detail when appropriate. I will not explain the syntax, but I will talk through the logic of a particular piece of code and I will explain the reasons behind my design decisions. As of today the tutorial can only be followed on OS X or Linux systems, since `sqlc`, the tool we will be using to manage our PostgreSQL database, currently ships only Linux and OS X compatible binaries, but if you're on a Windows 10 machine you should be able to use the Windows Subsystem for Linux to follow along.
+We will be building a GraphQL back-end server for an imaginary literary agency website. Here's an overview of the data types we will be working with:
 
-> I've created a GitHub repository [***ADD LINK HERE] with the code of the tutorial. If you'd rather just look at the code, or if you need to reference my version of the project code at any stage, the releases in the repository correspond to the parts of this series, while the individual commits correspond to the `<h2>` sections of each post in the series.
+`Agent` objects, representing the agency's agents:
 
-We will be building a GraphQL backend service for an imagined literary agency website. Here's a quick overview of the data model of our server:
+```graphql
+type Agent {
+  id: ID!
+  name: String!
+  email: String!
+  authors: [Author!]!
+}
+```
 
-1. `Agent` objects, representing agents working at the agency:
+Agents have a `name` and an `email` (both of which are required). One agent represents many `authors`.
 
-   ```graphql
-   type Agent {
-     id: ID!
-     name: String!
-     email: String!
-     authors: [Author!]!
-   }
-   ```
+`Author` objects, representing the agency's authors:
 
-   Agents have a `name` and an `email` (both required). One Agent represents many `authors`.
+```graphql
+type Author {
+  id: ID!
+  name: String!
+  website: String
+  agent: Agent!
+  books: [Book!]!
+}
+```
 
-2. `Author` objects, representing authors represented by the agency:
+Authors have a required `name` and an optional `website`. Each author must have a single `agent` and they can have many `books`.
 
-   ```graphql
-   type Author {
-     id: ID!
-     name: String!
-     website: String
-     agent: Agent!
-     books: [Book!]!
-   }
-   ```
+`Book` objects, representing books written by the agency's authors:
 
-   Authors have a required `name` and an optional `website`. Each author must have a single `agent` and they can have many `books`.
+```graphql
+type Book {
+  id: ID!
+  title: String!
+  description: String!
+  cover: String!
+  authors: [Author!]!
+}
+```
 
-3. `Book` objects, representing books written by the agency's authors:
+A book has a `title`, a `description` and a `cover` (all required) and it can have multiple `authors`.
 
-   ```graphql
-   type Book {
-     id: ID!
-     title: String!
-     description: String!
-     cover: String!
-     authors: [Author!]!
-   }
-   ```
-
-   A book has a `title`, a `description` and a `cover` (all required) and it can have multiple `authors`.
-
-In other words, we are dealing with a one-to-many relationship between agents and authors (each author is represented by a single agent, but an agent represents many authors) and a many-to-many relationship between authors and books (a book can have multiple authors and an author can have multiple books). The schema also implies an indirect many-to-many relationship between agents and books, because a book written by multiple authors can, in principle, have more than one agent responsible for it, and an agent is typically responsible for many books. The schema is simple, but it should suffice as a playground for exploring possible representations of relational data in the form of a GraphQL server backed by a relational database.
+We are thus dealing with a one-to-many relationship between agents and authors (each author is represented by a single agent, but an agent represents many authors) and a many-to-many relationship between authors and books (a book can have multiple authors and an author can have multiple books). The schema also implies an indirect many-to-many relationship between agents and books (a book written by multiple authors can, in principle, have more than one agent responsible for it, and an agent is typically responsible for many books).
 
 ## PostgreSQL and sqlc configuration
 
@@ -85,34 +82,7 @@ Let's also install the two primary dependencies of the project:
 > go get github.com/99designs/gqlgen
 ```
 
-The `pq` library is required by the Go `sql` package to use the package with PostgreSQL databases. `gqlgen` will be used both as a tool, for generating the code of our GraphQL server and as a library supporting the generated code. We also have to install `sqlc`, a tool we will use to generate the database code for our server. Right now the installation of the tool involves downloading the binary using [one of the links on the poject's GitHub page](4150a80634970db1eb35346cb508d4cf48b323a9).
-
-For example, to install the macOS binary you could do:
-
-```text
-> wget https://bin.equinox.io/c/[version]/sqlc-devel-darwin-amd64.zip
-> unzip sqlc-devel-darwin-amd64.zip
-> mv sqlc $GOPATH/bin
-> rm sqlc-devel-darwin-amd64.zip
-```
-
-And for a Linux binary:
-
-```text
-> wget https://bin.equinox.io/c/[version]/sqlc-devel-linux-amd64.tgz
-> tar zxvf sqlc-devel-linux-amd64.tgz
-> mv sqlc $GOPATH/bin
-> rm sqlc-devel-linux-amd64.tgz
-```
-
-However you choose to install the tool, you should be able to run the `sqlc` command:
-
-```text
-> sqlc version
-v0.0.1
-```
-
-`sqlc` is a relatively new project, but I'm already a huge fan. In fact discovering this project is what inspired me to start working on this tutorial since a tutorial like this became feasible in the first place because of how `sqlc` simplifies working with PostgreSQL in Go. We will use `sqlc` as a tool to automatically generate type-safe Go code for interacting with our PostgreSQL database directly from SQL files containing the database schema and queries.
+The `pq` dependency is a Go PostgreSQL driver. `gqlgen` is the library/tool we will use to generate our server from the GraphQL schema we will write in a moment. We also have to install `sqlc`, a utility we will use to generate type-safe database code for our server. Right now the installation of `sqlc` involves downloading the binary using [one of the links on the project's GitHub page](4150a80634970db1eb35346cb508d4cf48b323a9).
 
 We configure `sqlc` by adding a file named `sqlc.json` to our project's root directory.
 
@@ -135,7 +105,7 @@ And here is the configuration we will be using for our project:
 }
 ```
 
-This configuration instructs `sqlc` to place the generated code in the `pg` folder, to read information about the SQL queries from the `./queries.sql` file and information about the database schema from the `./schema.sql` file. In this project I mostly follow the pattern described by [Ben Johnson in his Standard Package Layer article](https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1). The main idea is to create a sub-package for each dependency of our project and to name that sub-package after the dependency. In this case we're creating a `pg` package to hold all our PostgreSQL-related code. Much of that code will be generated for us by `sqlc` but we will also add some code written by hand.
+The configuration instructs `sqlc` to place the generated code in the `pg` folder, to read information about the SQL queries from the `./queries.sql` file, and the information about the database schema from the `./schema.sql` file. This follows the pattern described by Ben Johnson in his [Standard Package Layer article](https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1) as far as the question of code organization is concerned. The idea is to create a sub-package for each dependency of a project and to name that sub-package after the dependency. In this case we're creating a `pg` package to hold all our PostgreSQL-related code. Much of that code will be generated for us by `sqlc` but we will also add some code written by hand.
 
 Let's create files for our database schema and queries:
 
@@ -275,81 +245,31 @@ DELETE FROM book_authors
 WHERE book_id = $1;
 ```
 
-For each type of objects we will be working with we are creating a query to fetch a single item by its `ID`, a query to list all items of the given type, and queries to create, modify and delete an item. In case of the `book_authors` table we also have a query to set an author for a book, and a query to delete all author associations for a book.
+For each type of objects we will be working with we are creating a query to fetch a single item by its `ID`, a query to list all items of the given type, and queries to create, modify and delete an item. In case of the `book_authors` table we also have a query to set an author for a book, and a query to delete all author associations for a book. The comments above each query are required by `sqlc`; they inform the generator about the type of each query (whether it returns a single row, multiple rows or returns no values) and about the desired names for methods corresponding to each query.
 
-The comments above each query are required by `sqlc`; they inform the generator about the type of each query (whether it returns a single row, multiple rows or returns no values) and about the desired names for methods corresponding to each query.
+## The pg package
 
-## Generate all the things!
-
-Run the `sqlc generate` command in the root of the project and observe the magic happen!
+Run the `sqlc generate` command in the root of the project to see the magic happen!
 
 ```text
 > sqlc generate
 ```
 
-Well, that was probably underwhelming, because the command works almost instantaneously and produces no output. Still, you should now find a newly created `pg` directory and three new files inside it:
+Well, that might have been underwhelming, because the command works almost instantaneously and produces no output. Still, you should now have a newly created `pg` directory and three new files inside it:
 
-- `db.go` contains the `DBTX` interface which defines a functionality shared by `*sql.DB` and `*sql.Tx` types. The generated queries require an implementation of this interface to work, which in turn means that you can run the queries as single queries or bundled into transactions. This file also includes a couple of simple initializer functions for the `*Queries` type.
+- `db.go` contains the `DBTX` interface which defines the functionality shared by `*sql.DB` and `*sql.Tx` types, which means you can run the generated queries as standalone database operations or scoped to a transaction. You can also create your own implementations of the `DBTX` interface to enhance the functionality provided by the `sql` package types, to add logging, benchmark the queries, etc.
 - `models.go` contains automatically created structs derived from our database schema that will be used in our interactions with the database. We will also instruct `gqlgen` to use these structs to represent the GraphQL types from our schema, where possible -- more about that later.
-- `queries.sql.go` holds the generated methods corresponding to the queries defined in the `queries.sql` file.
+- `queries.sql.go` holds the generated methods of the `*Queries` type corresponding to the queries defined earlier in the `queries.sql` file.
 
-Take a moment to familiarize yourself with the files. The simplicity and the quality of code generated by `sqlc` is what sold me on the project initially - it just looks like something written by hand:
+While it would be possible to import and use the `*Queries` type and its methods directly in our GraphQL resolvers, adopting this approach would make testing the resolver code difficult later on. The resolvers would end up coupled with the database code and we would most likely have no choice but to resort to integration tests in order to test them. To avoid this problem in the future, we will create a custom `Repository` interface to provide a layer of abstraction over the `sqlc`-generated code. The rest of our application will only communicate with the database only by means of that interface, and we will be able to use the mock version of the `Repository` in our tests.
 
-```go
-const getAgent = `-- name: GetAgent :one
-SELECT id, name, email FROM agents
-WHERE id = $1
-`
-
-func (q *Queries) GetAgent(ctx context.Context, id int64) (Agent, error) {
-	row := q.db.QueryRowContext(ctx, getAgent, id)
-	var i Agent
-	err := row.Scan(&i.ID, &i.Name, &i.Email)
-	return i, err
-}
-```
-
-Or:
-
-```go
-const createAgent = `-- name: CreateAgent :one
-INSERT INTO agents (name, email)
-VALUES ($1, $2)
-RETURNING id, name, email
-`
-
-type CreateAgentParams struct {
-	Name  string
-	Email string
-}
-
-func (q *Queries) CreateAgent(ctx context.Context, arg CreateAgentParams) (Agent, error) {
-	row := q.db.QueryRowContext(ctx, createAgent, arg.Name, arg.Email)
-	var i Agent
-	err := row.Scan(&i.ID, &i.Name, &i.Email)
-	return i, err
-}
-```
-
-The advantage of generating this kind of boilerplate code is that you prevent silly mistakes like changing the order of arguments when running the query or scanning results to a struct, etc. These sorts of mistakes absolutely do happen, even if you're careful, and they can be annoying to track down. If you want to change the query you just change the SQL code and rerun the generator to create the correct code for the change. It's awesome!
-
-## The pg package
-
-While it would be possible to embed the `*Queries` directly in our GraphQL resolvers, taking this approach would make testing our resolvers difficult down the road. The resolvers would end up tightly coupled with the database code and we would most likely have to resort to integration tests in order to test them. Depending on the complexity of the project, that might be a viable strategy, but for the purposes of this tutorial we will use a different pattern.
-
-I generally find it useful to have a layer of indirection between the code that touches the database and the code that depends on it, and I usually implemented it as an interface of as multiple interfaces in Go. With the functionality provided by the `sqlc`-generated code hidden behind an interface, we will be able to easily replace the code that touches the database with mocks for the purpose of unit-testing our resolvers.
-
-Enough theory, let's see how this works in practice, it's time to actually write some Go!
-
-### Querent and TxQuerent interfaces
-
-Let's create a new file for our code:
+Let's create a file to hold the new code:
 
 ```text
 > touch pg/pg.go
 ```
 
-And here are the initial contents of the file:
+Here's the preliminary definition of the `Repository` interface:
 
 ```go
 package pg
@@ -360,90 +280,82 @@ import (
 	_ "github.com/lib/pq" // required
 )
 
-// Querent represents database query methods.
-type Querent interface {
+// Repository is the application's data layer functionality.
+type Repository interface {
 	// agent queries
-	CreateAgent(ctx context.Context, args CreateAgentParams) (Agent, error)
+	CreateAgent(ctx context.Context, arg CreateAgentParams) (Agent, error)
 	DeleteAgent(ctx context.Context, id int64) (Agent, error)
 	GetAgent(ctx context.Context, id int64) (Agent, error)
 	ListAgents(ctx context.Context) ([]Agent, error)
-	UpdateAgent(ctx context.Context, args UpdateAgentParams) (Agent, error)
+	UpdateAgent(ctx context.Context, arg UpdateAgentParams) (Agent, error)
 
 	// author queries
-	CreateAuthor(ctx context.Context, args CreateAuthorParams) (Author, error)
+	CreateAuthor(ctx context.Context, arg CreateAuthorParams) (Author, error)
 	DeleteAuthor(ctx context.Context, id int64) (Author, error)
 	GetAuthor(ctx context.Context, id int64) (Author, error)
 	ListAuthors(ctx context.Context) ([]Author, error)
-	UpdateAuthor(ctx context.Context, args UpdateAuthorParams) (Author, error)
+	UpdateAuthor(ctx context.Context, arg UpdateAuthorParams) (Author, error)
 
 	// book queries
+	CreateBook(ctx context.Context, bookArg CreateBookParams, authorIDs []int64) (*Book, error)
+	UpdateBook(ctx context.Context, bookArg UpdateBookParams, authorIDs []int64) (*Book, error)
 	DeleteBook(ctx context.Context, id int64) (Book, error)
 	GetBook(ctx context.Context, id int64) (Book, error)
 	ListBooks(ctx context.Context) ([]Book, error)
 }
+```
 
-// TxQuerent represents database query methods performed using a transaction.
-type TxQuerent interface {
-	CreateBook(ctx context.Context, args CreateBookParams, authorIDs []int64) (*Book, error)
-	UpdateBook(ctx context.Context, args UpdateBookParams, authorIDs []int64) (*Book, error)
+The `Repository` interface is comprised of a subset of query methods generated for us by `sqlc` and a few custom methods. It's only a subset of the `*Queries` functionality because some of the queries we have created were never meant to be used as stand-alone operations so the rest of our application should not be able to access them directly.
+
+If you have been paying close attention you'll notice that two methods of the `Repository` interface, `CreateBook` and `UpdateBook`, have signatures that differ from the signatures of their namesakes among the query methods generated by `sqlc`. The `CreateBook` and `UpdateBook` methods of the `*Queries` type are only concerned with making changes to the `books` table. A book, however, is also a relationship between a row in the `books` table and one or more rows in the `authors` table. A book has authors, in other words, so the process of creating a book linking it to its authors will involve a sequence of database operations wrapped in a transaction. We will, therefore, have to provide custom implementations of the `CreateBook` and `UpdateBook` methods of the `Repository` interface.
+
+The implementation of the `Repository` interface will take form of an unexported struct holding an embedded instance of `*Queries` and a reference to the database connection:
+
+```go
+type repoSvc struct {
+	*Queries
+	db *sql.DB
 }
 ```
 
-The code above introduces two interfaces to represent the two categories od database-related functionality our application will use:
-
-- The `Querent` interface represents the `sqlc`-generated query methods we will be accessing directly as single operations. The `*Queries` struct generated by `sqlc` will automatically implement this interface, though the interface represents only a subset of the available `*Queries` methods. I've excluded `CreateBook`, `UpdateBook`, `SetBookAuthor` and `UnsetBookAuthors` methods from the interface since these methods will only be used as parts of more complex transactions, never as stand-alone operations so they shouldn't be accessible directly elsewhere in our code.
-- The `TxQuerent` interface represents multi-stage database operations wrapped in transactions. As we will see, creating and updating a book involves a sequence of database operations wrapped in a transaction. We will need to create our own implementation of this interace.
-
-### Implementation of the TxQuerent interface
-
-Let's start working on the implementation of the `TxQuerent` interface by adding the following to the bottom of the `pg.go` file:
+Embedding `*Queries` in the `repoSvc` struct means that it automatically implements of all the `Repository` interface's methods that were derived from the methods of the `*Queries` struct. This means we only need to create custom implementations of the `CreateBook` and the `UpdateBook` methods. Since both these methods will involve database transactions let's start by creating a method to help with managing such transactions:
 
 ```go
-type txQuerentSvc struct {
-	db *sql.DB
-}
-
-func (s *txQuerentSvc) withTx(ctx context.Context, f func(*Queries) error) error {
-	tx, err := s.db.BeginTx(ctx, nil)
+func (r *repoSvc) withTx(ctx context.Context, txFn func(*Queries) error) error {
+	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
-	var exErr error
-	defer func() {
-		if exErr != nil {
-			if rbErr := tx.Rollback(); rbErr != nil {
-				exErr = fmt.Errorf("tx failed: %v, unable to rollback: %v", exErr, rbErr)
-			}
-		} else {
-			exErr = tx.Commit()
+	q := New(tx)
+	err = txFn(q)
+	if err != nil {
+		if rbErr := tx.Rollback(); rbErr != nil {
+			err = fmt.Errorf("tx failed: %v, unable to rollback: %v", err, rbErr)
 		}
-	}()
-	q := &Queries{db: tx}
-	exErr = f(q)
-	return exErr
+	} else {
+		err = tx.Commit()
+	}
+	return err
 }
 ```
 
-Our implementation of the `TxQuerent` interface takes the form of an unexported struct which holds a reference to the `*sql.DB` instance: it will be required to to initiate transactions. We begin by creating `withTx`, an unexported method to help with transaction-related logic that would otherwise have to be repeated in every other method of the implementation.
+The `withTx` method takes the current context and a transaction callback function (`txFn`) as arguments. It first initializes a transaction (`tx`), then instantiates `*Queries` using that transaction, it runs the callback function (`txFn`) with this transaction-scoped instance of `*Queries` as an argument, and eventually performs transaction rollback or commit based on the return value of the callback function.
 
-The `withTx` method takes the current context and a callback function as arguments. It initiates a transaction, implements the commit/rollback logic for the transaction as a deferred self-executing function that will rollback the transaction in case of an error and commit otherwise, it instantiates the `*Queries` struct using the transaction (`*sql.Tx`) and executes the callback function with the transaction-specific instance of the `*Queries` as an argument. The effect is that all queries performed by the callback function are pefrormed as a single database transaction which either succeeds or fails as a whole.
-
-Let's see how this works in practice by implementing the `CreateBook` method:
+Now we are ready to create the missing method implementations. Let's start with the `CreateBook` method:
 
 ```go
-func (s *txQuerentSvc) CreateBook(ctx context.Context, bookArgs CreateBookParams, authorIDs []int64) (*Book, error) {
-  book := new(Book)
-	err := s.withTx(ctx, func(q *Queries) error {
-		res, err := q.CreateBook(ctx, bookArgs)
+func (r *repoSvc) CreateBook(ctx context.Context, bookArg CreateBookParams, authorIDs []int64) (*Book, error) {
+	book := new(Book)
+	err := r.withTx(ctx, func(q *Queries) error {
+		res, err := q.CreateBook(ctx, bookArg)
 		if err != nil {
 			return err
 		}
 		for _, authorID := range authorIDs {
-			err = q.SetBookAuthor(ctx, SetBookAuthorParams{
+			if err := q.SetBookAuthor(ctx, SetBookAuthorParams{
 				BookID:   res.ID,
 				AuthorID: authorID,
-			})
-			if err != nil {
+			}); err != nil {
 				return err
 			}
 		}
@@ -454,17 +366,17 @@ func (s *txQuerentSvc) CreateBook(ctx context.Context, bookArgs CreateBookParams
 }
 ```
 
-We start by initializing a new variable of `*Book` type as a placeholder for the eventual return value of the main function. Next we run the `withTx` method, defining the callback function inline JavaScript-style. The callback function will be able to access the `book` variable as a closure, which is how we are able to use the callback function which only returns an `error` to peform operations which return other values as well. This is one way you can work around the fact that Go doesn't have generics.
+We start by initializing a new variable of `*Book` type as a placeholder for the eventual return value of the main function. Next we run the `withTx` method, defining the callback function inline. The callback function will be able to access the `book` variable as a closure, so we will be able to store the result of the transaction even though the callback function only returns an `error` value. Using closures is one way you can work around the fact that Go doesn't have generics.
 
-The callback function is very straight-forward because we don't have to worry about the minutia of performing a database transaction. In essence, we just run a sequence of queries and return in case of an error. First we run the `CreateBook` query which creates a new row in the `books` table of our database and returns the newly-created book. Next, we we loop over the `agentIDs` slice to create the referencess between the newly created book and all its authors using the `SetBookAuthor` query and the `ID` of the book created in the previous step. Should an error occur at any point during the sequence of these operations the `defer` block of the `withTx` method will take over and attempt to roll the transaction back. If all operations complete without errors we store the pointer to `res` in the `book` variable created at the very beginning and return, which will cause the `defer` block of the `withTx` method to commit the transaction. The parent method can now return as well.
+The callback function performs a sequence of queries and returns early in case of an error during any of the steps. It runs the `CreateBook` query first which creates a new row in the `books` table of our database and returns a struct representing the newly-created book. The function continues by iterating over the `agentIDs` slice to create the book-author associations in the `book_authors` table using the `SetBookAuthor` query and the `ID` of the book created in the previous step. If all operations complete without errors the pointer to `res` is stored in the `book` variable initialized earlier in the body of the parent `CreateBook` method.
 
-The `UpdateBook` method is just very slightly more complicated:
+The `UpdateBook` method is only slightly more complicated:
 
 ```go
-func (s *txQuerentSvc) UpdateBook(ctx context.Context, bookArgs UpdateBookParams, authorIDs []int64) (*Book, error) {
+func (r *repoSvc) UpdateBook(ctx context.Context, bookArg UpdateBookParams, authorIDs []int64) (*Book, error) {
 	book := new(Book)
-	err := s.withTx(ctx, func(q *Queries) error {
-		res, err := q.UpdateBook(ctx, bookArgs)
+	err := r.withTx(ctx, func(q *Queries) error {
+		res, err := q.UpdateBook(ctx, bookArg)
 		if err != nil {
 			return err
 		}
@@ -472,11 +384,10 @@ func (s *txQuerentSvc) UpdateBook(ctx context.Context, bookArgs UpdateBookParams
 			return err
 		}
 		for _, authorID := range authorIDs {
-			err = q.SetBookAuthor(ctx, SetBookAuthorParams{
+			if err := q.SetBookAuthor(ctx, SetBookAuthorParams{
 				BookID:   res.ID,
 				AuthorID: authorID,
-			})
-			if err != nil {
+			}); err != nil {
 				return err
 			}
 		}
@@ -487,29 +398,21 @@ func (s *txQuerentSvc) UpdateBook(ctx context.Context, bookArgs UpdateBookParams
 }
 ```
 
-The pattern is very similar to the `CreateBook` implementation. We follow the same procedure, except here before we start adding the book-author associations we first remove the prior associations by running the `UnsetBookAuthors`.
+The pattern is analogous to the `CreateBook` implementation, except in this case, we update an existing row in the `books` table instead of creating one, and before we start creating the book-author associations we first remove the prior associations using the `UnsetBookAuthors` query.
 
-### Finishing touches
-
-We will expose the data-layer functionality to the rest of the sever code as a `Repository` struct which combines the functionality of the `Querent` and the `TxQuerent` interfaces:
+We're almost done, but we still need a way to initialize our implementation of the `Repository` interface from other packages. Since the `repoSvc` struct is unexported we will need an exported constructor function:
 
 ```go
-// Repository is the data layer of the application.
-type Repository struct {
-	Querent
-	TxQuerent
-}
-
-// NewRepository returns a new instance of repository.
-func NewRepository(db *sql.DB) *Repository {
-	return &Repository{
-		Querent:   &Queries{db: db},
-		TxQuerent: &txQuerentSvc{db: db},
+// NewRepository returns an implementation of the Repository interface.
+func NewRepository(db *sql.DB) Repository {
+	return &repoSvc{
+		Queries: New(db),
+		db:      db,
 	}
 }
 ```
 
-This should be fairly self-explanatory - the `Repository` type just combines the functionality of the `Querent` and `TxQuerent` so that our resolvers will be able to reference a single type to represent the data-layer. the `NewRepository` function is used to initialize the data-layer functionality. One last addition to the `pg.go` file is a simple wrapper around the `sql.Open` function to initialize the database connection:
+One last thing we are going to add to the `pg/pg.go` file is a simple function to open a database connection as we willl need it later for the `main` function of our server eventually:
 
 ```go
 // Open opens a database specified by the data source name.
@@ -519,7 +422,7 @@ func Open(dataSourceName string) (*sql.DB, error) {
 }
 ```
 
-We can now proceed to configuring `gqlgen` and generating the resolvers for our server.
+This is just a simple wrapper around the `sql` package code. Why do we need it? This is just a way of assuring that all database-related code in our application is contained to the `pg` package which prevents possible coupling, maintains clear delineation of concerns within our app.
 
 ## GraphQL schema and gqlgen configuration
 
@@ -595,11 +498,11 @@ input BookInput {
 }
 ```
 
-The GraphQL schema mirrors our database setup - we have agents, authors and books with the relationships between them as described previously. As part of the GraphQL schema we also define queries (ways to access the data stored on our server) and mutations (methods for modifying the stored data), along with the inputs, as required by the mutations.
+The GraphQL schema reflects the database schema: we have agents, authors and books with the relationships between them as described previously. As part of the GraphQL schema we also define queries (ways to access the data stored on our server) and mutations (methods for modifying the stored data), along with the inputs, as required by the mutations.
 
-`gqlgen` is a schema-first GraphQL library/toolkit for Go. Like `sqlc`, it works by automatically generating the bulk of code required to build a server for a given GraphQL schema. I recommend you read the [introductory post about `gqlgen` by Adam Scarr](https://99designs.com.au/blog/engineering/gqlgen-a-graphql-server-generator-for-go/) outlining different approaches to building GraphQL servers in any language, and explaining where the schema-first approach used by `gqlgen` sits in the matrix of possible approaches. For an alternative take you could also read a post [outlining possible shortcomings of the schema-first approach by Nikolas Burk](https://www.prisma.io/blog/the-problems-of-schema-first-graphql-development-x1mn4cb0tyl3). For what it's worth, what initially lead me to experimenting with `gqlgen` was my frustration with the code-first JavaScript/TypeScript GraphQL libraries and I'm personally a fan on the approach used by `gqlgen`.
+`gqlgen` is a so-called "schema-first" GraphQL library/toolkit for Go. Similarly to `sqlc`, it works by automatically generating boilerplate code required to build a server given a GraphQL schema. I recommend the [introductory post about gqlgen by Adam Scarr](https://99designs.com.au/blog/engineering/gqlgen-a-graphql-server-generator-for-go/) outlining different approaches to building GraphQL servers, and explaining where the schema-first approach used by `gqlgen` sits in the matrix of possible approaches. For an alternative take you could also read a post [outlining possible shortcomings of the schema-first approach by Nikolas Burk](https://www.prisma.io/blog/the-problems-of-schema-first-graphql-development-x1mn4cb0tyl3), one of the devs working on the Prisma project. For what it's worth, I've tried both approaches and I'm personally a fan on the approach used by `gqlgen`.
 
-Like `sqlc`, `gqlgen` needs to be configured by means of configuration file (`gqlgen.yml`) located in the root of the project directory. The `gqlgen` cli tool (which we've installed earlier) can generate the example configuration file for you, but I prefer to write it by hand as I don't really like the default project layout and workflow assumed by the tool.
+Like `sqlc`, `gqlgen` needs to be configured so let's create the configuration file:
 
 ```text
 > touch gqlgen.yml
@@ -613,11 +516,11 @@ Here's the configuration we will use for our project:
 
 schema: schema.graphql
 exec:
-  filename: gqlgen/exec_gen.go
+  filename: gqlgen/exec.go
 model:
-  filename: gqlgen/model_gen.go
+  filename: gqlgen/model.go
 resolver:
-  filename: gqlgen/resolver.go
+  filename: gqlgen/resolvers.go
   type: Resolver
 
 # use models generated by sqlc when possible
@@ -636,17 +539,17 @@ models:
 omit_slice_element_pointers: true
 ```
 
-Here's the brief explanation of the contents of the configuration file:
+Here's the brief explanation of the meaning of the various settings:
 
 - `schema` - the path to the GraphQL schema for our project;
 - `exec` - the path to the generated GraphQL execution runtime (we will never make any changes to this file);
 - `model` - the path the models generated automatically by `gqlgen` (we will never make any changes to this file);
-- `resolver` - automatically generated stubs for resolver methods we will be required to complete by hand. `gqlgen` expects that the user will customize this file so it will never be regenerated on subsequent runs of the tool unless explicitly deleted first.
-- `autobind` - this directs `gqlgen` to try and use models from another package rather than generating a new set of models. In this case we are pointing `gqlgen` to models generated by `sqlc` stored in our `pg` package. `gqlgen` will only generate models for structs which are not defined by the `pg` package. **It's important to reference your own project repository here**.
-- `models`: `ID`: `model` - GraphQL assumes that the type of `ID` field is `String`. However, we are using a PostgreSQL database as our backend, so it makes more sense to use `Integers` in this context. This configuration instructs `gqlgen` to assume `Int64` as the type of `ID`. The generator will automatically include code to convert between `BIGINT` values used internally by PostgreSQL and the `String` values preferred by GraphQL spec.
-- `omit_slice_element_pointers` - resolvers generated by `gqlgen` output slices of pointers as list results (for example `[]*Author`). This setting changes the default behavior to output slices of values instead (for example `[]Author`). We do this for compatibility with `sqlc` which outputs slices of values not pointers as results of queries returning more than row from the database.
+- `resolver` - the path to the file with the automatically generated stubs of the resolver methods we will be required to implement by hand. Since this file will have to be customized it will never be overwritten on subsequent runs of `gqlgen`, though you can always generate a fresh copy by deleting the customized file first.
+- `autobind` - this directs `gqlgen` to try and use models defined in another package rather than generating a new set of models. In this case we are pointing `gqlgen` to the models generated by `sqlc` and stored in our `pg` package. This is the first step of linking our resolvers to the schema of our database. `gqlgen` will only generate models for types which are not defined by the `pg` package, which means the Input types from our GraphQL schema in this case. **Please make sure that the value of this setting references your own project repository**.
+- `models`: `ID`: `model` - the GraphQL spec assumes that `IDs` are of `String` type so this is also the default assumption made by `gqlgen`. We are using a PostgreSQL database as our backend, so it makes more sense to use `Int` values instead. This setting instructs `gqlgen` to use `Int64` as the type of the `ID` fields.
+- `omit_slice_element_pointers` - resolvers methods generated by `gqlgen` output slices of pointers as list results (for example `[]*Author`) by default. This setting changes the default behavior to output slices of values instead (for example `[]Author`). We do this for compatibility with `sqlc`, which uses slices of values not pointers as result values of the queries it generates.
 
-## Generate all the things again!
+## Generate all the things!
 
 We are finally ready to generate our server. We have previously installed `gqlgen` as the dependency for our project so running the tool is as simple as:
 
@@ -654,9 +557,9 @@ We are finally ready to generate our server. We have previously installed `gqlge
 > gqlgen
 ```
 
-Running this command will result in three new files being created in the `gqlgen` folder. I've described the purpose of each of the files above when discussing the configuration of `gqlgen` but it might be a good idea to spend some time looking at the code generated by the tool. The most interesting file, from our perspective, is `resolver.go` since it contains the stubs of the resolvers we will need to implement by hand. Whenever `gqlgen` can decide by itself how to resolve a field defined in the schema it will create a resolver automatically. What's left for us to do is to create resolvers for fields which are ambiguous, typically because they represent a non-obvious interaction between the resolver and the underlying data layer.
+Running this command will result in three new files being created in the `gqlgen` folder. The most interesting file, from our perspective, is `resolvers.go`, since it contains the stubs of the resolvers we will need to implement by hand. Whenever `gqlgen` can decide by itself how to resolve a field defined in the schema it will create a resolver automatically. What's left for us to do is to create resolvers for fields which are somehow ambiguous, typically because they represent a non-obvious interaction between the resolver and the data repository.
 
-Let's take a closer look at the `resolver.go` code related to the `Agent` type from our schema:
+Let's take a closer look at the `resolvers.go` code related to the `Agent` type from our schema:
 
 ```go
 type agentResolver struct{ *Resolver }
@@ -666,7 +569,7 @@ func (r *agentResolver) Authors(ctx context.Context, obj *pg.Agent) ([]pg.Author
 }
 ```
 
-`gqlgen` was able to automatically determine how to resolve the `ID`, `name` and `email` fields of the `Agent` type, but it wasn't able to figure out what to do about the `authors` field. This makes sense, because `gqlgen` maps the resolver type onto the model representing the data in the database, which looks like this:
+`gqlgen` was able to automatically determine how to resolve the `ID`, `name` and `email` fields of the `Agent` type, but it wasn't able to figure out what to do about the `authors` field, so this is why the `Authors` method appears in the `resolvers.go` file as one of the methods we need to implement. This makes sense, because based on how we have configured it, `gqlgen` maps the resolver type onto the corresponding model from our database, namely:
 
 ```go
 type Agent struct {
@@ -676,36 +579,30 @@ type Agent struct {
 }
 ```
 
-The database representation of `Agent` doesn't have a field for `authors` so `gqlgen` leaves it up to us to decide how to resolve this particular field given the information available to the `agentResolver` struct and/or passed directly to the resolver method as arguments.
+The database representation of the `Agent` type doesn't have a field for `authors` so `gqlgen` leaves it up to us to decide how to resolve this particular field given the information available to the `agentResolver` struct and/or passed directly to the resolver method as arguments. In this case it will involve running a database query that selects `Author` objects based on the `ID` of the `Agent`.
 
-Towards the top of the generated `resolver.go` file we find the following comment:
-
-```go
-// THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
-```
-
-`gqlgen` will only generate the `resolver.go` file during the initial run of the tool, and that from that point onward we should take over the ownership of the file. I like to do a little bit of clean-up first by adding the missing comments for the exported types. I have also added a reference to the `*pg.Repository` instance as a field on the `Resolver` type. Thanks to this the individual resolver methods will be able to access the data layer of the server:
+I like to start customizing the resolvers file by doing a little bit of clean-up first (like adding the missing comments for the exported types/methods, etc.) In this case I have also added a reference to the `pg.Repository` interface as a field on the `Resolver` type. This is how the individual resolver methods will be able to access the data stored in our database:
 
 ```go
 // Resolver connects individual resolvers with the datalayer.
 type Resolver struct {
-	Repository *pg.Repository
+	Repository pg.Repository
 }
 ```
 
-Our task now is to implement the missing resolver methods. We'll focus on a few methods first so that we are able to do an initial test-run of our server and see the results of our work so far.
+Our task now is to implement the missing resolver methods. We'll focus on a few methods first so that we can do an initial test-run of our server and check on our progress so far.
 
 ## Running the server for the first time
 
-The next step is to quickly implement the functionality related to creating and listing `Agent` objects - so that we can do something useful when we run our server for the first time. This will involve creating implementations for the following three resolver methods:
+The next step is to quickly implement the functionality needed to be able to create and list `Agent` objects, so that we can do something useful when we run our server for the first time. We'll work on implementing the following methods:
 
-1. `agentResolver.Authors` since the `agentResolver` needs to know how to resolve the `Authors` field,
+1. `agentResolver.Authors`, required since the `agentResolver` needs to know how to resolve the `Authors` field,
 2. `mutationResolver.CreateAgent` so that we can create Agent objects, and
 3. `queryResolver.Agents` so that we can list the objects we have created.
 
 ### agentResolver.Authors implementation
 
-For the `agentResolver` we need to implement the the method that will resolve the `Authors` field. This field is supposed to return a slice of `Author` objects represented by the given `Agent`. Our database schema defined a relationship between agents and authors as a one-to-many relationship via a foreign key reference in the `authors` table. We will therefore need a new query to select authors based on the `ID` of the agent (we can access this value as `obj.ID` inside the resolver). Let's add the following to the `queries.sql` file:
+This field is supposed to return a slice of `Author` objects represented by a given `Agent`. Our database schema defines the relationship between agents and authors as a one-to-many relationship via a foreign key reference in the `authors` table. We will therefore need to create a new query to select authors based on the `ID` of the agent (we can access this value as `obj.ID` inside the resolver). Let's add the following to the `queries.sql` file:
 
 ```sql
 -- name: ListAuthorsByAgentID :many
@@ -719,65 +616,16 @@ And re-generate the `sqlc` code:
 > sqlc generate
 ```
 
-One nice thing about using code generation in conjunction with `git` is that we can easily check the changes made to the generated code using `git diff [filename]` command, assuming the previous version of the file is what's currently commited:
+We can check the changes made to the generated using the `git diff [filename]` command (assuming the previous version of the file is what's currently commited earlier):
 
 ```text
 > git diff pg/queries.sql.go
 ```
 
-Here, for example, are the changes made to the file by the `sqlc generate` command:
-
-```diff
-diff --git a/pg/queries.sql.go b/pg/queries.sql.go
-index 54dea3e..9929e16 100644
---- a/pg/queries.sql.go
-+++ b/pg/queries.sql.go
-@@ -230,6 +230,39 @@ func (q *Queries) ListAuthors(ctx context.Context) ([]Author, error) {
-        return items, nil
- }
-
-+const listAuthorsByAgentID = `-- name: ListAuthorsByAgentID :many
-+SELECT authors.id, authors.name, authors.website, authors.agent_id FROM authors, agents
-+WHERE agents.id = authors.agent_id AND authors.agent_id = $1
-+`
-+
-+func (q *Queries) ListAuthorsByAgentID(ctx context.Context, agentID int64) ([]Author, error) {
-+       rows, err := q.db.QueryContext(ctx, listAuthorsByAgentID, agentID)
-+       if err != nil {
-+               return nil, err
-+       }
-+       defer rows.Close()
-+       var items []Author
-+       for rows.Next() {
-+               var i Author
-+               if err := rows.Scan(
-+                       &i.ID,
-+                       &i.Name,
-+                       &i.Website,
-+                       &i.AgentID,
-+               ); err != nil {
-+                       return nil, err
-+               }
-+               items = append(items, i)
-+       }
-+       if err := rows.Close(); err != nil {
-+               return nil, err
-+       }
-+       if err := rows.Err(); err != nil {
-+               return nil, err
-+       }
-+       return items, nil
-+}
-+
- const listBooks = `-- name: ListBooks :many
- SELECT id, title, description, cover FROM books
- ORDER BY title
-```
-
-Great! We have a new query but in order to make it available to our resolvers we need to add the `ListAuthorsByAgentID` method to the `pg.Querent` interface:
+Great! We have a new query but in order to make it available to our resolvers we also need to add the new `ListAuthorsByAgentID` method to the `pg.Repository` interface:
 
 ```go
-type Querent interface {
+type Repository interface {
 	// author queries
 	// (...)
 	ListAuthorsByAgentID(ctx context.Context, agentID int64) ([]Author, error)
@@ -785,7 +633,7 @@ type Querent interface {
 }
 ```
 
-Now that we have everything we need the actual implementation of the `Authors` method is simple:
+Now we have everything we need to implement the `Authors` method for the `agentResolver`:
 
 ```go
 func (r *agentResolver) Authors(ctx context.Context, obj *pg.Agent) ([]pg.Author, error) {
@@ -793,9 +641,7 @@ func (r *agentResolver) Authors(ctx context.Context, obj *pg.Agent) ([]pg.Author
 }
 ```
 
-Well, there's one important caveat. This is a naïve implementation and in the next post in this series I will discuss in detail the limitations of this naïve approach (hint: it would be better to implement the resolver using [the dataloader pattern](https://github.com/graphql/dataloader)). While this implementation is not optimal, it works, and we will keep it for the time being.
-
-One additional thing to point out in case of this resolver is that the return values of the query generated by `sqlc` and the resolver generated by `gqlgen` line up so that we are able to return the result of the query directly as the result of the resolver. This is the effect of setting the `omit_slice_element_pointers` option in the `gqlgen.yml` file to true, as discussed above. Without this configuration the return value of the resolver expected by `gqlgen` would have been `([]*pg.Author, error)`, and we would have needed to manually convert the slice of values returned from the query to a slice of pointers to these values before being able to return it.
+Well, there's one important caveat. This is a naïve implementation and in the next post in this series I will discuss in detail the limitations of this approach and how it can be improved. In a nutshell, this implementation suffers from the [N+1 query problem](https://itnext.io/what-is-the-n-1-problem-in-graphql-dd4921cb3c1a) when a query asks for a list of agents and the authors they represent, so it will have to be implemented using a dataloader. While this implementation is not optimal, it works, and we will keep it for the time being.
 
 ### mutationResolver.CreateAgent implementation
 
@@ -826,17 +672,15 @@ func (r *queryResolver) Agents(ctx context.Context) ([]pg.Agent, error) {
 }
 ```
 
-Here again the return values of the `sqlc`-generated query and the resolver generated by `gqlgen` are identical so we can simply return the result of the database query as the result of the resolver.
-
 ### Creating the GraphQL endpoint handlers
 
-Let's create a new file in the `gqlgen` sub-package directory:
+In order to be able to run our server we will need to define a couple of handlers. Let's create a new file in the `gqlgen` sub-package directory:
 
 ```text
 > touch gqlgen/gqlgen.go
 ```
 
-We follow a pattern similar to our approach in the `pg` package. This new file will hold our custom code related to the `gqlgen` dependency:
+We follow a pattern similar to our approach in the `pg` package. This new file will hold our custom code related to the `gqlgen` dependency so that we can keep the entire code that depends on `gqlgen` in a single subpackage of our application:
 
 ```go
 package gqlgen
@@ -849,7 +693,7 @@ import (
 )
 
 // NewHandler returns a new graphql endpoint handler.
-func NewHandler(repo *pg.Repository) http.Handler {
+func NewHandler(repo pg.Repository) http.Handler {
 	return handler.GraphQL(NewExecutableSchema(Config{
 		Resolvers: &Resolver{
 			Repository: repo,
@@ -858,20 +702,16 @@ func NewHandler(repo *pg.Repository) http.Handler {
 }
 
 // NewPlaygroundHandler returns a new GraphQL Playground handler.
-func NewPlaygroundHandler(title string, endpoint string) http.Handler {
-	return handler.Playground(title, endpoint)
+func NewPlaygroundHandler(endpoint string) http.Handler {
+	return handler.Playground("GraphQL Playground", endpoint)
 }
 ```
 
-[*** Should this be updated for 0.11 version already???]
-
-In order to run our server we will need to build a simple Go server which will expose two endponts. The code above defines the handlers for those endpoints. The `NewHandler` function returns the main GraphQL server handler which will receive the GraphQL queries and send the responses to these queries.
-
-The `NewPlaygroundHandler` will serve the [GraphQL Playground](https://www.apollographql.com/docs/apollo-server/testing/graphql-playground/) application on a selected endpoint as an admin/debuging interface for our server.
+To run our server we will build a simple Go http exposing two endpoints. The code above defines the handlers for these endpoints. The `NewHandler` function returns the main GraphQL server handler which will receive the GraphQL queries and send the responses to these queries. The `NewPlaygroundHandler` will serve the [GraphQL Playground](https://www.apollographql.com/docs/apollo-server/testing/graphql-playground/) application on a selected endpoint as an admin/debugging interface for our server.
 
 ### Creating the executable to run our server
 
-Now we have all the pieces required to run our server, we just need to wire them together in an executable. I follow a convention of placing all executable files in a separate subdirectory of the `cmd` package:
+Now we have all the pieces required to run our server, we just need to wire them together in our server's `main` function. I follow a convention of placing individual executable files in separate subdirectories of the `cmd` package:
 
 ```text
 > mkdir -p cmd/gqlgen-sqlc-example
@@ -905,7 +745,7 @@ func main() {
 
 	// configure the server
 	mux := http.NewServeMux()
-	mux.Handle("/", gqlgen.NewPlaygroundHandler("GraphQL Playground", "/query"))
+	mux.Handle("/", gqlgen.NewPlaygroundHandler("/query"))
 	mux.Handle("/query", gqlgen.NewHandler(repo))
 
 	// run the server
@@ -915,10 +755,10 @@ func main() {
 }
 ```
 
-This is a very basic version of the `main` function for our server, and we might refactor it later into something more functional, but a quick-and-dirty solution will be sufficient for now. The logic of the `main` function is easy to follow:
+This is a very basic version of the `main` function for our server, and we might refactor it later into something more customizable, but a quick-and-dirty solution will be sufficient for now. The `main` function is where we wire the individual components of our app together. The logic of the `main` function is easy to follow:
 
-1. We initialize the database connection.
-2. We instantiate the `Repository` as `repo` using the database connection.
+1. We initialize the database connection using the database connection string corresponding to the database we have created previously. We use the `Open` function from our `pg` package to establish the connection.
+2. We instantiate the `pg.Repository` as `repo` using the database connection.
 3. We use Go's standard library to create a simple server with two routes:
    1. The root route (`/`) where we will be able to access GraphQL Playground.
    2. The `/query` route which will actually execute and respond to GraphQL queries.
@@ -943,21 +783,7 @@ mutation {
 }
 ```
 
-You should see the result of the mutation, a JSON representation of object you have just created, in the right pane of the Playground:
-
-```json
-{
-  "data": {
-    "createAgent": {
-      "id": 1,
-      "name": "Virginia Kidd",
-      "email": "vk@themilfordmethod.com"
-    }
-  }
-}
-```
-
-At this stage we can also run a query to list all agents:
+You should see the result of the mutation, a JSON representation of object you have just created, in the right pane of the Playground. At this stage we can also run a query to list all agents:
 
 ```graphql
 query {
@@ -989,15 +815,15 @@ This query should produce the following result:
 }
 ```
 
-Our server works, but we have just about exhausted what it can do at the moment. Running any other queries will result in a panic, since many resolver methods still await implementation.
+Our server works, but we have just about exhausted what it can do at the moment. Running other queries will most likely result in a panic, since the majoirty of the resolver methods still await implementation.
 
-## Remaining resolver method implementations
+## Remaining resolver implementations
 
-Now that we know that we're on the right track we can get back to creating resolver method implementation. There's still quite a lot of work to do before our server is fully operational so let's get to it.
+Now that we know that we're on the right track we can get back to creating the remaining resolver method implementation. I will only include the code for the methods that warrant additional explanation or showcase a unique problem in this post. The goal is to replace all instances of `panic("not implemented")` in the `gqlgen/resolvers.go` file with working implementations of each method. This will typically involve calling the correct method of the `pg.Repository` interface and returning the correct values. The complete implementation is available, for reference, [in the project's GitHub repository](https://github.com/fwojciec/gqlgen-sqlc-example/tree/part1).
 
 ### authorResolver.Website implementation
 
-The reason why we need to implement the method for the `Website` field resolver manually has to do with the fact that the `sqlc`-generated `Author` model uses `sql.NullString` to represent nullable values, while `gqlgen` expects `*string` as a representation of a string that can be null. Our job is therefore simply to render the `sql.NullString` value returned by our database query as a `*string`:
+The reason why we need to implement the method for the `Website` method manually is due to the fact that the `sqlc`-generated `Author` model uses `sql.NullString` to represent an optional string value, while `gqlgen` uses `*string` (a string pointer). These are just two differnet approaches of dealing with nullable values in Go. Our job is here isto render the `sql.NullString` value returned by our database query as a `*string`:
 
 ```go
 func (r *authorResolver) Website(ctx context.Context, obj *pg.Author) (*string, error) {
@@ -1010,11 +836,9 @@ func (r *authorResolver) Website(ctx context.Context, obj *pg.Author) (*string, 
 }
 ```
 
-If we had more resolvers returning `string` pointers I would be a good idea to create a helper function to convert between the two types of nullable string representations. Because in this case we only have to do a conversion like this once we can leave the conversion logic in the body of the resolver method.
-
 ### authorResolver.Agent implementation
 
-The relationship between `Agent` and `Author` objects is a one-to-many relationship established by means of a foreign key field (`agent_id`) in our database's `authors` table. In other words, our resolver needs to fetch an `Agent` object by the id, stored in the `agent_id` field of the `Author` object we're resolving. Luckily we already have defined a query to fetch an agent by their id so here's what the code of the resolver method should be:
+The relationship between the `Agent` and the `Author` objects is a one-to-many relationship established by means of a foreign key field (`agent_id`) in our database's `authors` table. In other words, our resolver needs to fetch an `Agent` object using the `ID` value, stored in the `agent_id` field of the `Author` object. We have previously defined a query to fetch an agent by their id so here's the implementation of the method:
 
 ```go
 func (r *authorResolver) Agent(ctx context.Context, obj *pg.Author) (*pg.Agent, error) {
@@ -1026,11 +850,11 @@ return &agent, nil
 }
 ```
 
-This solution works, but is not ideal since it will result in the so-called N+1 query problem. In a nutshell, in case we're resolving a list of authors, our server will send one query to retrieve agent data per each author on the list, which has significant performance implications. We will solve this problem with a better implementation of this resolver, one using the dataloader pattern, in the next part of this tutorial, but we'll keep the imperfect implementation for now.
+This solution works, but is not ideal since it will result in the N+1 query problem when resolving a query that asks for many authors along with their agents. We will improve on the above implementation in an upcoming part of this series about dataloaders.
 
 ### authorResolver.Books implementation
 
-We will need to do a bit more work to retrieve the list of an author's books. In our database the relationship between authors and books is a many-to-many relationship facilitated by means of the `book_authors` join table. In order to retrieve all books for a given author we need to write a new query. Let's add the following to `queries.sql`:
+We will need to do a bit more work to retrieve a list of books for an author. From the perspective of our database the relationship between authors and books is a many-to-many relationship facilitated by means of the `book_authors` join table. In order to fetch books for a given author we need to add a new query to the `queries.sql` file:
 
 ```sql
 -- name: ListBooksByAuthorID :many
@@ -1044,10 +868,10 @@ And re-run the `sqlc generate` command:
 > sqlc generate
 ```
 
-If you need to confirm the changes made to the `pg/queries.sql.go` file you can run `git diff pg/queries.sql.go` command. We also need to add the newly created query method to the `pg.Querent` interface:
+If you need to confirm the changes made to the `pg/queries.sql.go` file you can run `git diff pg/queries.sql.go` command. We also need to add the newly created query method to the `pg.Repository` interface:
 
 ```go
-type Querent interface {
+type Repository interface {
 	// book queries
 	// (...)
 	ListBooksByAuthorID(ctx context.Context, authorID int64) ([]Book, error)
@@ -1062,11 +886,11 @@ func (r *authorResolver) Books(ctx context.Context, obj *pg.Author) ([]pg.Book, 
 }
 ```
 
-Again, this is a naïve implementation that suffers from the N+1 queries problem. We will improve on the current approach in the upcoming follow up to this post which will focus on the dataloader pattern implementations for our server.
+Again, this is a naïve implementation that suffers from the N+1 queries problem, but we will improve on it in another post in this series.
 
 ### bookResolver.Authors implementation
 
-The `Authors` method of the `bookResolver` represents a very similar problem to the previous resolver we have implemented. Previously we were looking up a list of books for a given author, in this case we have to look up authors for a given book. Again, we will need a new query so add the following to the `queries.sql` file:
+The `Authors` method of the `bookResolver` represents a very similar challenge to the previous resolver we have implemented. Here's the query you will need to fetch authors using a book's `ID`:
 
 ```sql
 -- name: ListAuthorsByBookID :many
@@ -1074,39 +898,13 @@ SELECT authors.* FROM authors, book_authors
 WHERE authors.id = book_authors.author_id AND book_authors.book_id = $1;
 ```
 
-We run the `sqlc generate` command again:
-
-```text
-> sqlc generate
-```
-
-If necessary feel free to review the changes made by `sqlc` by running `git diff` on the `pg/queries.sql.go` file. This all should be familiar by now, we need to add the new method to the `pg.Querent` interface so we can access it in our resolvers:
-
-```go
-type Querent interface {
-	// author queries
-	// (...)
-	ListAuthorsByBookID(ctx context.Context, bookID int64) ([]Author, error)
-}
-```
-
-Finally, we create an implenetation for the resolver method:
-
-```go
-func (r *bookResolver) Authors(ctx context.Context, obj *pg.Book) ([]pg.Author, error) {
-	return r.Repository.ListAuthorsByBookID(ctx, obj.ID)
-}
-```
-
-Once again, this is a preliminary implementation that will be improved upon in the upcoming follow up to this post discussing the application of the dataloader pattern to our server's resolvers.
+From this point you just follow the procedure described in `authorResolver.Books` method implementation above - add the query to the `queries.sql` file, run `sqlc generate`, update the `pg.Repository` interface to include the newly created query method and finally use the new query in the resolver.
 
 ### queryResolver methods
 
-Let's tackle the `queryResolver` next because it's just a matter of mapping our database queries to the respective methods of the resolver:
+The `queryResolver` methods are just a simple mappings the database query results to the expected return values of the resolvers. In many cases the resolver method implementation will be a one-liner similar to the previously completed implementation of the `Agents` method of this resolver. Things are just slightly more tricky in case of the queries that return a single object, since the `sqlc` generated queries return a value while the `gqlgen` resolvers expects to return a pointer to this value. For example, the `Agent` method can be implemented as follows:
 
 ```go
-type queryResolver struct{ *Resolver }
-
 func (r *queryResolver) Agent(ctx context.Context, id int64) (*pg.Agent, error) {
 	agent, err := r.Repository.GetAgent(ctx, id)
 	if err != nil {
@@ -1114,82 +912,25 @@ func (r *queryResolver) Agent(ctx context.Context, id int64) (*pg.Agent, error) 
 	}
 	return &agent, nil
 }
-
-func (r *queryResolver) Agents(ctx context.Context) ([]pg.Agent, error) {
-	return r.Repository.ListAgents(ctx)
-}
-
-func (r *queryResolver) Author(ctx context.Context, id int64) (*pg.Author, error) {
-	author, err := r.Repository.GetAuthor(ctx, id)
-	if err != nil {
-		return nil, err
-	}
-	return &author, nil
-}
-
-func (r *queryResolver) Authors(ctx context.Context) ([]pg.Author, error) {
-	return r.Repository.ListAuthors(ctx)
-}
-
-func (r *queryResolver) Book(ctx context.Context, id int64) (*pg.Book, error) {
-	book, err := r.Repository.GetBook(ctx, id)
-	if err != nil {
-		return nil, err
-	}
-	return &book, nil
-}
-
-func (r *queryResolver) Books(ctx context.Context) ([]pg.Book, error) {
-	return r.Repository.ListBooks(ctx)
-}
 ```
 
-The code in the `Agent`, `Author` and `Book` method is very similar, the only difference being the particular query called by each method. The same is true of the `Agents`, `Authors` and `Books` methods. At this stage the general pattern of these implementations should feel familiar.
-
-We have previously implemented the `CreateAgent` method so we can continue by working on the `UpdateAgent` method next.
+I'll leave it up to you to complete the implementations of the remaining methods of the `queryResolver`.
 
 ### mutationResolver.UpdateAgent method
 
-There are different approaches we could take to updating objects in the database. For the purposes of this tutorial we'll implement the most straight-forward (and often also the most practical) approach where each update overwrites data in all mutable fields of the object even if our intention is to only change one value. One alternative approach might make it possible, for example, to work only on the fields that have changed, but an implementation of this kind involves quite a bit more work. If you're interested, there's a good [example of using 'changesets' on the `gqlgen` website](https://gqlgen.com/reference/changesets/). In either case, here's the basic implementation of the resolver:
-
-```go
-func (r *mutationResolver) UpdateAgent(ctx context.Context, id int64, data AgentInput) (*pg.Agent, error) {
-	agent, err := r.Repository.UpdateAgent(ctx, pg.UpdateAgentParams{
-		ID:    id,
-		Name:  data.Name,
-		Email: data.Email,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &agent, nil
-}
-```
-
-The implementation here is similar to the approach used in the `CreateAgent` method, except in this case the `UpdateAgentParams` object expects to receive the `ID` of the updated object in addition to the values for each of the fields so that the database query knows which row in the table to update with the new values.
+The implementation here should be analogous to the approach used for the `CreateAgent` method previously, except in this case the `UpdateAgentParams` object expects to receive the `ID` of the updated object in addition to the values for each of the fields so that the database query knows which row in the table to update with the new values. I'll leave it up to you to complete the implementation of this method.
 
 ### mutationResolver.DeleteAgent method
 
-Here's the code for the `DeleteAgent` method implementation:
-
-```go
-func (r *mutationResolver) DeleteAgent(ctx context.Context, id int64) (*pg.Agent, error) {
-	agent, err := r.Repository.DeleteAgent(ctx, id)
-	if err != nil {
-		return nil, err
-	}
-	return &agent, nil
-}
-```
-
-This should require no detailed explanation at this stage - we're just calling the query, return an error in case of an error or the result in case the query was successful. One thing to mention, perhaps, is that there are different conventions regarding possible return values of `Delete` mutations (return no value? just the id of the deleted object? return the entire object?). I find it's useful to return the entire deleted object in case the interface of the frontend applications needs to be updated using some data from the deleted object (for example to display a notification about the status of the delete operation or to update the caches of the frontend app). If the return value is not needed it can be discarded.
+The implementation of this method should be straight-forward as well, it's just a matter of calling the `DeleteAgent` method of the `Repository` interface and returning a pointer to the `Agent` value returned by the query.
 
 ### mutationResolver CreateAuthor, UpdateAuthor and DeleteAuthor methods
 
-The `CreateAuthor`, `UpdateAuthor` and `DeleteAuthor` method implementations are similar to their equivalents for the `Agent` type. The only significant difference is that we have to deal with the fact that the `Website` field on the `Author` type is nullable. This value will be passed to the resolver as a pointer to a string (`*string`) but our database expects it in the form of a `sql.NullString` value. For this reason we need a simple helper function to convert between these two types. I will add it to the bottom of the `resolvers.go` file:
+The `CreateAuthor`, `UpdateAuthor` and `DeleteAuthor` method implementations are similar to their equivalents for the `Agent` type. The only significant difference is that we have to deal with the fact that the `Website` field on the `Author` type is nullable. This value will be passed to the resolver as a pointer to a string (`*string`) but our database expects it in the form of an `sql.NullString` value. For this reason we need a helper function to convert between these two types. Because an implementation of this method requires the `sql` package as the dependency my preference would be to place this helper method in the `pg` package with the rest of the database-related code. Add the following to the bottom of the `pg/pg.go` file:
 
 ```go
-func stringPtrToNullString(s *string) sql.NullString {
+// StringPtrToNullString converts *string to sql.NullString.
+func StringPtrToNullString(s *string) sql.NullString {
 	if s != nil {
 		return sql.NullString{String: *s, Valid: true}
 	}
@@ -1197,38 +938,15 @@ func stringPtrToNullString(s *string) sql.NullString {
 }
 ```
 
-Keep in mind that you'll need to add `database/sql` to the import statement at the top of the file for this code to compile - your editor will most likely do this automatically when you save the file.
-
-Here are the implementations of the ramaining author mutation resolver methods:
+Once we have this helper method we can implement the `CreateAuthor` resolver method (back in the `gqlgen/resolvers.go` file) as follows:
 
 ```go
 func (r *mutationResolver) CreateAuthor(ctx context.Context, data AuthorInput) (*pg.Author, error) {
 	author, err := r.Repository.CreateAuthor(ctx, pg.CreateAuthorParams{
 		Name:    data.Name,
-		Website: stringPtrToNullString(data.Website),
+		Website: pg.StringPtrToNullString(data.Website),
 		AgentID: data.AgentID,
 	})
-	if err != nil {
-		return nil, err
-	}
-	return &author, nil
-}
-
-func (r *mutationResolver) UpdateAuthor(ctx context.Context, id int64, data AuthorInput) (*pg.Author, error) {
-	author, err := r.Repository.UpdateAuthor(ctx, pg.UpdateAuthorParams{
-		ID:      id,
-		Name:    data.Name,
-		Website: stringPtrToNullString(data.Website),
-		AgentID: data.AgentID,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &author, nil
-}
-
-func (r *mutationResolver) DeleteAuthor(ctx context.Context, id int64) (*pg.Author, error) {
-	author, err := r.Repository.DeleteAuthor(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -1236,15 +954,11 @@ func (r *mutationResolver) DeleteAuthor(ctx context.Context, id int64) (*pg.Auth
 }
 ```
 
-All this code should make sense at this stage.
-
-> ASIDE: In general, the resolver method implementations in this post are the most simple implementations possible - the post is very long as it is so I'm trying to keep it simple. They could (and likely should) be improved by adding validation logic to make sure that the data we're saving to the database meets our requirements and perhaps also adding better error checking code. These possible improvements are outside the scope of this tutorial.
-
-We're almost done, just three more resolvers to go! Let's keep coding!
+I'll leave it up to you to complete the implementations of the remaining Author resolver methods.
 
 ### mutationResolver CreateBook, UpdateBook and DeleteBook methods
 
-We've done the bulk of the work required to create and update books previously in our implementation of the `TxQuerent` interface. We therefore just need to connect the previously created methods to the respective resolvers. Here's the code for the resolvers:
+We've done the bulk of the work required to create and update books previously in our implementation of the `Repository` interface. We therefore just need to connect the previously created `Repository` methods to the respective resolvers. Here's the code for the `CreateBook` resolver, for example:
 
 ```go
 func (r *mutationResolver) CreateBook(ctx context.Context, data BookInput) (*pg.Book, error) {
@@ -1254,27 +968,9 @@ func (r *mutationResolver) CreateBook(ctx context.Context, data BookInput) (*pg.
 		Cover:       data.Cover,
 	}, data.AuthorIDs)
 }
-
-func (r *mutationResolver) UpdateBook(ctx context.Context, id int64, data BookInput) (*pg.Book, error) {
-	return r.Repository.UpdateBook(ctx, pg.UpdateBookParams{
-		ID:          id,
-		Title:       data.Title,
-		Description: data.Description,
-		Cover:       data.Cover,
-	}, data.AuthorIDs)
-}
-
-func (r *mutationResolver) DeleteBook(ctx context.Context, id int64) (*pg.Book, error) {
-	// BookAuthors associations will cascade automatically.
-	book, err := r.Repository.DeleteBook(ctx, id)
-	if err != nil {
-		return nil, err
-	}
-	return &book, nil
-}
 ```
 
-One thing to note in the context of the `DeleteBook` method is that we're relying on our database schema to cascade the delete operation in the `books` table to the `book_authors` table which holds the book's associations to its authors. This is possible because of how we have defined the schema for the `book_authors` table:
+Again, it's your task to create the remaining two methods. One last thing to note in the context of the `DeleteBook` method is that deleting the book itself will automatically cascade to the relevant rows of the `book_authors` table because of how we have defined the schema for the `book_authors` table.
 
 ```sql
 CREATE TABLE IF NOT EXISTS book_authors (
@@ -1285,9 +981,7 @@ CREATE TABLE IF NOT EXISTS book_authors (
 );
 ```
 
-The alternative implementation could for example use a transaction to manually run the `UnsetBookAuthors` query with the ID of the deleted book in addition to removing the book from the `books` table.
-
-We're done with the resolver implementations! 🎉🎉🎉
+That's it, we're done with the resolver implementations! 🎉🎉🎉
 
 ## Wrapping up and what's next?
 
@@ -1297,18 +991,19 @@ We now have an operational GraphQL server. You can run it an play with creating/
 > go run cmd/gqlgen-sqlc-example/main.go
 ```
 
-The server runs and works, but it's not production-ready yet. We don't have any tests to make sure that everything is working as it should. Some of our resolvers are implemented naïvely, resulting in suboptimal performance in case of more complex queries. We don't have any way of restricting random users from being able to access and make changes to our database. Our server is also not easy to configure, as parameters such as database name or server port are currently only configurable by changing the code of the `main.go` file. In short, there's still quite a bit of work ahead of us.
+The server runs and works, but it's not production-ready yet. We don't have any tests to make sure that everything is working as it should. Some of our resolvers are implemented naïvely, resulting in suboptimal performance in case of more complex queries. We can't prevent random users from being able to access all the data and make changes to our database. Our server is also difficult to configure, since parameters such as database name or server port are currently only configurable by changing the code of the `main.go` file. In short, there's still quite a bit of work ahead of us.
 
-With that said, I think we've established a good foundation for our continued work on this project. We have a solid implementation of data persistence layer that's convenient to use. To introduce new queries to our system is as easy as writing some SQL code and running a command. The data layer is plugged into our server by means of an interface, which means it remains orthogonal to our server code and can be easily mocked and even replaced, if need be. Making changes to our GraphQL schema is also easy - we just have to make changes to the schema file, run the `gqlgen` command and add implementations of new resolvers, if required. Because of the way the code is structured and organized, it will be easy to test our code by means of both unit tests and integration tests (we'll explore strategies for testing the server in a separate blog post in the future.) Finally, because we're using Go, our code is extremely portable and easy to deploy.
+That said, we've established a good foundation for our continued work on this project. We have a solid implementation of the data persistence layer that's contained in a separate module and easy to make changes to. Making changes to the GraphQL schema is also easy - we just update the schema file, run the `gqlgen` command, and add implementations of the new resolvers, if required. Because of the way we have structured the code, it will be also easy to test our code (we'll explore strategies for testing the server in a separate blog post in the future.) Finally, because we're using Go, our code is extremely portable and easy to deploy.
 
-This has been a long post so we're going to call it a day for now, but I will be publishing follow ups to this posts soon where I will address the abovementioned issues. Thanks for making it all the way to the end of the post! [Follow me on Twitter](https://twitter.com/filipcodes) if you have found this useful and you want to hear from me when I post new content to the blog.
+I will be publishing more posts in this seres, addressing dataloader implementations for our resolvers, authentication and authorization, testing, and various other improvements to the implementation, whenever I find some time to write. Thanks for making it all the way to the end of the post! [Follow me on Twitter](https://twitter.com/filipcodes) if you have found this useful and you want to hear from me when I post new content to the blog.
 
 ## Useful resources
 
-1. [Official GraphQL documentation](https://graphql.org/)
-2. [Official gqlgen documentation](https://gqlgen.com)
-3. [gqlgen GitHub repository](https://github.com/99designs/gqlgen)
-4. [sqlc GitHub repository](https://github.com/kyleconroy/sqlc)
-5. [Introducing gqlgen: a GraphQL Server Generator for Go by Adam Scarr](https://99designs.com.au/blog/engineering/gqlgen-a-graphql-server-generator-for-go/)
-6. [The Problems of "Schema-First" GraphQL Server Development by Nikolas Burk](https://www.prisma.io/blog/the-problems-of-schema-first-graphql-development-x1mn4cb0tyl3)
-7. [Standard Package Layout by Ben Johnson](https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1)
+1. [The GitHub repository with the code of this tutorial](https://github.com/fwojciec/gqlgen-sqlc-example/tree/part1)
+2. [Official GraphQL documentation](https://graphql.org/)
+3. [Official gqlgen documentation](https://gqlgen.com)
+4. [gqlgen GitHub repository](https://github.com/99designs/gqlgen)
+5. [sqlc GitHub repository](https://github.com/kyleconroy/sqlc)
+6. [Introducing gqlgen: a GraphQL Server Generator for Go by Adam Scarr](https://99designs.com.au/blog/engineering/gqlgen-a-graphql-server-generator-for-go/)
+7. [The Problems of "Schema-First" GraphQL Server Development by Nikolas Burk](https://www.prisma.io/blog/the-problems-of-schema-first-graphql-development-x1mn4cb0tyl3)
+8. [Standard Package Layout by Ben Johnson](https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1)
