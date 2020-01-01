@@ -7,11 +7,7 @@ interface Props {
 const Footer: React.FC<Props> = ({ copyrights }) => (
   <footer>
     {copyrights ? (
-      <div
-        dangerouslySetInnerHTML={{
-          __html: copyrights
-        }}
-      />
+      <div dangerouslySetInnerHTML={{ __html: copyrights }} />
     ) : (
       <div>
         <span className="footerCopyrights">

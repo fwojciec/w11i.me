@@ -34,17 +34,13 @@ const Post: React.FC<Props> = ({
   previousPost,
   nextPost
 }) => {
-  const previousPath = previousPost && previousPost.frontmatter.path
-  const previousLabel = previousPost && previousPost.frontmatter.title
-  const nextPath = nextPost && nextPost.frontmatter.path
-  const nextLabel = nextPost && nextPost.frontmatter.title
   return (
     <div className={style.post}>
       <div className={style.postContent}>
         <h1 className={style.title}>{excerpt ? <Link to={path}>{title}</Link> : title}</h1>
         <div className={style.meta}>
           {date} {author && <>— Written by {author}</>}
-          {tags ? (
+          {tags && (
             <div className={style.tags}>
               {tags.map(tag => (
                 <Link to={`/tag/${toKebabCase(tag)}/`} key={toKebabCase(tag)}>
@@ -52,7 +48,7 @@ const Post: React.FC<Props> = ({
                 </Link>
               ))}
             </div>
-          ) : null}
+          )}
         </div>
 
         {coverImage && (
@@ -60,23 +56,16 @@ const Post: React.FC<Props> = ({
         )}
 
         {excerpt ? (
-          <>
+          <div>
             <p>{excerpt}</p>
             <Link to={path} className={style.readMore}>
               Read more →
             </Link>
-          </>
+          </div>
         ) : (
           <>
-            {html ? <div dangerouslySetInnerHTML={{ __html: html }} /> : null}
-            {previousPath && previousLabel && nextPath && nextLabel && (
-              <Navigation
-                previousPath={previousPath}
-                previousLabel={previousLabel}
-                nextPath={nextPath}
-                nextLabel={nextLabel}
-              />
-            )}
+            {html && <div dangerouslySetInnerHTML={{ __html: html }} />}
+            <Navigation previousPost={previousPost} nextPost={nextPost} />
           </>
         )}
       </div>
