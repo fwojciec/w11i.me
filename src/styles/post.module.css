@@ -14,7 +14,7 @@
   }
 
   @media (--tablet) {
-    max-width: 660px;
+    max-width: var(--tablet-content-width);
   }
 
   h1 {
@@ -22,7 +22,7 @@
   }
 
   img {
-    border-radius: 8px;
+    border-radius: 3px;
   }
 }
 
@@ -33,7 +33,7 @@
 }
 
 .coverImage {
-  border-radius: 8px;
+  border-radius: 3px;
   margin-bottom: 40px;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
@@ -63,4 +63,26 @@
 
 .postContent {
   position: relative;
+}
+
+.dateAndAuthor {
+  display: flex;
+  align-items: center;
+}
+
+.writtenBy {
+  display: inline-flex;
+  align-items: center;
+}
+
+.author {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 600;
+
+  svg {
+    height: 28px;
+    margin-left: 2px;
+  }
 }

@@ -19,6 +19,8 @@ const Index: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPag
   if (!data.allMarkdownRemark || !data.allMarkdownRemark.edges) {
     throw new Error('MarkdownRemark data is missing')
   }
+  const nextPage = nextPagePath ? { path: nextPagePath, title: 'Older posts' } : undefined
+  const prevPage = previousPagePath ? { path: previousPagePath, title: 'Newer posts' } : undefined
   return (
     <>
       <SEO />
@@ -40,13 +42,7 @@ const Index: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPag
             />
           )
         })}
-
-        <Navigation
-          previousPath={previousPagePath}
-          previousLabel="Newer posts"
-          nextPath={nextPagePath}
-          nextLabel="Older posts"
-        />
+        <Navigation next={nextPage} previous={prevPage} />
       </Layout>
     </>
   )
@@ -73,7 +69,7 @@ export const postsQuery = graphql`
             tags
             coverImage {
               childImageSharp {
-                fluid(maxWidth: 800) {
+                fluid(maxWidth: 900) {
                   ...GatsbyImageSharpFluid
                 }
               }

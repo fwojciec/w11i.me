@@ -9,7 +9,7 @@ const Image: React.FC = () => {
     query GetImg {
       placeholderImage: file(relativePath: { eq: "images" }) {
         childImageSharp {
-          fluid(maxWidth: 800) {
+          fluid(maxWidth: 900) {
             ...GatsbyImageSharpFluid
           }
         }

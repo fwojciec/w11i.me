@@ -2,9 +2,9 @@
 title: 'Next.js, useRouter hook, and testing'
 path: '/next-js-userouter-testing'
 date: '2019-09-02'
-author: 'Filip'
+author: 'Filip Wojciechowski'
 excerpt: 'A quick tip on how to test Next.js components which utilize the useRouter hook.'
-tags: ['next.js', 'react', 'typescript', 'testing', 'useRouter', 'context']
+tags: ['next.js', 'useRouter', 'testing']
 ---
 
 ## Introduction

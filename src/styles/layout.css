@@ -28,10 +28,6 @@ body {
   -webkit-overflow-scrolling: touch;
   -webkit-text-size-adjust: 100%;
 
-  @media (--phone) {
-    font-size: 1rem;
-  }
-
   &.dark-theme {
     background-color: var(--dark-background);
     color: var(--dark-color);
@@ -161,7 +157,7 @@ code {
 pre {
   background: #1a1a1d;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 3px;
   font-size: 0.9rem;
   overflow: auto;
 
@@ -203,7 +199,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   margin: 40px 0;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 table,
@@ -227,15 +223,15 @@ th {
 
 ul,
 ol {
-  margin-left: 2rem;
+  margin-left: 40px;
   padding: 0;
 
   @media (--phone) {
-    margin-left: 1.5rem;
+    margin-left: 30px;
   }
 
   li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 10px;
   }
 }
 
@@ -272,7 +268,7 @@ textarea {
   }
 
   @media (--tablet) {
-    max-width: 660px;
+    max-width: var(--tablet-content-width);
   }
 }
 

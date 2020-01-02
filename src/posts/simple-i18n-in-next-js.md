@@ -2,20 +2,10 @@
 title: 'How to build a multilingual website in Next.js'
 path: '/how-to-build-multilingual-website-in-next-js'
 date: '2019-09-03'
-author: 'Filip'
+author: 'Filip Wojciechowski'
 excerpt: "It used to be challenging to build multilingual websites in Next.js, but things have greatly improved with introduction of Next 9. In this blog post I'm sharing my ideas on how to implement multi-language support (with locale subpaths, etc.) in Next.js by taking advantage of the framework's newly introduced APIs, while trying to keep things as simple as possible."
 coverImage: '../images/don-ross-iii-JuKbaozIo0k-unsplash.jpg'
-tags:
-  [
-    'next.js',
-    'react',
-    'i18n',
-    'internationalization',
-    'multi-language',
-    'multi-lingual',
-    'typescript',
-    'locale subpaths',
-  ]
+tags: ['next.js', 'i18n', 'typescript']
 ---
 
 ## Introduction

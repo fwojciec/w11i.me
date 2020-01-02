@@ -2,7 +2,7 @@
 title: "Let's Build a GraphQL Server in Go: Part 1"
 path: '/graphql-server-go-part1'
 date: '2019-12-31'
-author: 'Filip'
+author: 'Filip Wojciechowski'
 excerpt: 'This is the first in a series of posts covering the process of building a simple yet full featured GraphQL server in Go. In this post we will use gqlgen and sqlc to build a working GraphQL server backed by a PostgreSQL database, and capable of performing basic CRUD operations.'
 coverImage: '../images/joel-filipe-jU9VAZDGMzs-unsplash.jpg'
 tags: ['go', 'golang', 'graphql', 'sqlc', 'gqlgen', 'postgresql']

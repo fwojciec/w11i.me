@@ -2,10 +2,10 @@
 title: 'Google ReCaptcha V3 in React, using TypeScript'
 path: '/recaptcha-v3-react'
 date: '2018-11-18'
-author: 'Filip'
+author: 'Filip Wojciechowski'
 excerpt: "Google has recently released a new version of ReCaptcha. It no longer requires any end-user interaction, so it's arguably an improvement over the frequently annoying V2 version. This is a quick tutorial on how to use it in a React app."
 coverImage: '../images/florian-klauer-147-unsplash.jpg'
-tags: ['react', 'recaptcha', 'captcha', 'typescript']
+tags: ['react', 'recaptcha', 'typescript']
 ---
 
 Google has recently [released](https://webmasters.googleblog.com/2018/10/introducing-recaptcha-v3-new-way-to.html) a new version of ReCaptcha. It no longer requires any end-user interaction, so it's arguably an improvement over the frequently annoying V2 version. The world will be a better place with fewer blurry storefronts to identify and click on. Here's one way to implement ReCaptcha V3 in React.

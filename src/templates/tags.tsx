@@ -48,10 +48,8 @@ const Tags: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPage
         })}
 
         <Navigation
-          previousPath={previousPagePath}
-          previousLabel="Newer posts"
-          nextPath={nextPagePath}
-          nextLabel="Older posts"
+          previous={previousPagePath ? { path: previousPagePath, title: 'Newer posts' } : undefined}
+          next={nextPagePath ? { path: nextPagePath, title: 'Older posts' } : undefined}
         />
       </Layout>
     </>
@@ -79,7 +77,7 @@ export const postsQuery = graphql`
             tags
             coverImage {
               childImageSharp {
-                fluid(maxWidth: 800) {
+                fluid(maxWidth: 900) {
                   ...GatsbyImageSharpFluid
                 }
               }

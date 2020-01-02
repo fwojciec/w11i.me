@@ -21,7 +21,7 @@ module.exports = {
     },
     logoText: 'w11i',
     defaultTheme: 'dark',
-    postsPerPage: 5,
+    postsPerPage: 10,
     showMenuItems: 1,
     menuMoreText: 'Show more',
     mainMenu: [
@@ -92,7 +92,7 @@ module.exports = {
           {
             resolve: 'gatsby-remark-images',
             options: {
-              maxWidth: 800,
+              maxWidth: 900,
               quality: 100,
               showCaptions: true,
               linkImagesToOriginal: false

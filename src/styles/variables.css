@@ -14,7 +14,8 @@
   --dark-border-color: #4a4b50;
 
   /* sizes */
-  --content-width: 800px;
+  --content-width: 900px;
+  --tablet-content-width: 760px;
   --line-height: 1.66;
 
   /* variables for js, must be the same as these in @custom-media queries */
