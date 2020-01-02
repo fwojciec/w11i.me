@@ -69,7 +69,7 @@ We are thus dealing with a one-to-many relationship between agents and authors (
 
 Let's initialize a new Go project:
 
-```text
+```
 > mkdir gqlgen-sqlc-example
 > cd gqlgen-sqlc-example
 > go mod init github.com/[username]/gqlgen-sqlc-example
@@ -77,7 +77,7 @@ Let's initialize a new Go project:
 
 Let's also install the two primary dependencies of the project:
 
-```text
+```
 > go get github.com/lib/pq
 > go get github.com/99designs/gqlgen
 ```
@@ -86,7 +86,7 @@ The `pq` dependency is a Go PostgreSQL driver. `gqlgen` is the library/tool we w
 
 We configure `sqlc` by adding a file named `sqlc.json` to our project's root directory.
 
-```text
+```
 > touch sqlc.json
 ```
 
@@ -109,7 +109,7 @@ The configuration instructs `sqlc` to place the generated code in the `pg` folde
 
 Let's create files for our database schema and queries:
 
-```text
+```
 > touch schema.sql queries.sql
 ```
 
@@ -156,7 +156,7 @@ The definition of the schema matches the definition of the GraphQL types discuss
 
 I assume that you have PostgreSQL installed and running on your system. With the schema defined we can create the database and initialize it:
 
-```text
+```
 > createdb gqlgen_sqlc_example_db
 > psql -d gqlgen_sqlc_example_db -a -f schema.sql
 ```
@@ -251,7 +251,7 @@ For each type of objects we will be working with we are creating a query to fetc
 
 Run the `sqlc generate` command in the root of the project to see the magic happen!
 
-```text
+```
 > sqlc generate
 ```
 
@@ -265,7 +265,7 @@ While it would be possible to import and use the `*Queries` type and its methods
 
 Let's create a file to hold the new code:
 
-```text
+```
 > touch pg/pg.go
 ```
 
@@ -428,7 +428,7 @@ This is just a simple wrapper around the `sql` package code. Why do we need it? 
 
 It's finally time to create the schema for our GraphQL server:
 
-```text
+```
 > touch schema.graphql
 ```
 
@@ -504,7 +504,7 @@ The GraphQL schema reflects the database schema: we have agents, authors and boo
 
 Like `sqlc`, `gqlgen` needs to be configured so let's create the configuration file:
 
-```text
+```
 > touch gqlgen.yml
 ```
 
@@ -553,7 +553,7 @@ Here's the brief explanation of the meaning of the various settings:
 
 We are finally ready to generate our server. We have previously installed `gqlgen` as the dependency for our project so running the tool is as simple as:
 
-```text
+```
 > gqlgen
 ```
 
@@ -612,13 +612,13 @@ WHERE agents.id = authors.agent_id AND authors.agent_id = $1;
 
 And re-generate the `sqlc` code:
 
-```text
+```
 > sqlc generate
 ```
 
 We can check the changes made to the generated using the `git diff [filename]` command (assuming the previous version of the file is what's currently commited earlier):
 
-```text
+```
 > git diff pg/queries.sql.go
 ```
 
@@ -676,7 +676,7 @@ func (r *queryResolver) Agents(ctx context.Context) ([]pg.Agent, error) {
 
 In order to be able to run our server we will need to define a couple of handlers. Let's create a new file in the `gqlgen` sub-package directory:
 
-```text
+```
 > touch gqlgen/gqlgen.go
 ```
 
@@ -713,7 +713,7 @@ To run our server we will build a simple Go http exposing two endpoints. The cod
 
 Now we have all the pieces required to run our server, we just need to wire them together in our server's `main` function. I follow a convention of placing individual executable files in separate subdirectories of the `cmd` package:
 
-```text
+```
 > mkdir -p cmd/gqlgen-sqlc-example
 > touch cmd/gqlgen-sqlc-example/main.go
 ```
@@ -766,7 +766,7 @@ This is a very basic version of the `main` function for our server, and we might
 
 Let's confirm that everything works:
 
-```text
+```
 > go run cmd/gqlgen-sqlc-example/main.go
 🚀 Server ready at http://localhost:8080
 ```
@@ -864,7 +864,7 @@ WHERE books.id = book_authors.book_id AND book_authors.author_id = $1;
 
 And re-run the `sqlc generate` command:
 
-```text
+```
 > sqlc generate
 ```
 
@@ -987,7 +987,7 @@ That's it, we're done with the resolver implementations! 🎉🎉🎉
 
 We now have an operational GraphQL server. You can run it an play with creating/changing/accessing the data using the GraphQL playground by running:
 
-```text
+```
 > go run cmd/gqlgen-sqlc-example/main.go
 ```
 
