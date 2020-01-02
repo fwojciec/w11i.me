@@ -2,7 +2,7 @@
 title: 'Random Ticker in Go'
 path: '/random-ticker-in-go'
 date: '2019-12-11'
-author: 'Filip Wojciechowski'
+author: 'Filip'
 excerpt: "I'm writing something like a scraper, and I want this program to be able to send requests every x seconds, at a slightly different interval every time. How to accomplish this idiomatically in Go?"
 coverImage: '../images/fabrizio-verrecchia-Ai7sV3SSMIQ-unsplash.jpg'
 tags: ['go', 'golang', 'time']
