@@ -13,7 +13,7 @@ module.exports = {
     siteUrl: siteAddress.href,
     title: "Filip Wojciechowski's Blog",
     description: 'A personal blog featuring writing on my two hobbies: coding and books.',
-    copyrights: `Text copyright @ ${new Date().getFullYear()}, Filip Wojciechowski.`,
+    copyrights: `Text copyright @ ${new Date().getFullYear()}, Filip Wojciechowski`,
     author: 'Filip Wojciechowski',
     logo: {
       src: '',
