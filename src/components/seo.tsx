@@ -19,19 +19,15 @@ const defaultKeywords = [
 interface Props {
   description?: string
   lang?: string
-  meta?:
-    | { name: string; content: string; property?: undefined }
-    | { property: string; content: string; name?: undefined }[]
   keywords?: string[]
   title?: string
-  image?: string
   pageUrl?: string
+  image?: string
 }
 
 const SEO: React.FC<Props> = ({
   description,
   lang = 'en',
-  meta = [],
   keywords = defaultKeywords,
   title,
   pageUrl,
@@ -56,17 +52,12 @@ const SEO: React.FC<Props> = ({
     }
   `)
 
-  const siteDescription = data.site?.siteMetadata?.description || `Filip Wojciechowski's blog`
-  const siteUrl = data.site?.siteMetadata?.siteUrl || 'https://w11i.me'
-  const siteTitle = data.site?.siteMetadata?.title || `Filip Wojciechowski's Blog`
-
+  const siteTitle = data.site?.siteMetadata?.title || ''
   const metaTitle = title || siteTitle
-  const metaDescription = description || siteDescription
+  const metaDescription = description || data.site?.siteMetadata?.description || ''
+  const siteUrl = data.site?.siteMetadata?.siteUrl || ''
   const metaUrl = pageUrl ? siteUrl + pageUrl : siteUrl
-
-  const blogImg = data.file?.childImageSharp?.fluid?.src || undefined
-
-  const metaImg = image || blogImg
+  const metaImg = image || data.file?.childImageSharp?.fluid?.src || undefined
 
   return (
     <Helmet
@@ -75,51 +66,42 @@ const SEO: React.FC<Props> = ({
       titleTemplate={title ? `${title} | ${siteTitle}` : siteTitle}
       meta={[
         {
-          name: `description`,
+          name: 'description',
           content: metaDescription
         },
         {
-          property: `og:title`,
+          property: 'og:title',
           content: metaTitle
         },
         {
-          property: `og:description`,
+          property: 'og:description',
           content: metaDescription
         },
         {
-          property: `og:type`,
-          content: `website`
+          property: 'og:type',
+          content: 'website'
         },
         {
-          property: `og:url`,
+          property: 'og:url',
           content: metaUrl
         },
         {
-          name: `twitter:card`,
-          content: `summary_large_image`
+          name: 'twitter:card',
+          content: 'summary_large_image'
         },
         {
-          name: `twitter:creator`,
+          name: 'twitter:creator',
           content: '@filipcodes'
+        },
+        {
+          property: 'og:image',
+          content: siteUrl + metaImg
+        },
+        {
+          name: 'keywords',
+          content: keywords.join(', ')
         }
-      ]
-        .concat(
-          metaImg
-            ? {
-                property: 'og:image',
-                content: siteUrl + metaImg
-              }
-            : []
-        )
-        .concat(
-          keywords.length > 0
-            ? {
-                name: `keywords`,
-                content: keywords.join(`, `)
-              }
-            : []
-        )
-        .concat(meta)}
+      ]}
     />
   )
 }
