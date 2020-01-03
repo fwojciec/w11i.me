@@ -35,18 +35,12 @@ const SEO: React.FC<Props> = ({
 }) => {
   const data: DefaultSeoQueryQuery = useStaticQuery(graphql`
     query DefaultSEOQuery {
-      file(relativePath: { eq: "blog_image2.jpg" }) {
-        childImageSharp {
-          fluid {
-            src
-          }
-        }
-      }
       site {
         siteMetadata {
           title
           description
           siteUrl
+          defaultImage: image
         }
       }
     }
@@ -57,7 +51,7 @@ const SEO: React.FC<Props> = ({
   const metaDescription = description || data.site?.siteMetadata?.description || ''
   const siteUrl = data.site?.siteMetadata?.siteUrl || ''
   const metaUrl = pageUrl ? siteUrl + pageUrl : siteUrl
-  const metaImg = image || data.file?.childImageSharp?.fluid?.src || undefined
+  const metaImg = image || data.site?.siteMetadata?.defaultImage || undefined
 
   return (
     <Helmet

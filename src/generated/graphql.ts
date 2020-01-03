@@ -6,12 +6,7 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
-  /** 
- * A date string, such as 2007-12-03, compliant with the ISO 8601 standard for
-   * representation of dates and times using the Gregorian calendar.
- */
   Date: any,
-  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any,
 };
 
@@ -383,7 +378,6 @@ export type File = Node & {
   birthtimeMs: Maybe<Scalars['Float']>,
   blksize: Maybe<Scalars['Int']>,
   blocks: Maybe<Scalars['Int']>,
-  /** Copy file to static directory and return public url to it */
   publicURL: Maybe<Scalars['String']>,
   childImageSharp: Maybe<ImageSharp>,
   id: Scalars['ID'],
@@ -1734,7 +1728,6 @@ export type MarkdownWordCountFilterInput = {
   words: Maybe<IntQueryOperatorInput>,
 };
 
-/** Node Interface */
 export type Node = {
   id: Scalars['ID'],
   parent: Maybe<Node>,
@@ -2168,6 +2161,7 @@ export enum SiteFieldsEnum {
   SiteMetadataMainMenu = 'siteMetadata___mainMenu',
   SiteMetadataMainMenuTitle = 'siteMetadata___mainMenu___title',
   SiteMetadataMainMenuPath = 'siteMetadata___mainMenu___path',
+  SiteMetadataImage = 'siteMetadata___image',
   Port = 'port',
   Host = 'host',
   Polyfill = 'polyfill',
@@ -2477,6 +2471,15 @@ export enum SitePageFieldsEnum {
   PluginCreatorPluginOptionsQuality = 'pluginCreator___pluginOptions___quality',
   PluginCreatorPluginOptionsShowCaptions = 'pluginCreator___pluginOptions___showCaptions',
   PluginCreatorPluginOptionsLinkImagesToOriginal = 'pluginCreator___pluginOptions___linkImagesToOriginal',
+  PluginCreatorPluginOptionsPathPrefix = 'pluginCreator___pluginOptions___pathPrefix',
+  PluginCreatorPluginOptionsWrapperStyle = 'pluginCreator___pluginOptions___wrapperStyle',
+  PluginCreatorPluginOptionsBackgroundColor = 'pluginCreator___pluginOptions___backgroundColor',
+  PluginCreatorPluginOptionsMarkdownCaptions = 'pluginCreator___pluginOptions___markdownCaptions',
+  PluginCreatorPluginOptionsWithWebp = 'pluginCreator___pluginOptions___withWebp',
+  PluginCreatorPluginOptionsTracedSvg = 'pluginCreator___pluginOptions___tracedSVG',
+  PluginCreatorPluginOptionsLoading = 'pluginCreator___pluginOptions___loading',
+  PluginCreatorPluginOptionsDisableBgImageOnAlpha = 'pluginCreator___pluginOptions___disableBgImageOnAlpha',
+  PluginCreatorPluginOptionsDisableBgImage = 'pluginCreator___pluginOptions___disableBgImage',
   PluginCreatorPluginOptionsClassPrefix = 'pluginCreator___pluginOptions___classPrefix',
   PluginCreatorPluginOptionsShowLineNumbers = 'pluginCreator___pluginOptions___showLineNumbers',
   PluginCreatorPluginOptionsNoInlineHighlight = 'pluginCreator___pluginOptions___noInlineHighlight',
@@ -2686,6 +2689,15 @@ export enum SitePluginFieldsEnum {
   PluginOptionsPluginsPluginOptionsQuality = 'pluginOptions___plugins___pluginOptions___quality',
   PluginOptionsPluginsPluginOptionsShowCaptions = 'pluginOptions___plugins___pluginOptions___showCaptions',
   PluginOptionsPluginsPluginOptionsLinkImagesToOriginal = 'pluginOptions___plugins___pluginOptions___linkImagesToOriginal',
+  PluginOptionsPluginsPluginOptionsPathPrefix = 'pluginOptions___plugins___pluginOptions___pathPrefix',
+  PluginOptionsPluginsPluginOptionsWrapperStyle = 'pluginOptions___plugins___pluginOptions___wrapperStyle',
+  PluginOptionsPluginsPluginOptionsBackgroundColor = 'pluginOptions___plugins___pluginOptions___backgroundColor',
+  PluginOptionsPluginsPluginOptionsMarkdownCaptions = 'pluginOptions___plugins___pluginOptions___markdownCaptions',
+  PluginOptionsPluginsPluginOptionsWithWebp = 'pluginOptions___plugins___pluginOptions___withWebp',
+  PluginOptionsPluginsPluginOptionsTracedSvg = 'pluginOptions___plugins___pluginOptions___tracedSVG',
+  PluginOptionsPluginsPluginOptionsLoading = 'pluginOptions___plugins___pluginOptions___loading',
+  PluginOptionsPluginsPluginOptionsDisableBgImageOnAlpha = 'pluginOptions___plugins___pluginOptions___disableBgImageOnAlpha',
+  PluginOptionsPluginsPluginOptionsDisableBgImage = 'pluginOptions___plugins___pluginOptions___disableBgImage',
   PluginOptionsPluginsPluginOptionsClassPrefix = 'pluginOptions___plugins___pluginOptions___classPrefix',
   PluginOptionsPluginsPluginOptionsShowLineNumbers = 'pluginOptions___plugins___pluginOptions___showLineNumbers',
   PluginOptionsPluginsPluginOptionsNoInlineHighlight = 'pluginOptions___plugins___pluginOptions___noInlineHighlight',
@@ -2699,6 +2711,15 @@ export enum SitePluginFieldsEnum {
   PluginOptionsQuality = 'pluginOptions___quality',
   PluginOptionsShowCaptions = 'pluginOptions___showCaptions',
   PluginOptionsLinkImagesToOriginal = 'pluginOptions___linkImagesToOriginal',
+  PluginOptionsPathPrefix = 'pluginOptions___pathPrefix',
+  PluginOptionsWrapperStyle = 'pluginOptions___wrapperStyle',
+  PluginOptionsBackgroundColor = 'pluginOptions___backgroundColor',
+  PluginOptionsMarkdownCaptions = 'pluginOptions___markdownCaptions',
+  PluginOptionsWithWebp = 'pluginOptions___withWebp',
+  PluginOptionsTracedSvg = 'pluginOptions___tracedSVG',
+  PluginOptionsLoading = 'pluginOptions___loading',
+  PluginOptionsDisableBgImageOnAlpha = 'pluginOptions___disableBgImageOnAlpha',
+  PluginOptionsDisableBgImage = 'pluginOptions___disableBgImage',
   PluginOptionsClassPrefix = 'pluginOptions___classPrefix',
   PluginOptionsShowLineNumbers = 'pluginOptions___showLineNumbers',
   PluginOptionsNoInlineHighlight = 'pluginOptions___noInlineHighlight',
@@ -2835,6 +2856,15 @@ export type SitePluginPluginOptions = {
   quality: Maybe<Scalars['Int']>,
   showCaptions: Maybe<Scalars['Boolean']>,
   linkImagesToOriginal: Maybe<Scalars['Boolean']>,
+  pathPrefix: Maybe<Scalars['String']>,
+  wrapperStyle: Maybe<Scalars['String']>,
+  backgroundColor: Maybe<Scalars['String']>,
+  markdownCaptions: Maybe<Scalars['Boolean']>,
+  withWebp: Maybe<Scalars['Boolean']>,
+  tracedSVG: Maybe<Scalars['Boolean']>,
+  loading: Maybe<Scalars['String']>,
+  disableBgImageOnAlpha: Maybe<Scalars['Boolean']>,
+  disableBgImage: Maybe<Scalars['Boolean']>,
   classPrefix: Maybe<Scalars['String']>,
   showLineNumbers: Maybe<Scalars['Boolean']>,
   noInlineHighlight: Maybe<Scalars['Boolean']>,
@@ -2858,6 +2888,15 @@ export type SitePluginPluginOptionsFilterInput = {
   quality: Maybe<IntQueryOperatorInput>,
   showCaptions: Maybe<BooleanQueryOperatorInput>,
   linkImagesToOriginal: Maybe<BooleanQueryOperatorInput>,
+  pathPrefix: Maybe<StringQueryOperatorInput>,
+  wrapperStyle: Maybe<StringQueryOperatorInput>,
+  backgroundColor: Maybe<StringQueryOperatorInput>,
+  markdownCaptions: Maybe<BooleanQueryOperatorInput>,
+  withWebp: Maybe<BooleanQueryOperatorInput>,
+  tracedSVG: Maybe<BooleanQueryOperatorInput>,
+  loading: Maybe<StringQueryOperatorInput>,
+  disableBgImageOnAlpha: Maybe<BooleanQueryOperatorInput>,
+  disableBgImage: Maybe<BooleanQueryOperatorInput>,
   classPrefix: Maybe<StringQueryOperatorInput>,
   showLineNumbers: Maybe<BooleanQueryOperatorInput>,
   noInlineHighlight: Maybe<BooleanQueryOperatorInput>,
@@ -2902,6 +2941,15 @@ export type SitePluginPluginOptionsPluginsPluginOptions = {
   quality: Maybe<Scalars['Int']>,
   showCaptions: Maybe<Scalars['Boolean']>,
   linkImagesToOriginal: Maybe<Scalars['Boolean']>,
+  pathPrefix: Maybe<Scalars['String']>,
+  wrapperStyle: Maybe<Scalars['String']>,
+  backgroundColor: Maybe<Scalars['String']>,
+  markdownCaptions: Maybe<Scalars['Boolean']>,
+  withWebp: Maybe<Scalars['Boolean']>,
+  tracedSVG: Maybe<Scalars['Boolean']>,
+  loading: Maybe<Scalars['String']>,
+  disableBgImageOnAlpha: Maybe<Scalars['Boolean']>,
+  disableBgImage: Maybe<Scalars['Boolean']>,
   classPrefix: Maybe<Scalars['String']>,
   showLineNumbers: Maybe<Scalars['Boolean']>,
   noInlineHighlight: Maybe<Scalars['Boolean']>,
@@ -2914,6 +2962,15 @@ export type SitePluginPluginOptionsPluginsPluginOptionsFilterInput = {
   quality: Maybe<IntQueryOperatorInput>,
   showCaptions: Maybe<BooleanQueryOperatorInput>,
   linkImagesToOriginal: Maybe<BooleanQueryOperatorInput>,
+  pathPrefix: Maybe<StringQueryOperatorInput>,
+  wrapperStyle: Maybe<StringQueryOperatorInput>,
+  backgroundColor: Maybe<StringQueryOperatorInput>,
+  markdownCaptions: Maybe<BooleanQueryOperatorInput>,
+  withWebp: Maybe<BooleanQueryOperatorInput>,
+  tracedSVG: Maybe<BooleanQueryOperatorInput>,
+  loading: Maybe<StringQueryOperatorInput>,
+  disableBgImageOnAlpha: Maybe<BooleanQueryOperatorInput>,
+  disableBgImage: Maybe<BooleanQueryOperatorInput>,
   classPrefix: Maybe<StringQueryOperatorInput>,
   showLineNumbers: Maybe<BooleanQueryOperatorInput>,
   noInlineHighlight: Maybe<BooleanQueryOperatorInput>,
@@ -2934,6 +2991,7 @@ export type SiteSiteMetadata = {
   defaultTheme: Maybe<Scalars['String']>,
   postsPerPage: Maybe<Scalars['Int']>,
   mainMenu: Maybe<Array<Maybe<SiteSiteMetadataMainMenu>>>,
+  image: Maybe<Scalars['String']>,
 };
 
 export type SiteSiteMetadataFilterInput = {
@@ -2946,6 +3004,7 @@ export type SiteSiteMetadataFilterInput = {
   defaultTheme: Maybe<StringQueryOperatorInput>,
   postsPerPage: Maybe<IntQueryOperatorInput>,
   mainMenu: Maybe<SiteSiteMetadataMainMenuFilterListInput>,
+  image: Maybe<StringQueryOperatorInput>,
 };
 
 export type SiteSiteMetadataMainMenu = {
@@ -3045,7 +3104,10 @@ export type SiteTitleQueryQuery = { site: Maybe<{ siteMetadata: Maybe<(
 export type DefaultSeoQueryQueryVariables = {};
 
 
-export type DefaultSeoQueryQuery = { file: Maybe<{ childImageSharp: Maybe<{ fluid: Maybe<Pick<ImageSharpFluid, 'src'>> }> }>, site: Maybe<{ siteMetadata: Maybe<Pick<SiteSiteMetadata, 'title' | 'description' | 'siteUrl'>> }> };
+export type DefaultSeoQueryQuery = { site: Maybe<{ siteMetadata: Maybe<(
+      Pick<SiteSiteMetadata, 'title' | 'description' | 'siteUrl'>
+      & { defaultImage: SiteSiteMetadata['image'] }
+    )> }> };
 
 export type GetPostsQueryVariables = {
   limit: Scalars['Int'],

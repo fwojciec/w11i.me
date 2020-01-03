@@ -18,12 +18,8 @@ module.exports = {
     logoText: 'w11i',
     defaultTheme: 'dark',
     postsPerPage: 10,
-    mainMenu: [
-      {
-        title: 'About',
-        path: '/about'
-      }
-    ]
+    mainMenu: [{ title: 'About', path: '/about' }],
+    image: '/images/blog_image3.jpg'
   },
   plugins: [
     'gatsby-plugin-typescript',
