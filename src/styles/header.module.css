@@ -28,7 +28,7 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 800;
 
   & img {
     height: 44px;
