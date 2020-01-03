@@ -62,19 +62,6 @@ const SEO: React.FC<Props> = ({
       htmlAttributes={{ lang }}
       title={metaTitle}
       titleTemplate={title ? `${title} | ${siteTitle}` : siteTitle}
-      link={[
-        {
-          property: `og:url`,
-          href: metaUrl
-        }
-      ].concat(
-        image
-          ? {
-              property: 'og:image',
-              href: siteUrl + image
-            }
-          : []
-      )}
       meta={[
         {
           name: `description`,
@@ -93,6 +80,10 @@ const SEO: React.FC<Props> = ({
           content: `website`
         },
         {
+          property: `og:url`,
+          content: metaUrl
+        },
+        {
           name: `twitter:card`,
           content: `summary_large_image`
         },
@@ -101,6 +92,14 @@ const SEO: React.FC<Props> = ({
           content: '@filipcodes'
         }
       ]
+        .concat(
+          image
+            ? {
+                name: 'og:image',
+                content: siteUrl + image
+              }
+            : []
+        )
         .concat(
           keywords.length > 0
             ? {
