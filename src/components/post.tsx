@@ -18,8 +18,8 @@ interface Props {
   excerpt?: string
   html?: string
   tags?: string[]
-  previousPost?: { frontmatter: { path: string; title: string } }
-  nextPost?: { frontmatter: { path: string; title: string } }
+  previousPost?: PostLink
+  nextPost?: PostLink
 }
 
 const Post: React.FC<Props> = ({
@@ -69,7 +69,7 @@ const Post: React.FC<Props> = ({
         ) : (
           <>
             {html && <div dangerouslySetInnerHTML={{ __html: html }} />}
-            <Navigation previous={previousPost?.frontmatter} next={nextPost?.frontmatter} />
+            <Navigation previous={previousPost} next={nextPost} />
           </>
         )}
       </div>

@@ -15,15 +15,9 @@ module.exports = {
     description: 'A personal blog featuring writing on my two hobbies: coding and books.',
     copyrights: `Text copyright @ ${new Date().getFullYear()}, Filip Wojciechowski`,
     author: 'Filip Wojciechowski',
-    logo: {
-      src: '',
-      alt: ''
-    },
     logoText: 'w11i',
     defaultTheme: 'dark',
     postsPerPage: 10,
-    showMenuItems: 1,
-    menuMoreText: 'Show more',
     mainMenu: [
       {
         title: 'About',
@@ -92,7 +86,7 @@ module.exports = {
           {
             resolve: 'gatsby-remark-images',
             options: {
-              maxWidth: 1200,
+              maxWidth: 860,
               quality: 80,
               showCaptions: true,
               linkImagesToOriginal: false

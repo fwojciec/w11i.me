@@ -16,8 +16,8 @@ interface FrontMatter {
 interface Props {
   data: GetPageQuery
   pageContext: {
-    next: FrontMatter
-    previous: FrontMatter
+    next?: FrontMatter
+    previous?: FrontMatter
   }
 }
 
@@ -43,8 +43,8 @@ const BlogPostTemplate: React.FC<Props> = ({ data, pageContext }) => {
         coverImage={frontmatter.coverImage ? fixCoverImage(frontmatter.coverImage) : undefined}
         html={html || undefined}
         tags={frontmatter.tags || undefined}
-        previousPost={pageContext.previous}
-        nextPost={pageContext.next}
+        previousPost={pageContext.previous?.frontmatter}
+        nextPost={pageContext.next?.frontmatter}
       />
     </Layout>
   )
@@ -64,7 +64,7 @@ export const pageQuery = graphql`
         tags
         coverImage {
           childImageSharp {
-            fluid(maxWidth: 1200) {
+            fluid(maxWidth: 860) {
               ...GatsbyImageSharpFluid
             }
           }

@@ -4,8 +4,8 @@ documents:
   - 'src/**/*.tsx'
   - 'node_modules/gatsby-*/**/*.js'
 config:
-  # skipTypename: true
-  # avoidOptionals: true
+  skipTypename: true
+  avoidOptionals: true
   # maybeValue: T | undefined
 generates:
   src/generated/graphql.ts:

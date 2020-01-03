@@ -3,8 +3,8 @@ import { Link } from 'gatsby'
 import style from '../styles/navigation.module.css'
 
 interface Props {
-  previous?: { path: string; title: string }
-  next?: { path: string; title: string }
+  previous?: PostLink
+  next?: PostLink
 }
 
 const Navigation: React.FC<Props> = ({ previous, next }) => {

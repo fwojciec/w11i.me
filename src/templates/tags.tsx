@@ -21,7 +21,6 @@ const Tags: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPage
   if (!data.allMarkdownRemark || !data.allMarkdownRemark.edges) {
     return null
   }
-
   return (
     <>
       <SEO />
@@ -29,9 +28,8 @@ const Tags: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPage
         <div className="infoBanner">
           Posts with tag: <span>#{tag}</span>
         </div>
-
-        {data.allMarkdownRemark.edges.map(({ node: { id, excerpt, frontmatter } }) => {
-          return (
+        <div>
+          {data.allMarkdownRemark.edges.map(({ node: { id, excerpt, frontmatter } }) => (
             <Post
               key={id}
               title={frontmatter.title}
@@ -44,9 +42,8 @@ const Tags: React.FC<Props> = ({ data, pageContext: { nextPagePath, previousPage
               }
               excerpt={frontmatter.excerpt || excerpt || undefined}
             />
-          )
-        })}
-
+          ))}
+        </div>
         <Navigation
           previous={previousPagePath ? { path: previousPagePath, title: 'Newer posts' } : undefined}
           next={nextPagePath ? { path: nextPagePath, title: 'Older posts' } : undefined}

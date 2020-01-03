@@ -4,35 +4,11 @@ import Header from './header'
 import Footer from './footer'
 import '../styles/layout.css'
 
-interface DataProps {
-  site: {
-    siteMetadata: {
-      logo: {
-        src: string
-        alt: string
-      }
-      logoText: string
-      defaultTheme: string
-      copyrights: string
-      mainMenu: {
-        title: string
-        path: string
-      }[]
-      showMenuItems: number
-      menuMoreText: string
-    }
-  }
-}
-
 const Layout: React.FC = ({ children }) => {
-  const data = useStaticQuery<DataProps>(graphql`
+  const data = useStaticQuery<{ site: { siteMetadata: SiteMetaData } }>(graphql`
     query SiteTitleQuery {
       site {
         siteMetadata {
-          logo {
-            src
-            alt
-          }
           logoText
           defaultTheme
           copyrights
@@ -40,32 +16,15 @@ const Layout: React.FC = ({ children }) => {
             title
             path
           }
-          showMenuItems
-          menuMoreText
         }
       }
     }
   `)
-  const {
-    logo,
-    logoText,
-    defaultTheme,
-    mainMenu,
-    showMenuItems,
-    menuMoreText,
-    copyrights
-  } = data.site.siteMetadata
+  const { logoText, defaultTheme, mainMenu, copyrights } = data.site.siteMetadata
 
   return (
     <div className="container">
-      <Header
-        siteLogo={logo}
-        logoText={logoText}
-        defaultTheme={defaultTheme}
-        mainMenu={mainMenu}
-        mainMenuItems={showMenuItems}
-        menuMoreText={menuMoreText}
-      />
+      <Header logoText={logoText} defaultTheme={defaultTheme} mainMenu={mainMenu} />
       <div className="content">{children}</div>
       <Footer copyrights={copyrights} />
     </div>
