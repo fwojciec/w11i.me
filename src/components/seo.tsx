@@ -95,7 +95,7 @@ const SEO: React.FC<Props> = ({
         .concat(
           image
             ? {
-                name: 'og:image',
+                property: 'og:image',
                 content: siteUrl + image
               }
             : []
