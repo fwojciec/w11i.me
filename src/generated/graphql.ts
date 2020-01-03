@@ -3302,7 +3302,7 @@ export type DefaultSeoQueryQuery = (
     { __typename?: 'Site' }
     & { siteMetadata: Maybe<(
       { __typename?: 'SiteSiteMetadata' }
-      & Pick<SiteSiteMetadata, 'title' | 'description' | 'author'>
+      & Pick<SiteSiteMetadata, 'title' | 'description' | 'siteUrl'>
     )> }
   )> }
 );

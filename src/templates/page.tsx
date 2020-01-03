@@ -28,7 +28,12 @@ const BlogPostTemplate: React.FC<Props> = ({ data, pageContext }) => {
   const { frontmatter, excerpt, id, html } = data.markdownRemark
   return (
     <Layout>
-      <SEO title={frontmatter.title} description={frontmatter.excerpt || excerpt || undefined} />
+      <SEO
+        title={frontmatter.title}
+        description={frontmatter.excerpt || excerpt || undefined}
+        image={data.markdownRemark.frontmatter.coverImage?.childImageSharp?.fluid?.src || undefined}
+        pageUrl={data.markdownRemark.frontmatter.path}
+      />
       <Post
         key={id}
         title={frontmatter.title}
@@ -59,7 +64,7 @@ export const pageQuery = graphql`
         tags
         coverImage {
           childImageSharp {
-            fluid(maxWidth: 900) {
+            fluid(maxWidth: 1200) {
               ...GatsbyImageSharpFluid
             }
           }

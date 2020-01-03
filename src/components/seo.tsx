@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Helmet from 'react-helmet'
 import { useStaticQuery, graphql } from 'gatsby'
+import { DefaultSeoQueryQuery } from '../generated/graphql'
 
 const defaultKeywords = [
   'gatsby',
@@ -23,6 +24,8 @@ interface Props {
     | { property: string; content: string; name?: undefined }[]
   keywords?: string[]
   title?: string
+  image?: string
+  pageUrl?: string
 }
 
 const SEO: React.FC<Props> = ({
@@ -30,28 +33,33 @@ const SEO: React.FC<Props> = ({
   lang = 'en',
   meta = [],
   keywords = defaultKeywords,
-  title
+  title,
+  pageUrl,
+  image
 }) => {
-  const data = useStaticQuery(graphql`
+  const data: DefaultSeoQueryQuery = useStaticQuery(graphql`
     query DefaultSEOQuery {
       site {
         siteMetadata {
           title
           description
-          author
+          siteUrl
         }
       }
     }
   `)
-  const { title: siteTitle, description: siteDescription, author } = data.site.siteMetadata
+
+  const siteDescription = data.site?.siteMetadata?.description || `Filip Wojciechowski's blog`
+  const siteUrl = data.site?.siteMetadata?.siteUrl || 'https://w11i.me'
+  const siteTitle = data.site?.siteMetadata?.title || `Filip Wojciechowski's Blog`
+
   const metaTitle = title || siteTitle
   const metaDescription = description || siteDescription
+  const metaUrl = pageUrl ? siteUrl + pageUrl : siteUrl
 
   return (
     <Helmet
-      htmlAttributes={{
-        lang
-      }}
+      htmlAttributes={{ lang }}
       title={metaTitle}
       titleTemplate={title ? `${title} | ${siteTitle}` : siteTitle}
       meta={[
@@ -72,22 +80,26 @@ const SEO: React.FC<Props> = ({
           content: `website`
         },
         {
+          property: `og:url`,
+          content: metaUrl
+        },
+        {
           name: `twitter:card`,
-          content: `summary`
-        },
-        {
-          name: `twitter:title`,
-          content: metaTitle
-        },
-        {
-          name: `twitter:description`,
-          content: metaDescription
+          content: `summary_large_image`
         },
         {
           name: `twitter:creator`,
-          content: author
+          content: '@filipcodes'
         }
       ]
+        .concat(
+          image
+            ? {
+                name: 'og:image',
+                content: siteUrl + image
+              }
+            : []
+        )
         .concat(
           keywords.length > 0
             ? {
