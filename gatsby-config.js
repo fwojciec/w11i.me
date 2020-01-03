@@ -19,7 +19,7 @@ module.exports = {
     defaultTheme: 'dark',
     postsPerPage: 10,
     mainMenu: [{ title: 'About', path: '/about' }],
-    image: '/images/blog_image3.jpg'
+    image: '/images/blog_image2.jpg'
   },
   plugins: [
     'gatsby-plugin-typescript',
