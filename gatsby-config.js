@@ -123,16 +123,16 @@ module.exports = {
         icon: 'src/images/w11i-icon.png'
       }
     },
-    {
-      resolve: 'gatsby-plugin-s3',
-      options: {
-        bucketName: process.env.S3_BUCKET_NAME,
-        region: process.env.AWS_REGION,
-        protocol: siteAddress.protocol.slice(0, -1),
-        hostname: siteAddress.hostname,
-        acl: null
-      }
-    },
+    // {
+    //   resolve: 'gatsby-plugin-s3',
+    //   options: {
+    //     bucketName: process.env.S3_BUCKET_NAME,
+    //     region: process.env.AWS_REGION,
+    //     protocol: siteAddress.protocol.slice(0, -1),
+    //     hostname: siteAddress.hostname,
+    //     acl: null
+    //   }
+    // },
     {
       resolve: 'gatsby-plugin-canonical-urls',
       options: {

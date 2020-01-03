@@ -55,7 +55,7 @@ const SEO: React.FC<Props> = ({
 
   const metaTitle = title || siteTitle
   const metaDescription = description || siteDescription
-  const metaUrl = addTrailingSlash(pageUrl ? siteUrl + pageUrl : siteUrl)
+  const metaUrl = pageUrl ? siteUrl + pageUrl : siteUrl
 
   return (
     <Helmet
@@ -111,14 +111,6 @@ const SEO: React.FC<Props> = ({
         .concat(meta)}
     />
   )
-}
-
-function addTrailingSlash(url: string): string {
-  const last = url[url.length - 1]
-  if (last === '/') {
-    return url
-  }
-  return url + '/'
 }
 
 export default SEO
