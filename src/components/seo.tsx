@@ -55,13 +55,26 @@ const SEO: React.FC<Props> = ({
 
   const metaTitle = title || siteTitle
   const metaDescription = description || siteDescription
-  const metaUrl = pageUrl ? siteUrl + pageUrl : siteUrl
+  const metaUrl = addTrailingSlash(pageUrl ? siteUrl + pageUrl : siteUrl)
 
   return (
     <Helmet
       htmlAttributes={{ lang }}
       title={metaTitle}
       titleTemplate={title ? `${title} | ${siteTitle}` : siteTitle}
+      link={[
+        {
+          property: `og:url`,
+          href: metaUrl
+        }
+      ].concat(
+        image
+          ? {
+              property: 'og:image',
+              href: siteUrl + image
+            }
+          : []
+      )}
       meta={[
         {
           name: `description`,
@@ -80,10 +93,6 @@ const SEO: React.FC<Props> = ({
           content: `website`
         },
         {
-          property: `og:url`,
-          content: metaUrl
-        },
-        {
           name: `twitter:card`,
           content: `summary_large_image`
         },
@@ -92,14 +101,6 @@ const SEO: React.FC<Props> = ({
           content: '@filipcodes'
         }
       ]
-        .concat(
-          image
-            ? {
-                name: 'og:image',
-                content: siteUrl + image
-              }
-            : []
-        )
         .concat(
           keywords.length > 0
             ? {
@@ -111,6 +112,14 @@ const SEO: React.FC<Props> = ({
         .concat(meta)}
     />
   )
+}
+
+function addTrailingSlash(url: string): string {
+  const last = url[url.length - 1]
+  if (last === '/') {
+    return url
+  }
+  return url + '/'
 }
 
 export default SEO
