@@ -128,6 +128,8 @@ exports.sourceNodes = ({ actions }) => {
       tags: [String!]
       excerpt: String
       coverImage: File @fileByRelativePath
+      coverImageCreditText: String
+      coverImageCreditUrl: String
     }
   `
   createTypes(typeDefs)

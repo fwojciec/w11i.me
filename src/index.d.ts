@@ -14,3 +14,8 @@ interface PostLink {
   path: string
   title: string
 }
+
+interface CoverImageCredit {
+  text: string
+  url: string
+}

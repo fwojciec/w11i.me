@@ -26,6 +26,13 @@ const BlogPostTemplate: React.FC<Props> = ({ data, pageContext }) => {
     throw new Error('MarkdownRemark data is missing')
   }
   const { frontmatter, excerpt, id, html } = data.markdownRemark
+
+  const { coverImageCreditText, coverImageCreditUrl } = frontmatter
+  const coverImageCredit =
+    coverImageCreditText && coverImageCreditUrl
+      ? { text: coverImageCreditText, url: coverImageCreditUrl }
+      : undefined
+
   return (
     <Layout>
       <SEO
@@ -45,6 +52,7 @@ const BlogPostTemplate: React.FC<Props> = ({ data, pageContext }) => {
         tags={frontmatter.tags || undefined}
         previousPost={pageContext.previous?.frontmatter}
         nextPost={pageContext.next?.frontmatter}
+        coverImageCredit={coverImageCredit}
       />
     </Layout>
   )
@@ -69,6 +77,8 @@ export const pageQuery = graphql`
             }
           }
         }
+        coverImageCreditText
+        coverImageCreditUrl
       }
       id
       html

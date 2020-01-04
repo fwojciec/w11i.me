@@ -725,6 +725,8 @@ export enum FileFieldsEnum {
   ChildMarkdownRemarkFrontmatterCoverImagePublicUrl = 'childMarkdownRemark___frontmatter___coverImage___publicURL',
   ChildMarkdownRemarkFrontmatterCoverImageId = 'childMarkdownRemark___frontmatter___coverImage___id',
   ChildMarkdownRemarkFrontmatterCoverImageChildren = 'childMarkdownRemark___frontmatter___coverImage___children',
+  ChildMarkdownRemarkFrontmatterCoverImageCreditText = 'childMarkdownRemark___frontmatter___coverImageCreditText',
+  ChildMarkdownRemarkFrontmatterCoverImageCreditUrl = 'childMarkdownRemark___frontmatter___coverImageCreditUrl',
   ChildMarkdownRemarkExcerpt = 'childMarkdownRemark___excerpt',
   ChildMarkdownRemarkRawMarkdownBody = 'childMarkdownRemark___rawMarkdownBody',
   ChildMarkdownRemarkFileAbsolutePath = 'childMarkdownRemark___fileAbsolutePath',
@@ -854,6 +856,8 @@ export type Frontmatter = {
   tags: Maybe<Array<Scalars['String']>>,
   excerpt: Maybe<Scalars['String']>,
   coverImage: Maybe<File>,
+  coverImageCreditText: Maybe<Scalars['String']>,
+  coverImageCreditUrl: Maybe<Scalars['String']>,
 };
 
 
@@ -872,6 +876,8 @@ export type FrontmatterFilterInput = {
   tags: Maybe<StringQueryOperatorInput>,
   excerpt: Maybe<StringQueryOperatorInput>,
   coverImage: Maybe<FileFilterInput>,
+  coverImageCreditText: Maybe<StringQueryOperatorInput>,
+  coverImageCreditUrl: Maybe<StringQueryOperatorInput>,
 };
 
 export enum ImageCropFocus {
@@ -1583,6 +1589,8 @@ export enum MarkdownRemarkFieldsEnum {
   FrontmatterCoverImageChildMarkdownRemarkTimeToRead = 'frontmatter___coverImage___childMarkdownRemark___timeToRead',
   FrontmatterCoverImageChildMarkdownRemarkTableOfContents = 'frontmatter___coverImage___childMarkdownRemark___tableOfContents',
   FrontmatterCoverImageChildMarkdownRemarkChildren = 'frontmatter___coverImage___childMarkdownRemark___children',
+  FrontmatterCoverImageCreditText = 'frontmatter___coverImageCreditText',
+  FrontmatterCoverImageCreditUrl = 'frontmatter___coverImageCreditUrl',
   Excerpt = 'excerpt',
   RawMarkdownBody = 'rawMarkdownBody',
   FileAbsolutePath = 'fileAbsolutePath',
@@ -3131,7 +3139,7 @@ export type GetPageQueryVariables = {
 export type GetPageQuery = { markdownRemark: Maybe<(
     Pick<MarkdownRemark, 'id' | 'html' | 'excerpt'>
     & { frontmatter: (
-      Pick<Frontmatter, 'title' | 'date' | 'path' | 'author' | 'excerpt' | 'tags'>
+      Pick<Frontmatter, 'title' | 'date' | 'path' | 'author' | 'excerpt' | 'tags' | 'coverImageCreditText' | 'coverImageCreditUrl'>
       & { coverImage: Maybe<{ childImageSharp: Maybe<{ fluid: Maybe<GatsbyImageSharpFluidFragment> }> }> }
     ) }
   )> };

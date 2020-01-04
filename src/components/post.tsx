@@ -20,6 +20,7 @@ interface Props {
   tags?: string[]
   previousPost?: PostLink
   nextPost?: PostLink
+  coverImageCredit?: CoverImageCredit
 }
 
 const Post: React.FC<Props> = ({
@@ -27,6 +28,7 @@ const Post: React.FC<Props> = ({
   date,
   path,
   coverImage,
+  coverImageCredit,
   author,
   excerpt,
   tags,
@@ -56,7 +58,14 @@ const Post: React.FC<Props> = ({
         </div>
 
         {coverImage && (
-          <Img fluid={coverImage.childImageSharp.fluid} className={style.coverImage} />
+          <div className={style.coverImageWrapper}>
+            <Img fluid={coverImage.childImageSharp.fluid} className={style.coverImage} />
+            {coverImageCredit && (
+              <a className={style.coverImageCredit} href={coverImageCredit.url}>
+                {coverImageCredit.text}
+              </a>
+            )}
+          </div>
         )}
 
         {excerpt ? (

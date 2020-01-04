@@ -32,10 +32,23 @@
   }
 }
 
+.coverImageWrapper {
+  margin-bottom: 15px;
+}
+
 .coverImage {
   border-radius: 3px;
-  margin-bottom: 40px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
+}
+
+.coverImageCredit {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-top: 15px;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: right;
 }
 
 .meta {

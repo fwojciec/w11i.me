@@ -5,6 +5,8 @@ date: '2019-09-03'
 author: 'Filip'
 excerpt: "It used to be challenging to build multilingual websites in Next.js, but things have greatly improved with introduction of Next 9. In this blog post I'm sharing my ideas on how to implement multi-language support (with locale subpaths, etc.) in Next.js by taking advantage of the framework's newly introduced APIs, while trying to keep things as simple as possible."
 coverImage: '../images/don-ross-iii-JuKbaozIo0k-unsplash.jpg'
+coverImageCreditText: 'Photo by Don Ross III'
+coverImageCreditUrl: 'https://unsplash.com/photos/JuKbaozIo0k'
 tags: ['next.js', 'i18n', 'typescript']
 ---
 
@@ -260,7 +262,7 @@ export const LocaleProvider: React.FC<{ lang: Locale }> = ({ lang, children }) =
 }
 ```
 
-The context makes use of the `useState` hook to store and expose the value of the currently selected locale along with the `setLocale` function that changes it. The context will generally be initialized in the `LocaleProvider` component, but React expects the context to be created with default values, so we use the English language as the default locale and a noop function as the locale setter.
+The context makes use of the `useState` hook to store and expose the value of the currently selected locale along with the `setLocale` function that changes it. The context will generally be initialized in the `LocaleProvider` component, but React expects the context to be created with default values, so we use the English language as the default locale and a no-op function as the locale setter.
 
 The `LocaleProvider` is a functional React component that has two side-effects defined in the two respective `useEffect` hooks. The first one stores the user's language preference in `localStorage` when locale is first defined and on each subsequent change. The second one checks the value of the locale URL parameter on every client-side route change and synchronizes the context state with the locale embedded in the URL. The `withLocale` HOC, discussed in the previous section, takes care of setting the initial state of the context during the server-rendering phase, but we also need to account for the possible locale changes that that happened during client-side navigation. The `LocaleProvider` component therefore checks the URL locale on every route change and updates its state accordingly.
 
@@ -510,7 +512,3 @@ If you have any questions about this (or suggestions for improvements/bug fixes)
 2. [Repository with the code of the example website](https://github.com/fwojciec/simple-i18n-example)
 3. [Dynamic Routing in Next Docs](https://nextjs.org/docs#dynamic-routing)
 4. [Example of a more complex production website that uses a version of the above-described approach](https://graalagency.com/)
-
-### Cover photo credit
-
-Cover photo by [Don Ross III](https://unsplash.com/photos/JuKbaozIo0k).

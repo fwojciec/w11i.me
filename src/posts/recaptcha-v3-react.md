@@ -5,6 +5,8 @@ date: '2018-11-18'
 author: 'Filip'
 excerpt: "Google has recently released a new version of ReCaptcha. It no longer requires any end-user interaction, so it's arguably an improvement over the frequently annoying V2 version. This is a quick tutorial on how to use it in a React app."
 coverImage: '../images/florian-klauer-147-unsplash.jpg'
+coverImageCreditText: 'Photo by Florian Klauer'
+coverImageCreditUrl: 'https://unsplash.com/photos/GG0jOrmwqtw'
 tags: ['react', 'recaptcha', 'typescript']
 ---
 
@@ -18,7 +20,7 @@ This is just the client-side implementation, concerned with loading the script, 
 
 Let's start by defining some types. The ReCaptcha script adds a `grecaptcha` property to the `window` object. We need to add its type to the global `Window` interface so that we can use it in our code.
 
-We will be rendering the ReCaptcha widget explicitly, using an onload callback function, which is expected to exist as a method defined on the `window` object before we begin loading the ReCaptcha script. We must therefore add the callback function's type to the `Window` interface as well, so that the TypeScript compiler is aware of it.
+We will be rendering the ReCaptcha widget explicitly, using an on-load callback function, which is expected to exist as a method defined on the `window` object before we begin loading the ReCaptcha script. We must therefore add the callback function's type to the `Window` interface as well, so that the TypeScript compiler is aware of it.
 
 ```typescript
 declare global {
@@ -143,7 +145,7 @@ Finally, in step #3, we add the script to the DOM. One thing to note is that in 
 
 ## The onLoad callback function
 
-Rather than loading ReCaptcha on every page of our app (by including it in the base index.html template, for example) we want to be able to enable it only when required. The captcha script can be loaded with reference to an onload callback that will give us control over the rendering of the widget. Here's what our callback function looks like:
+Rather than loading ReCaptcha on every page of our app (by including it in the base index.html template, for example) we want to be able to enable it only when required. The captcha script can be loaded with reference to an on-load callback that will give us control over the rendering of the widget. Here's what our callback function looks like:
 
 ```typescript
 private onLoad = (): void => {
@@ -210,7 +212,3 @@ Again, this is just the basic client-side implementation, an example of how one 
 1. [Google ReCaptcha V3 Docs](https://developers.google.com/recaptcha/docs/v3)
 2. [ReCaptcha discussion group](https://groups.google.com/forum/#!forum/recaptcha)
 3. [Example implementation on CodeSandbox](https://codesandbox.io/s/0m5omor41n)
-
-### Cover photo credit
-
-Cover photo by [Florian Klauer](https://unsplash.com/photos/GG0jOrmwqtw).
