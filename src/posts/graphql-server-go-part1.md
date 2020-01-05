@@ -842,11 +842,11 @@ The relationship between the `Agent` and the `Author` objects is a one-to-many r
 
 ```go
 func (r *authorResolver) Agent(ctx context.Context, obj *pg.Author) (*pg.Agent, error) {
-agent, err := r.Repository.GetAgent(ctx, obj.AgentID)
-if err != nil {
-	return nil, err
-}
-return &agent, nil
+	agent, err := r.Repository.GetAgent(ctx, obj.AgentID)
+	if err != nil {
+		return nil, err
+	}
+	return &agent, nil
 }
 ```
 
