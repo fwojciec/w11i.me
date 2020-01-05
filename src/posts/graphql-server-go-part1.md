@@ -970,7 +970,7 @@ func (r *mutationResolver) CreateBook(ctx context.Context, data BookInput) (*pg.
 }
 ```
 
-I'll leave it up to you to create the remaining two methods. One thing to keep in mind in the context of the `DeleteBook` method is that deleting a book will automatically cascade to the relevant rows of the `book_authors` table because of how we've defined the schema for the `book_authors` table.
+I'll leave it up to you to create the remaining two methods. One thing to keep in mind in the context of the `DeleteBook` method is that deleting a book will automatically cascade to the relevant rows of the `book_authors` table because of how we've defined the schema for the `book_authors` table:
 
 ```sql
 CREATE TABLE IF NOT EXISTS book_authors (
