@@ -1008,4 +1008,3 @@ Thanks for your attention. You made it all the way to the end of the tutorial! Y
 7. [The Problems of "Schema-First" GraphQL Server Development by Nikolas Burk](https://www.prisma.io/blog/the-problems-of-schema-first-graphql-development-x1mn4cb0tyl3)
 8. [Standard Package Layout by Ben Johnson](https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1)
 9. [Introducing sqlc by Kyle Conroy](https://conroy.org/introducing-sqlc)
-10. [Cover photo by Joel Filipe](https://unsplash.com/photos/jU9VAZDGMzs)
