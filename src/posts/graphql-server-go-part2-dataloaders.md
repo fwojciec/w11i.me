@@ -284,7 +284,7 @@ From our perspective, however, the most interesting option is the `Fetch` functi
 
 ### Creating the AgentByAuthorID loader
 
-We will call the dataloader that takes author `ID` values as keys and returns an agent for each key the `AgentByAuthorID` loader. This loader will be an instance of the `AgentLoader` type, configured in a particular way. Let's start by adding the `AgentByAuthorID` definition to the `Loaders` struct in the `dataloader/dataloader.go` file:
+We will call the dataloader that takes author `ID` values as keys and returns an agent for each key the `AgentByAuthorID` loader. This loader will be an instance of the `AgentLoader` type, configured in a particular way. Let's start by adding the `AgentByAuthorID` definition to the `Loaders` struct in the `dataloaders/dataloaders.go` file:
 
 ```go
 // Loaders holds references to the individual dataloaders.
@@ -403,7 +403,7 @@ The theory of the dataloader `Fetch` function implementation can be therefore ge
 2. transform the query result into a map from the input type to the return type of the dataloader, and
 3. transform the map into a properly ordered slice of result values and return it.
 
-We will see this pattern repeated in the next two dataloader implementations discussed in this tutorial. For the time being, however, we can use the `newAgentByAuthorID` function to initialize the `AgentByAuthorID` dataloader in the `newLoaders` function from the `dataloader/dataloader.go` file:
+We will see this pattern repeated in the next two dataloader implementations discussed in this tutorial. For the time being, however, we can use the `newAgentByAuthorID` function to initialize the `AgentByAuthorID` dataloader in the `newLoaders` function from the `dataloaders/dataloaders.go` file:
 
 ```go
 func newLoaders(ctx context.Context, repo pg.Repository) *Loaders {
