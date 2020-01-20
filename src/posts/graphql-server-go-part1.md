@@ -14,7 +14,7 @@ tags: ['go', 'golang', 'graphql', 'sqlc', 'gqlgen', 'postgresql']
 
 This is the first in a series of posts covering the process of building a simple yet full featured GraphQL server in Go. In this post we will use [gqlgen](https://github.com/99designs/gqlgen) and [sqlc](https://github.com/kyleconroy/sqlc) to build a working GraphQL server backed by a PostgreSQL database, and capable of performing basic CRUD operations. Subsequent posts will discuss:
 
-- dataloaders [link to come],
+- dataloaders: [Let's Build a GraphQL Server in Go, Part 2: Dataloaders](https://w11i.me/graphql-server-go-part2-dataloaders),
 - authentication and authorization [link to come],
 - strategies for testing the server [link to come].
 
