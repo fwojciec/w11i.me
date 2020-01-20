@@ -4,9 +4,9 @@ path: '/graphql-server-go-part2-dataloaders'
 date: '2020-01-20'
 author: 'Filip'
 excerpt: 'This is the second in a series of posts covering the process of building a simple yet full featured GraphQL server in Go. In this post we will focus on implementing dataloaders to improve the performance of the server.'
-coverImage: '../images/shiro-hatori-WR-ifjFy4CI-unsplash.jpg'
-coverImageCreditText: 'Photo by Shiro hatori'
-coverImageCreditUrl: 'https://unsplash.com/photos/WR-ifjFy4CI'
+coverImage: '../images/eugene-triguba-jwAkA8JUpZY-unsplash.jpg'
+coverImageCreditText: 'Photo by Eugene Triguba'
+coverImageCreditUrl: 'https://unsplash.com/photos/jwAkA8JUpZY'
 tags: ['go', 'golang', 'graphql', 'sqlc', 'gqlgen', 'postgresql', 'dataloaders', 'dataloaden']
 ---
 
