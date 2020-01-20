@@ -433,7 +433,7 @@ Implementing the remaining dataloaders for our server is going to be analogous t
 Let's add a new comment to the `dataloaders/dataloaders.go` file so that the `go generate` command knows how to generate the code for the new dataloader type:
 
 ```go
-package dataloader
+package dataloaders
 
 // ...
 //go:generate dataloaden AuthorSliceLoader int64 []github.com/[username]/gqlgen-sqlc-example/pg.Author
