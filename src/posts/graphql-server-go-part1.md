@@ -1,5 +1,5 @@
 ---
-title: "Let's Build a GraphQL Server in Go: Part 1"
+title: "Let's Build a GraphQL Server in Go, Part 1"
 path: '/graphql-server-go-part1'
 date: '2020-01-04'
 author: 'Filip'
