@@ -1,11 +1,15 @@
 ---
-title: 'Next.js, useRouter hook, and testing'
-path: '/next-js-userouter-testing'
-date: '2019-09-02'
-author: 'Filip'
-excerpt: 'A quick tip on how to test Next.js components which utilize the useRouter hook.'
-tags: ['next.js', 'useRouter', 'testing']
+title: "Next.js, useRouter hook, and testing"
+path: "/next-js-userouter-testing"
+date: "2019-09-02"
+author: "Filip"
+excerpt: "A quick tip on how to test Next.js components which utilize the useRouter hook."
+tags: ["next.js", "useRouter", "testing"]
 ---
+
+> Updates:
+>
+> - 2020-02-20: Updated the example to work with the latest version of Next.js (9.2).
 
 ## Introduction
 
@@ -31,28 +35,32 @@ Why does the error occur in the first place? The `useRouter` hook is basically a
 My solution to this problem is using a simple higher order function which takes two arguments - a component (or a component tree) and an optional object with optional router prop values - and returns the component passed in as the first argument wrapped in a configured `RouterContext.Provider`. Here's the (TypeScript) code:
 
 ```tsx
-import React from 'react'
-import { NextRouter } from 'next/router'
-import { RouterContext } from 'next-server/dist/lib/router-context'
+import React from "react";
+import { NextRouter } from "next/router";
+import { RouterContext } from "next/dist/next-server/lib/router-context";
 
-export function withTestRouter(tree: React.ReactElement, router: Partial<NextRouter> = {}) {
+export function withTestRouter(
+  tree: React.ReactElement,
+  router: Partial<NextRouter> = {}
+) {
   const {
-    route = '',
-    pathname = '',
+    route = "",
+    pathname = "",
     query = {},
-    asPath = '',
+    asPath = "",
     push = async () => true,
     replace = async () => true,
     reload = () => null,
     back = () => null,
     prefetch = async () => undefined,
     beforePopState = () => null,
+    isFallback = false,
     events = {
       on: () => null,
       off: () => null,
       emit: () => null
     }
-  } = router
+  } = router;
 
   return (
     <RouterContext.Provider
@@ -67,12 +75,13 @@ export function withTestRouter(tree: React.ReactElement, router: Partial<NextRou
         back,
         prefetch,
         beforePopState,
+        isFallback,
         events
       }}
     >
       {tree}
     </RouterContext.Provider>
-  )
+  );
 }
 ```
 
@@ -83,34 +92,34 @@ The nice thing about this approach is that it is possible to optionally set spec
 Here is a simplified example from one of my apps which demonstrates how it all works in practice:
 
 ```tsx
-(...)
+// (...)
 
 // the mock which will be used instead of the router's push method
-const push = jest.fn()
+const push = jest.fn();
 
 // the component tree being tested
 const tree = withTestRouter(
-    <LanguageProvider lang='en'>
-      <LanguageSwitcher />
-    </LanguageProvider>,
-    {
-  		push,
-  		pathname: '/[lang]',
-  		asPath: '/en'
-  	}
-  )
+  <LanguageProvider lang="en">
+    <LanguageSwitcher />
+  </LanguageProvider>,
+  {
+    push,
+    pathname: "/[lang]",
+    asPath: "/en"
+  }
+);
 
 // an example test
-describe('<LanguageSwitcher />', () => {
-	it('switches language en => pl', () => {
-    const { getByText } = render(tree('en'))
-    const pl = getByText('polski')
+describe("<LanguageSwitcher />", () => {
+  it("switches language en => pl", () => {
+    const { getByText } = render(tree("en"));
+    const pl = getByText("polski");
     act(() => {
-      fireEvent.click(pl)
-    })
-    expect(push).toHaveBeenCalledWith('/[lang]', '/pl')
-  })
-})
+      fireEvent.click(pl);
+    });
+    expect(push).toHaveBeenCalledWith("/[lang]", "/pl");
+  });
+});
 ```
 
 ### Additional Resources
