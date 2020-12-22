@@ -4,12 +4,12 @@ import styles from '../styles/Footer.module.scss'
 const Footer: React.FC = () => {
   return (
     <footer className={styles.root}>
-      <ul>
-        <li>
+      <ul className={styles.list}>
+        <li className={styles.item}>
           Text copyright &copy; {new Date().getFullYear()} by Filip
           Wojciechowski
         </li>
-        <li>
+        <li className={styles.item}>
           Design based on&nbsp;
           <a href="https://github.com/panr/gatsby-starter-hello-friend">
             Hello Friend

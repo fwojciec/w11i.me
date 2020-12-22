@@ -1,25 +1,45 @@
+@import 'vars.scss';
+@import 'mixins.scss';
+
 .root {
-  ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    list-style: none;
-    margin: 0;
+  background-color: $light-background-more;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 50px 0;
+
+  :global .dark-theme :local & {
+    background: $dark-background-more;
+  }
+}
+
+.list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @include phone {
+    flex-direction: column;
+  }
+}
+
+.item {
+  padding: 0 18px;
+  border-right: 1px solid;
+
+  &:first-of-type {
+    padding-left: 0;
+  }
+
+  &:last-of-type {
+    padding-right: 0;
+    border-right: none;
+  }
+
+  @include phone {
     padding: 0;
-
-    li {
-      font-size: 0.9rem;
-      padding: 0 12px;
-      border-right: 1px solid;
-
-      &:first-of-type {
-        padding-left: 0;
-      }
-
-      &:last-of-type {
-        padding-right: 0;
-        border-right: none;
-      }
-    }
+    border: none;
   }
 }
