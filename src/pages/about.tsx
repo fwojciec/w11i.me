@@ -8,6 +8,7 @@ const AboutPage: React.FC = () => {
     <Layout
       title="About"
       description="Information about Filip Wojciechowski, the author of w11i.me blog."
+      path="/about"
     >
       <div className={styles.root}>
         <h1>About me</h1>

@@ -8,9 +8,10 @@ import Footer from './Footer'
 interface Props {
   title?: string
   description?: string
+  path?: string
 }
 
-const Layout: React.FC<Props> = ({ children, title, description }) => {
+const Layout: React.FC<Props> = ({ children, title, description, path }) => {
   const [theme, onThemeToggle] = useTheme('dark')
 
   useLayoutEffect(() => {
@@ -30,6 +31,7 @@ const Layout: React.FC<Props> = ({ children, title, description }) => {
             ? description
             : 'A personal blog featuring writing on my two hobbies: coding and books.'
         }
+        url={`https://w11i.me${path ? path : ''}`}
       />
       <main className="container">
         <Navbar onThemeToggle={onThemeToggle} />

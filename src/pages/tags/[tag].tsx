@@ -52,6 +52,7 @@ const TagIndexPage: NextPage<Props> = ({ tag, posts }) => {
     <Layout
       title={`Tag #${tag}`}
       description={`Blog posts tagged with #${tag}`}
+      path={`/tags/${tag}`}
     >
       <div className="infoBanner">
         Posts tagged with: <span>{`#${tag}`}</span>

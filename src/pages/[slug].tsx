@@ -10,6 +10,7 @@ import CoverImage from '../components/CoverImage'
 interface Props {
   content: string
   meta: FrontMatter
+  slug: string
 }
 
 export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({
@@ -21,6 +22,7 @@ export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({
     props: {
       meta: post.meta,
       content,
+      slug,
     },
   }
 }
@@ -34,9 +36,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-const PostPage: NextPage<Props> = ({ content, meta }) => {
+const PostPage: NextPage<Props> = ({ content, meta, slug }) => {
   return (
-    <Layout title={meta.title} description={meta.excerpt}>
+    <Layout title={meta.title} description={meta.excerpt} path={`/${slug}`}>
       <Post>
         <PostTitle>{meta.title}</PostTitle>
         <PostMeta
