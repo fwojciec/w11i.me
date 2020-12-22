@@ -1,7 +1,7 @@
 @import 'vars.scss';
 
 .root {
-  background: #fafafa;
+  background: $light-background-more;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9,7 +9,7 @@
   padding: 20px;
 
   :global .dark-theme :local & {
-    background: #252627;
+    background: $dark-background-more;
   }
 
   a {
