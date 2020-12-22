@@ -47,6 +47,7 @@ const PostPage: NextPage<Props> = ({ content, meta }) => {
         />
         <CoverImage
           image={meta.coverImage}
+          alt={`${meta.title} Cover Image`}
           credit={meta.coverImageCreditText}
           creditURL={meta.coverImageCreditUrl}
         />

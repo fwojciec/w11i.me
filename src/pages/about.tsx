@@ -13,6 +13,7 @@ const AboutPage: React.FC = () => {
         <h1>About me</h1>
         <Image
           src="/images/about.jpg"
+          alt="Filip Wojciechowski"
           width={860}
           height={540}
           layout="responsive"

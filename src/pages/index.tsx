@@ -44,7 +44,10 @@ const IndexPage: NextPage<Props> = ({ posts }) => {
             twitterProfile={meta.twitterProfile}
             tags={meta.tags}
           />
-          <CoverImage image={meta.coverImage} />
+          <CoverImage
+            image={meta.coverImage}
+            alt={`${meta.title} Cover Image`}
+          />
           <p>{meta.excerpt}</p>
           <ReadMore slug={slug} />
         </Post>
