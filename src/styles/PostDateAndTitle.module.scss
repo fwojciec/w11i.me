@@ -1,0 +1,20 @@
+.root {
+  display: flex;
+  align-items: center;
+}
+
+.writtenBy {
+  display: inline-flex;
+  align-items: center;
+}
+
+.author {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 600;
+
+  svg {
+    height: 28px;
+  }
+}

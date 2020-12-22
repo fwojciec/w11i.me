@@ -1,5 +1,3 @@
 {
-  "files.associations": {
-    "*.css": "postcss"
-  }
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

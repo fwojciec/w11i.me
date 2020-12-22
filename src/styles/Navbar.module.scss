@@ -1,0 +1,69 @@
+@import 'vars.scss';
+
+.root {
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 20px;
+
+  :global .dark-theme :local & {
+    background: #252627;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: calc(#{$content-width} - 40px);
+  max-width: 100%;
+}
+
+.right {
+  display: flex;
+  position: relative;
+}
+
+.menu {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 15px;
+  list-style: none;
+  border-right: 1px solid;
+  margin-right: 18px;
+
+  li {
+    margin: 0 12px;
+  }
+
+  a {
+    display: inline-block;
+    margin-right: 15px;
+    text-decoration: none;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}
+
+.themeToggle {
+  background: none;
+  color: inherit;
+  border: none;
+  box-shadow: none;
+  line-height: 0;
+  padding: 0 5px;
+  outline: none;
+}

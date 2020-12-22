@@ -1,0 +1,31 @@
+@import 'vars.scss';
+@import 'mixins.scss';
+
+.root {
+  width: 100%;
+  max-width: $content-width;
+  text-align: left;
+  padding: 20px;
+  margin: 0 auto 20px;
+  position: relative;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid $light-border-color;
+
+    :global .dark-theme :local & {
+      border-color: $dark-border-color;
+    }
+  }
+
+  @include tablet {
+    max-width: $tablet-content-width;
+  }
+
+  h1 {
+    margin: 0 0 10px;
+  }
+
+  img {
+    border-radius: 3px;
+  }
+}
