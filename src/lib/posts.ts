@@ -1,4 +1,4 @@
-import fs from 'fs/promises'
+import fs from 'fs'
 import { join } from 'path'
 import matter from 'gray-matter'
 
@@ -25,7 +25,7 @@ function isFrontMatter(arg: { [key: string]: any }): arg is FrontMatter {
 export async function getPostBySlug(slug: string) {
   const realSlug = slug.replace(/\.md$/, '')
   const fullPath = join(postsDirectory, `${realSlug}.md`)
-  const fileContents = await fs.readFile(fullPath, 'utf8')
+  const fileContents = await fs.promises.readFile(fullPath, 'utf8')
   const { data, content } = matter(fileContents)
 
   if (!isFrontMatter(data)) {
@@ -35,6 +35,6 @@ export async function getPostBySlug(slug: string) {
 }
 
 export async function getAllPosts() {
-  const slugs = await fs.readdir(postsDirectory)
+  const slugs = await fs.promises.readdir(postsDirectory)
   return Promise.all(slugs.map((slug) => getPostBySlug(slug)))
 }
