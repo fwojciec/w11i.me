@@ -29,7 +29,7 @@ const Layout: React.FC<Props> = ({ children, title, description, path }) => {
         description={
           description
             ? description
-            : 'A personal blog featuring writing on my two hobbies: coding and books.'
+            : 'A blog about software development (mostly). Tutorials, and reflections on the process of building software. Go, Python and TypeScript/JavaScript.'
         }
         url={`https://w11i.me${path ? path : ''}`}
       />
