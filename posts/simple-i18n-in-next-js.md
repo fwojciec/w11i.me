@@ -10,6 +10,10 @@ coverImageCreditUrl: 'https://unsplash.com/photos/JuKbaozIo0k'
 tags: ['next.js', 'i18n', 'typescript']
 ---
 
+> Updates:
+>
+> - 2020-12-23: Next.js 10 introduced [internationalized routing](https://nextjs.org/blog/next-10#internationalized-routing) and this is a game-changer for applications that require i18n. The approach described below is no longer applicable in the context of Next.js 10, though you can still use it with earlier versions of the framework.
+
 ## Introduction
 
 The websites I build typically support more than one language. This affects how I think about building websites in general, from data modeling to implementing multiple language support on the frontend. Because full-blown internationalization solutions (like [react-intl](https://github.com/formatjs/react-intl) and others) tend to be way too much for my needs, I prefer to roll my own. While this is relatively easy to do in vanilla client-rendered React, it used to be somewhat difficult in Next.js because of SSR and the way Next used to implemented routing. Version 9 of Next.js, however, features a brand new implementation of [dynamic routing](https://nextjs.org/blog/next-9#dynamic-route-segments). This change makes it much easier to build multi-language websites and web apps in Next.

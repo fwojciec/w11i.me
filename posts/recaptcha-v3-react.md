@@ -10,6 +10,10 @@ coverImageCreditUrl: 'https://unsplash.com/photos/GG0jOrmwqtw'
 tags: ['react', 'recaptcha', 'typescript']
 ---
 
+> Updates:
+>
+> - 2020-12-23: This post was written a long while ago and I haven't used ReCaptcha since on any of my projects. Please bear in mind that this content is likely outdated.
+
 Google has recently [released](https://webmasters.googleblog.com/2018/10/introducing-recaptcha-v3-new-way-to.html) a new version of ReCaptcha. It no longer requires any end-user interaction, so it's arguably an improvement over the frequently annoying V2 version. The world will be a better place with fewer blurry storefronts to identify and click on. Here's one way to implement ReCaptcha V3 in React.
 
 Code examples in this post are written in TypeScript. The equivalent JavaScript code would have been shorter and simpler, but I prefer writing and thinking in TypeScript. I find TypeScript implementations to be more comprehensive, they are more explicit about how the code is supposed to work. Simply remove the typings and the `private` keyword if you're using JavaScript -- it all should work just as well.
