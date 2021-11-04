@@ -14,7 +14,10 @@ const months = {
 }
 
 export function formatDate(date: Date) {
-  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+  console.log(date)
+  return `${date.getUTCDate()} ${
+    months[date.getUTCMonth()]
+  } ${date.getUTCFullYear()}`
 }
 
 export function tsFromStr(date: string) {
