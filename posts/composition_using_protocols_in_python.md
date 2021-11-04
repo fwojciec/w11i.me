@@ -1,6 +1,6 @@
 ---
 title: 'Protocols and Composition in Python'
-date: '2021-10-28'
+date: '2021-11-04'
 author: 'Filip Wojciechowski'
 twitterProfile: 'https://twitter.com/filipcodes'
 excerpt: "It's a source of heartbreak and distress for me when instrumentation-related side-effects (like logging, metrics, tracing, retrying logic, error handling, etc.) begin making their way inside the business logic layer of an application. If only there was a way to overlay instrumentation on top of business logic without touching it directly... It would be even better if we could keep the various instrumentation concerns separate from one another, while we're at it..."
