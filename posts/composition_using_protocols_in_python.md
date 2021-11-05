@@ -106,12 +106,11 @@ A protocol is Python's take on "structural subtyping" - it's a type that's
 effectively implemented by anything that matches the signature of the
 protocol's methods. Concrete implementations can subclass the protocol, in
 which case implementation correctness will be enforced at runtime on
-instantiation of a class inheriting from a protocol. Behind the scenes
-protocols are implemented using abstract base classes, so the runtime behavior
-follows from that. That said, explicit subclassing is entirely optional. A tool
-like `mypy` will be able to reason about protocols and their implementations
-based on method signatures alone. Think - abstract base classes light. Or,
-think - pythonic duck-typing augmented with static verification tooling.
+instantiation of classes inheriting from a protocol. That said, explicit
+subclassing is entirely optional. A tool like `mypy` will be able to reason
+about protocols and their implementations based on method signatures alone.
+Think - abstract base classes light. Or, think - pythonic duck-typing augmented
+with static verification tooling.
 
 All that sounds very fancy, but what's the benefit of doing things this way?
 Let's have a look at what adding logging to our implementation might look like.
