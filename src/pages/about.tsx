@@ -20,27 +20,19 @@ const AboutPage: React.FC = () => {
           layout="responsive"
         />
         <p>
-          Hi there! My name is Filip Wojciechowski and I&apos;m the author of
-          this blog. I&apos;m a software engineer based in Warsaw, Poland. This
-          blog was originally created as a vehicle for learning when I was
-          preparing to transition to a career as a software developer and I
-          still post here from time to time.
-        </p>
-        <p>
-          I write about software development, mostly. I&apos;m interested in the
-          entire software stack, from backend to frontend, as well as in
-          software design, code quality, testing, and various other practices
-          related to building software. I work primarily in Python, Go, and
-          TypeScript/JavaScript, while learning Haskell and Rust in my free
-          time.
+          Hi there, My name is Filip. I&apos;m a software engineer from Poland,
+          currently living in northern California. I started this blog as part
+          of my transition to a career as a software developer. I post about
+          technical topics I&apos;m passionate about: Go, Python,
+          JavaScript/TypeScript, software design, code quality, testing, and
+          various other software building practices. When not coding, I love
+          playing with my 3 year old son and running in Trione-Annadel State
+          Park.
         </p>
         <p>
           This blog is written in React/Next.js and the source code is available
           on <a href="https://github.com/fwojciec/w11i.me">Github</a>, along
-          with some of my other projects.
-        </p>
-        <p>
-          If you would like to contact me please send me a message on{' '}
+          with some of my other projects. You can reach me on{' '}
           <a href="https://www.linkedin.com/in/filipwojciechowski/">LinkedIn</a>{' '}
           or <a href="https://twitter.com/filipcodes">Twitter</a>.
         </p>
