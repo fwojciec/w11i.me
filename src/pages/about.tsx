@@ -20,7 +20,7 @@ const AboutPage: React.FC = () => {
           layout="responsive"
         />
         <p>
-          Hi there, My name is Filip. I&apos;m a software engineer from Poland,
+          Hi there, my name is Filip. I&apos;m a software engineer from Poland,
           currently living in northern California. I started this blog as part
           of my transition to a career as a software developer. I post about
           technical topics I&apos;m passionate about: Go, Python,
