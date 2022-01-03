@@ -14,7 +14,6 @@ const months = {
 }
 
 export function formatDate(date: Date) {
-  console.log(date)
   return `${date.getUTCDate()} ${
     months[date.getUTCMonth()]
   } ${date.getUTCFullYear()}`
