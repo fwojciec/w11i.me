@@ -14,10 +14,10 @@ I haven't been able to find much guidance on how to structure AWS serverless pro
 
 After reading this post you'll know how to:
 
-- use Python packaging tools to elegantly share code between lambda handlers
+- use Python packaging tools to transparently share code between lambda handlers
+- avoid module resolution issues in local development environment
 - package shared code as a lambda layer on deployment
-- avoid module resolution issues in local environment and when the project is deployed
-- setup `pytest` to run correctly on all test files located in a separate directory
+- setup `pytest` to correctly run a test suite located in a separate directory
 - help `mypy` type-check the project correctly despite its non-standard structure
 
 > Note: A finished reference serverless project is available [on Github](https://github.com/fwojciec/serverless-project-example). Feel free to consult it at any stage or just read the finished code instead of the description below.
