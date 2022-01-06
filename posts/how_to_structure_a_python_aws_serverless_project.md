@@ -10,13 +10,13 @@ coverImageCreditUrl: 'https://unsplash.com/photos/oalS6SkZc_s'
 tags: ['python', 'aws', 'lambda', 'serverless']
 ---
 
-I haven't been able to find much guidance on how to structure AWS serverless projects written in Python. There is plenty of "hello world" examples where all code fits into a single file, and a whole lot of questions about module resolution issues in Python lambda projects on StackOverflow, but precious little advice on how to correctly set up a repository for a larger project. What is the best way to share code between lambdas? How to overcome various module resolution issues that frequently plague these types of projects? In short, how to set things up so that Python tooling - language servers, type checkers and test runners - all work as expected?
+I haven't been able to find much guidance on how to structure AWS serverless projects written in Python. There is plenty of "hello world" examples out there, where all code fits into a single file, and a whole lot of questions about module resolution issues in Python lambda projects on StackOverflow, but precious little advice on how to set up a repository for a larger project. What is the best way to share code between lambdas? How to overcome local development module resolution issues that frequently plague projects of this type? In short, how to set things up so that Python tooling - language servers, type checkers and test runners - all work as expected?
 
 After reading this post you'll know how to:
 
 - use Python packaging tools to transparently share code between lambda handlers
 - avoid module resolution issues in local development environment
-- package shared code as a lambda layer on deployment
+- package shared code as a lambda layer during deployment
 - setup `pytest` to correctly run a test suite located in a separate directory
 - help `mypy` type-check the project correctly despite its non-standard structure
 
@@ -40,13 +40,13 @@ The basic structure of the [example project repository](https://github.com/fwojc
 ├── tests/
 ```
 
-The [example application](https://github.com/fwojciec/serverless-project-example) is a service that performs mathematical operations. It's a pointless service, or rather its only point is to give me an excuse to talk about code structure, the code itself is not important. All shared code is located in the `layer/shared` folder while lambda handlers live in the `functions` folder. Tests are separated from application code in the `tests` folder, since we don't want them to be included during deployment.
+The [example application](https://github.com/fwojciec/serverless-project-example) is a service that performs mathematical operations. It's a pointless service, or rather its only point is to provide an excuse for me to talk about structuring the project. The shared code is located in the `layer/shared` folder, while the lambda handlers live in the `functions` folder. Tests have been separated from the application code in the `tests` folder - since we don't want them to be included with the deployed code.
 
 ### The problem and the solution
 
-When functions and the layer are deployed, handlers will be able to import the `shared` package from the global namespace. This "magical" behavior is courtesy of the lambda layer machinery working behind the scenes. Things will work when deployed, that's great, but what about the local development environment? If you clone the example repository and open either of the handlers in your code editor you'll find the import statements referencing the `shared` module decorated with red squiggles. Module resolution is broken, since Python doesn't understand a codebase structured as described above. It seems that many projects end up accepting this state of affairs as the reality of building with lambdas - some really hacky workarounds for this very issue can be found, for example, in [official serverless project examples published by AWS](https://github.com/aws-samples/aws-serverless-shopping-cart/blob/b4b45d97544b840dc5852b39d92f20cf8ecae16b/backend/shopping-cart-service/tests/test_example.py#L4-L7). We can do better!
+When functions and the layer are deployed, the function handlers will be able to import the `shared` package from the global namespace. This "magical" behavior is courtesy of the lambda layer machinery working behind the scenes. Things will work when deployed, that's great, but what about the local development experience? If you clone the example repository and open either of the handlers in your code editor you'll find the import statements referencing the `shared` module underlined in red. Module resolution is broken, since Python doesn't automatically understand a codebase structured as described above. It seems that many projects end up accepting this state of affairs as the fact of life when building with lambdas - some really hacky workarounds for this very issue can be found, for example, in [official serverless project examples published by AWS](https://github.com/aws-samples/aws-serverless-shopping-cart/blob/b4b45d97544b840dc5852b39d92f20cf8ecae16b/backend/shopping-cart-service/tests/test_example.py#L4-L7). We can do better!
 
-The proper "Pythonic" solution is to have the `shared` package installed in the development environment so that it can be imported in other parts of the project irrespective of the project directory structure. Python, in fact, has a well established pattern for installing packages in "editable" mode to ease local development. We can leverage this feature to effectively create a simulated editable layer that can be developed along with the handlers. Yes, a little bit of initial setup is required, and we will always need to install the `shared` package locally as a prerequisite to doing development work and/or running the test suite, but the tradeoff is well worth it.
+The proper "Pythonic" solution to the problem is to have the `shared` package installed in the development environment so that it can be imported in other parts of the project irrespective of the project's directory structure. Python, in fact, has a well established pattern for installing packages in "editable" mode to ease local development. We can leverage this feature to effectively create an editable simulated layer that can be developed alongside the handlers. Yes, a little bit of initial setup is required, and we will always need to install the `shared` package locally as a prerequisite to doing development work and/or running the test suite, but the tradeoff is well worth it.
 
 ### Creating the internal package
 
@@ -63,7 +63,7 @@ The files and directories that comprise the internal package look as follows:
 └── setup.cfg
 ```
 
-The above structure is essentially a variant of what's known as a [src package layout](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html?highlight=src#using-a-src-layout) - with the `src` directory renamed to `layer`. For this project I'm using [setuptools](https://github.com/pypa/setuptools/tree/main/setuptools) as the packaging tool, and I'm configuring the package [declaratively](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html) using a `setup.cfg` file.
+This structure is essentially a variant of what's known as the [src package layout](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html?highlight=src#using-a-src-layout) - with the `src` directory renamed as `layer`. For this project I'm using [setuptools](https://github.com/pypa/setuptools/tree/main/setuptools) as the packaging tool, and I'm configuring the package [declaratively](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html) using a `setup.cfg` file.
 
 Declaring packages in this style requires, per [PEP 621](https://www.python.org/dev/peps/pep-0621/), a tiny bit of boilerplate in the `pyproject.toml` file:
 
@@ -119,32 +119,34 @@ The `shared` package is now installed and we can import it like any other packag
 4
 ```
 
-The red squiggles should now be gone from the handlers and the test suite should run without any issues. If you're using a modern code editor running a Python language server you should be able to jump around the code, find definitions and get completion suggestions for the packaged code throughout the entire codebase. Finally, any changes to the `shared` package code will be immediately applied throughout the project.
+The red squiggles should now be gone from the handlers and the test suite should run without any issues. If you're using a Python language server in your code editor you should be able to jump around the code, find definitions, and get completion suggestions for the packaged code throughout the codebase. Finally, any changes to the `shared` package code will be immediately applied throughout the project, without the need to re-install it.
 
 ### Deploying the internal package in a layer
 
-We managed to get things working nicely in the local environment, now we just have to figure out how to deploy our internal package in a lambda layer. While the [example project repository](https://github.com/fwojciec/serverless-project-example) uses AWS SAM for deployment, the solution I'm going to describe is tool agnostic and should be easy to adapt to any other AWS deployment framework (we use this approach with Terraform at work, for example).
+We've managed to get things working nicely in the local environment, now we just have to figure out how to include our internal package in a lambda layer on deployment. While the [example project repository](https://github.com/fwojciec/serverless-project-example) uses AWS SAM for deployment, the solution I'm going to describe is tool agnostic and should be possible to adapt to any other AWS deployment tool/framework (we use this approach with Terraform at work, for example).
 
-The first step is to turn our internal package into a wheel (`whl`) file. We can use the [build](https://github.com/pypa/build) tool to do it. After installing the tool with `pip` we can run it as follows:
+The first step is to turn the internal package into a wheel (a `*.whl` file). We can use the [build](https://github.com/pypa/build) tool for this purpose. After installing `build` with `pip` we can run it as follows:
 
 ```shellsession
 ❯ python -m build -w
 ```
 
-We run it as a Python module with the `-w` flag to build the wheel file only. By default the build artifacts are placed in the `dist` folder:
+We run it as a Python module, adding the `-w` flag to build the wheel only. By default the build artifacts are placed in the `dist` folder:
 
 ```shellsession
 ├── dist
 │  └── shared-0.1.0-py3-none-any.whl
 ```
 
-The second step is to begin assembling the layer. A lambda layer is packaged as a zipped `python` directory containing Python modules. These modules can be anything Python understands as modules - individual Python files or directories containing `__init__.py` files. The example project uses the `build` directory as staging area - let's, therefore, create `python` directory as a subdirectory of `build`:
+Now we can begin assembling the layer.
+
+A lambda layer is packaged as a zipped `python` directory containing Python modules. These modules can be anything Python understands as modules - individual Python files or directories containing `__init__.py` files. The example project uses the `build` directory as staging area - let's, therefore, create `python` directory as a subdirectory of `build`:
 
 ```shellsession
 ❯ mkdir -p build/python
 ```
 
-Now we can use `pip` to install the shared package wheel to `build/python` directory:
+Now we can use `pip` to install the `shared` package wheel to the `build/python` directory:
 
 ```shellsession
 ❯ python -m pip install dist/*.whl -t build/python
@@ -163,7 +165,7 @@ This should produce the following structure under the `build` directory:
 │        ├── (...)
 ```
 
-We can use analogous approach to install any external dependencies that should be included in the layer:
+We can use analogous approach to install any external dependencies that should be included in the layer - so provided they are listed in the `requirements.txt` file we run:
 
 ```shellsession
 ❯ python -m pip install -r requirements.txt -t build/python
@@ -175,7 +177,7 @@ The final step is to zip the `python` directory:
 ❯ cd build; zip -rq ../layer.zip python; cd ..
 ```
 
-This will produce a `layer.zip` file located in the root directory of the project. This file is ready to be deployed as a layer using any AWS deployment tool you like.
+This will produce a `layer.zip` file located in the root directory of the project. This file is ready to be deployed as a layer using a AWS deployment tool of your preference.
 
 In the [example project repository](https://github.com/fwojciec/serverless-project-example) I use a `Makefile` to perform the above-described manuals steps automatically:
 
@@ -201,19 +203,19 @@ package_layer: build build_layer
 	cd "$(ARTIFACTS_DIR)"; zip -rq ../layer.zip python
 ```
 
-Running `make build` will build the package, `make build_layer` will assemble the layer `python` directory and `make package_layer` will turn the `python` directory into a zip archive. The `ARTIFACTS_DIR` defaults to "build" if not set, so the default behavior of the make targets will be like in the manual commands described earlier. The single command to create the layer zip file is `make package_layer` (this target will run `build` and `build_layer` targets as its prerequisites/dependencies).
+Running `make build` will build the package, running `make build_layer` will populate the layer `python` directory, and running `make package_layer` will turn the `python` directory into a zip archive. The `ARTIFACTS_DIR` defaults to "build" if not set, so the default behavior of the make targets will be like in the manual commands described earlier. The single command to package the layer as a zip file is `make package_layer` (this target will run `build` and `build_layer` targets as its prerequisites/dependencies).
 
 ## Getting pytest to work
 
-With the `shared` package installed in the local Python environment, `pytest` mostly works with this repository structure. This is because `pytest` uses its own module discovery logic that's more flexible regarding directory layout compared to Python's internal one.
+With the `shared` package installed in the local Python environment, `pytest` mostly works with this repository structure. This is because `pytest` uses its own module discovery logic that's more permissive regarding directory layout compared to the Python default.
 
-The tests will always work when `pytest` is invoked as follows from the root of the project:
+The tests should always work when `pytest` is invoked as follows from the root of the project:
 
 ```shellsession
 ❯ python -m pytest
 ```
 
-The handler tests (`tests/unit/functions_add_test.py` and `tests/unit/functions_multiply_test.py`) will fail, however, when invoking `pytest` directly (i.e. not as a Python module with `python -m`) with the following error:
+The handler tests (`tests/unit/functions_add_test.py` and `tests/unit/functions_multiply_test.py`) will fail, however, with the following error when invoking `pytest` directly (i.e. not as a Python module with `python -m`) from the root of the project:
 
 ```shellsession
 ❯ pytest
@@ -226,9 +228,9 @@ tests/unit/functions_multiply_test.py:2: in <module>
 E   ModuleNotFoundError: No module named 'functions'
 ```
 
-The difference in behavior is explained in [pytest documentation](https://docs.pytest.org/en/6.2.x/pythonpath.html#invoking-pytest-versus-python-m-pytest) - running `python -m pytest` has a side-effect of adding the current directory to `sys.path` per standard `python` behavior.
+The difference in behavior is explained in [PyTest documentation](https://docs.pytest.org/en/6.2.x/pythonpath.html#invoking-pytest-versus-python-m-pytest) - running `python -m pytest` has a side-effect of adding the current directory to `sys.path` per standard `python` behavior.
 
-If you prefer calling `pytest` directly you can work around this quirk by including a `conftest.py` file in the root of the project. This will effectively force `pytest` to include project root in its hierarchy of discovered modules and the command will run without any errors.
+If you prefer calling `pytest` directly you can work around this quirk by including a `conftest.py` file in the root of the project. This will effectively force `pytest` to include project root in its hierarchy of discovered modules and the command should run without module resolution errors.
 
 ## Getting mypy to work
 
@@ -242,9 +244,9 @@ Found 1 error in 1 file (errors prevented further checking)
 
 The problem has to do with the fact that the `functions` directory contains multiple subdirectories, each with a file called `handler.py`. From `mypy`'s perspective this indicates an invalid package structure.
 
-There is a [closed issue in the `mypy` repo](https://github.com/python/mypy/issues/4008) with a discussion about this problem. The problem can be boiled down to this: `mypy` only understands Python packages and relationships between them, while our `functions` folder holds multiple discrete, parallel entry-points into the codebase that don't make sense when interpreted as a package. Contents of the `functions` directory, in other words, is a bit like a monorepo with multiple distinct projects located in separate directories and `mypy` doesn't understand monorepos.
+There is a [closed issue in the `mypy` repo](https://github.com/python/mypy/issues/4008) with a discussion about this problem. The problem can be boiled down to this: `mypy` only understands Python packages and relationships between them, while our `functions` folder holds multiple discrete, parallel entry-points into the codebase that don't make sense when interpreted as a package. Contents of the `functions` directory, in other words, is a bit like a monorepo with multiple distinct projects located in separate directories, and `mypy` doesn't understand monorepos.
 
-There are different possible ways of working around the problem. One way would be to use distinct handler file names for each function, but that seems like addressing the symptom not the cause of the problem. I ended up just writing a simple `make` target that runs `mypy` separately on each directory to be type checked:
+There are different possible ways of working around the problem. One way would be to use distinct handler file names for each function, but that seems like addressing the symptom not the cause of the problem. Instead, I ended up writing a simple `make` target that runs `mypy` separately on each directory that ought to be type-checked:
 
 ```makefile
 MYPY_DIRS := $(shell find functions layer ! -path '*.egg-info*' -type d -maxdepth 1 -mindepth 1 | xargs)
@@ -256,11 +258,11 @@ mypy: $(MYPY_DIRS)
 	$(foreach d, $(MYPY_DIRS), python -m mypy $(d);)
 ```
 
-The `MYPY_DIRS` variable finds all direct subdirectories of `layer` and `functions` directories (except the `egg-info` directory that's created by installing the `shared` package in editable mode). The `make mypy` command will run `python -m mypy` for each of those directories.
+The `MYPY_DIRS` variable holds all direct subdirectories of `layer` and `functions` directories (except the `egg-info` directory that's created by installing the `shared` package in editable mode). The `make mypy` command will run `python -m mypy` for each of those directories.
 
 ## Conclusion
 
-The general idea I was hoping to get across in this blog post is that it's possible to leverage Python packaging tooling to decouple project directory structure from the issue of module discovery/resolution in Python. This happens to be very helpful in case of Python AWS serverless projects.
+The general idea I was hoping to get across in this blog post is that it's possible to leverage Python packaging tooling to decouple project directory structure from the issue of module discovery/resolution in Python. This happens to be particularly helpful in case of Python AWS serverless projects.
 
 The template of the solution described above could be adjusted to suit many types of projects. If you're working on a system that's comprised of multiple micro-services, this project layout might be used for individual micro-services, with an additional abstraction, such as packages published to an internal repository, to share code between services. In case of very large projects it might be beneficial to package shared code into multiple layers, which is also possible in principle, with few adjustments.
 
