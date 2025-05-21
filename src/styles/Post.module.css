@@ -24,3 +24,36 @@
 .root img {
   border-radius: 3px;
 }
+
+/* MDX-specific styling */
+.root :global(.callout) {
+  margin: 20px 0;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.root :global(.callout-info) {
+  background-color: var(--color-background-secondary);
+  border-color: var(--color-primary);
+}
+
+.root :global(.callout-warning) {
+  background-color: #fff9c4;
+  border-color: #f59e0b;
+}
+
+.root :global(.callout-error) {
+  background-color: #fef2f2;
+  border-color: #ef4444;
+}
+
+[data-theme="dark"] .root :global(.callout-warning) {
+  background-color: #451a03;
+  border-color: #f59e0b;
+}
+
+[data-theme="dark"] .root :global(.callout-error) {
+  background-color: #450a0a;
+  border-color: #ef4444;
+}

@@ -13,3 +13,9 @@ interface FrontMatter {
   coverImageCreditUrl?: string
   tags: string[]
 }
+
+interface Post {
+  slug: string
+  meta: FrontMatter
+  content: string
+}

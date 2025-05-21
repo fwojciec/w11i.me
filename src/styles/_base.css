@@ -35,10 +35,13 @@ h6 {
   align-items: center;
   line-height: var(--line-height);
   font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
 }
 
 h1 {
   font-size: 2.625rem;
+  margin-top: 1em;
 }
 
 h2 {
@@ -78,56 +81,56 @@ a {
 img {
   display: block;
   max-width: 100%;
+}
 
-  &.left {
-    margin-right: auto;
-  }
+img.left {
+  margin-right: auto;
+}
 
-  &.center {
-    margin-left: auto;
-    margin-right: auto;
-  }
+img.center {
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  &.right {
-    margin-left: auto;
-  }
+img.right {
+  margin-left: auto;
 }
 
 figure {
   display: table;
   max-width: 100%;
   margin: 25px 0;
+}
 
-  &.left {
-    margin-right: auto;
-  }
+figure.left {
+  margin-right: auto;
+}
 
-  &.center {
-    margin-left: auto;
-    margin-right: auto;
-  }
+figure.center {
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  &.right {
-    margin-left: auto;
-  }
+figure.right {
+  margin-left: auto;
+}
 
-  figcaption {
-    font-size: 14px;
-    margin-top: 5px;
-    opacity: 0.8;
+figcaption {
+  font-size: 14px;
+  margin-top: 5px;
+  opacity: 0.8;
+}
 
-    &.left {
-      text-align: left;
-    }
+figcaption.left {
+  text-align: left;
+}
 
-    &.center {
-      text-align: center;
-    }
+figcaption.center {
+  text-align: center;
+}
 
-    &.right {
-      text-align: right;
-    }
-  }
+figcaption.right {
+  text-align: right;
 }
 
 code {
@@ -147,38 +150,42 @@ pre {
   border-radius: 3px;
   font-size: 0.9rem;
   overflow: auto;
+}
 
-  @media (max-width: 684px) {
+@media (max-width: 684px) {
+  pre {
     white-space: pre-wrap;
     word-wrap: break-word;
   }
+}
 
-  code {
-    background: none !important;
-    color: #ccc;
-    margin: 0;
-    padding: 0;
-    font-size: 0.9rem;
-  }
+pre code {
+  background: none !important;
+  color: #ccc;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
 }
 
 blockquote {
   border-left: 2px solid;
-  margin: 40px;
+  margin: 40px 0;
   padding: 10px 20px;
+}
 
-  @media (max-width: 684px) {
-    margin: 10px;
+@media (max-width: 684px) {
+  blockquote {
+    margin: 10px 0;
     padding: 10px;
   }
+}
 
-  p:first-of-type {
-    margin-top: 0;
-  }
+blockquote p:first-of-type {
+  margin-top: 0;
+}
 
-  p:last-of-type {
-    margin-bottom: 0;
-  }
+blockquote p:last-of-type {
+  margin-bottom: 0;
 }
 
 table {
@@ -204,14 +211,17 @@ ul,
 ol {
   margin-left: 40px;
   padding: 0;
+}
 
-  @media (max-width: 684px) {
+@media (max-width: 684px) {
+  ul,
+  ol {
     margin-left: 30px;
   }
+}
 
-  li {
-    margin-bottom: 10px;
-  }
+li {
+  margin-bottom: 10px;
 }
 
 ol ol {
@@ -243,12 +253,16 @@ textarea {
   max-width: var(--content-width);
   /* full height - header height - footer height - content top margin */
   min-height: calc(100vh - 67px - 131px - 50px);
+}
 
-  @media (max-width: 900px) {
+@media (max-width: 900px) {
+  .content {
     max-width: var(--tablet-content-width);
   }
+}
 
-  @media (max-width: 684px) {
+@media (max-width: 684px) {
+  .content {
     margin-top: 0;
   }
 }
@@ -267,10 +281,10 @@ hr {
   border-radius: 10px;
   width: calc(100% - 40px);
   background: var(--color-background-secondary);
+}
 
-  span {
-    font-weight: bold;
-  }
+.infoBanner span {
+  font-weight: bold;
 }
 
 .hidden {
@@ -282,13 +296,13 @@ hr {
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
+}
 
-  iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
+.embedVideo-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
