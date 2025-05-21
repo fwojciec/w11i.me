@@ -1,14 +1,14 @@
-@import 'vars.scss';
-@import 'mixins.scss';
+@use 'vars' as v;
+@use 'mixins' as m;
 
 .root {
-  background-color: $light-background-more;
+  background-color: v.$light-background-more;
   font-size: 0.9rem;
   text-align: center;
   padding: 50px 0;
 
   :global .dark-theme :local & {
-    background: $dark-background-more;
+    background: v.$dark-background-more;
   }
 }
 
@@ -20,7 +20,7 @@
   margin: 0;
   padding: 0;
 
-  @include phone {
+  @include m.phone {
     flex-direction: column;
   }
 }
@@ -38,7 +38,7 @@
     border-right: none;
   }
 
-  @include phone {
+  @include m.phone {
     padding: 0;
     border: none;
   }

@@ -10,10 +10,8 @@ const PostTags: React.FC<Props> = ({ tags }) => {
   return (
     <div className={styles.root}>
       {tags.map((tag) => (
-        <Link key={tag} href={`/tags/${tag}`}>
-          <a>
-            <span className={styles.tag}>{`#${tag}`}</span>
-          </a>
+        <Link key={tag} href={`/tags/${tag}`} className={styles.link}>
+          <span className={styles.tag}>{`#${tag}`}</span>
         </Link>
       ))}
     </div>

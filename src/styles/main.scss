@@ -1,5 +1,5 @@
-@import 'fonts.scss';
-@import 'prism.scss';
-@import 'vars.scss';
-@import 'mixins.scss';
-@import 'base.scss';
+@use 'fonts';
+@use 'prism';
+@use 'vars';
+@use 'mixins';
+@use 'base';

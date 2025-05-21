@@ -1,24 +1,24 @@
-@import 'vars.scss';
-@import 'mixins.scss';
+@use 'vars' as v;
+@use 'mixins' as m;
 
 .root {
   width: 100%;
-  max-width: $content-width;
+  max-width: v.$content-width;
   text-align: left;
   padding: 20px;
   margin: 0 auto 20px;
   position: relative;
 
   &:not(:last-of-type) {
-    border-bottom: 1px solid $light-border-color;
+    border-bottom: 1px solid v.$light-border-color;
 
     :global .dark-theme :local & {
-      border-color: $dark-border-color;
+      border-color: v.$dark-border-color;
     }
   }
 
-  @include tablet {
-    max-width: $tablet-content-width;
+  @include m.tablet {
+    max-width: v.$tablet-content-width;
   }
 
   h1 {

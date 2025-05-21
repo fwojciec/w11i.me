@@ -11,16 +11,14 @@ const Navbar: React.FC<Props> = ({ onThemeToggle }) => {
   return (
     <header className={styles.root}>
       <div className={styles.inner}>
-        <Link href="/">
-          <a>
-            <Logo logoText="w11i.me" />
-          </a>
+        <Link href="/" className={styles.logoLink}>
+          <Logo logoText="w11i.me" />
         </Link>
         <div className={styles.right}>
           <ul className={styles.menu}>
             <li>
-              <Link href="/about">
-                <a>About</a>
+              <Link href="/about" className={styles.link}>
+                About
               </Link>
             </li>
           </ul>

@@ -17,7 +17,7 @@ const AboutPage: React.FC = () => {
           alt="Filip Wojciechowski"
           width={860}
           height={540}
-          layout="responsive"
+          style={{ width: '100%', height: 'auto' }}
         />
         <p>
           Hi there, my name is Filip. I&apos;m a software engineer from Poland,

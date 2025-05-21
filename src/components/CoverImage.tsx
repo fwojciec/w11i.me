@@ -15,10 +15,10 @@ const CoverImage: React.FC<Props> = ({ image, alt, credit, creditURL }) => {
       <div className={styles.image}>
         <Image
           src={`/images/${image}`}
-          alt={alt}
+          alt={alt || ''}
           width={860}
           height={537.5}
-          layout="responsive"
+          style={{ width: '100%', height: 'auto' }}
         />
       </div>
       {credit && creditURL && (

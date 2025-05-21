@@ -1,12 +1,12 @@
-@import 'vars.scss';
-@import 'mixins.scss';
+@use 'vars' as v;
+@use 'mixins' as m;
 
 .root {
   display: flex;
   align-items: center;
   margin-bottom: 0.5em;
 
-  @include phone {
+  @include m.phone {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -15,7 +15,7 @@
 .hyphen {
   margin: 0 0.5em;
 
-  @include phone {
+  @include m.phone {
     display: none;
   }
 }

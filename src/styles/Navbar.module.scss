@@ -1,7 +1,7 @@
-@import 'vars.scss';
+@use 'vars' as v;
 
 .root {
-  background: $light-background-more;
+  background: v.$light-background-more;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9,7 +9,7 @@
   padding: 20px;
 
   :global .dark-theme :local & {
-    background: $dark-background-more;
+    background: v.$dark-background-more;
   }
 
   a {
@@ -22,7 +22,7 @@
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
-  width: calc(#{$content-width} - 40px);
+  width: calc(#{v.$content-width} - 40px);
   max-width: 100%;
 }
 

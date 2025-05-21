@@ -1,3 +1,6 @@
+@use 'vars' as v;
+@use 'mixins' as m;
+
 html {
   box-sizing: border-box;
 }
@@ -15,9 +18,9 @@ body {
     'Segoe UI', Helvetica, Arial, sans-serif;
   font-size: 1rem;
   font-weight: 400;
-  line-height: $line-height;
-  background-color: $light-background;
-  color: $light-color;
+  line-height: v.$line-height;
+  background-color: v.$light-background;
+  color: v.$light-color;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   font-feature-settings: 'liga', 'tnum', 'case', 'calt', 'zero', 'ss01', 'locl';
@@ -25,8 +28,8 @@ body {
   -webkit-text-size-adjust: 100%;
 
   &.dark-theme {
-    background-color: $dark-background;
-    color: $dark-color;
+    background-color: v.$dark-background;
+    color: v.$dark-color;
   }
 }
 
@@ -38,7 +41,7 @@ h5,
 h6 {
   display: flex;
   align-items: center;
-  line-height: $line-height;
+  line-height: v.$line-height;
   font-weight: 600;
 }
 
@@ -58,7 +61,7 @@ h4 {
   font-size: 1.125rem;
 }
 
-@include phone {
+@include m.phone {
   h1 {
     font-size: 2rem;
   }
@@ -139,14 +142,14 @@ code {
   font-family: Iosevka, Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
   font-feature-settings: normal;
   font-weight: normal;
-  background: $light-background-secondary;
+  background: v.$light-background-secondary;
   padding: 1px 4px;
   margin: 0 2px;
   border-radius: 3px;
   font-size: 1rem;
 
   .dark-theme & {
-    background: $dark-background-secondary;
+    background: v.$dark-background-secondary;
   }
 }
 
@@ -157,7 +160,7 @@ pre {
   font-size: 0.9rem;
   overflow: auto;
 
-  @include phone {
+  @include m.phone {
     white-space: pre-wrap;
     word-wrap: break-word;
   }
@@ -176,7 +179,7 @@ blockquote {
   margin: 40px;
   padding: 10px 20px;
 
-  @include phone {
+  @include m.phone {
     margin: 10px;
     padding: 10px;
   }
@@ -201,19 +204,19 @@ table {
 table,
 th,
 td {
-  border: 1px solid $light-color;
+  border: 1px solid v.$light-color;
   padding: 10px;
 
   .dark-theme & {
-    border-color: $dark-color;
+    border-color: v.$dark-color;
   }
 }
 
 th {
-  background: $light-background-secondary;
+  background: v.$light-background-secondary;
 
   .dark-theme & {
-    background: $dark-background-secondary;
+    background: v.$dark-background-secondary;
   }
 }
 
@@ -222,7 +225,7 @@ ol {
   margin-left: 40px;
   padding: 0;
 
-  @include phone {
+  @include m.phone {
     margin-left: 30px;
   }
 
@@ -257,15 +260,15 @@ textarea {
   justify-content: center;
   margin: 50px auto 0;
   width: 100%;
-  max-width: $content-width;
+  max-width: v.$content-width;
   // full height - header height - footer height - content top margin
   min-height: calc(100vh - 67px - 131px - 50px);
 
-  @include tablet {
-    max-width: $tablet-content-width;
+  @include m.tablet {
+    max-width: v.$tablet-content-width;
   }
 
-  @include phone {
+  @include m.phone {
     margin-top: 0;
   }
 }
@@ -273,11 +276,11 @@ textarea {
 hr {
   width: 100%;
   border: none;
-  background: $light-border-color;
+  background: v.$light-border-color;
   height: 1px;
 
   .dark-theme & {
-    background: $dark-border-color;
+    background: v.$dark-border-color;
   }
 }
 
@@ -287,10 +290,10 @@ hr {
   padding: 10px 20px;
   border-radius: 10px;
   width: calc(100% - 40px);
-  background: $light-background-secondary;
+  background: v.$light-background-secondary;
 
   .dark-theme & {
-    background: $dark-background-secondary;
+    background: v.$dark-background-secondary;
   }
 
   span {
