@@ -15,29 +15,61 @@ export default async function HomePage() {
     (a, b) => (tsFromStr(a.meta.date) - tsFromStr(b.meta.date)) * -1,
   )
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'w11i.me - Filip Wojciechowski',
+    description:
+      'Personal blog about software development, TypeScript, Python, Go, and web technologies',
+    url: 'https://w11i.me',
+    author: {
+      '@type': 'Person',
+      name: 'Filip Wojciechowski',
+      url: 'https://w11i.me',
+      sameAs: ['https://twitter.com/filipcodes'],
+    },
+    blogPost: sortedPosts.slice(0, 10).map(({ slug, meta }) => ({
+      '@type': 'BlogPosting',
+      headline: meta.title,
+      description: meta.excerpt,
+      datePublished: meta.date,
+      author: {
+        '@type': 'Person',
+        name: meta.author,
+      },
+      url: `https://w11i.me/${slug}`,
+    })),
+  }
+
   return (
-    <Layout>
-      {sortedPosts.map(({ slug, meta }) => (
-        <Post key={slug}>
-          <PostTitle>
-            <Link href={`/${slug}`} className="post-title-link">
-              {meta.title}
-            </Link>
-          </PostTitle>
-          <PostMeta
-            date={new Date(meta.date)}
-            author={meta.author}
-            twitterProfile={meta.twitterProfile}
-            tags={meta.tags}
-          />
-          <CoverImage
-            image={meta.coverImage}
-            alt={`${meta.title} Cover Image`}
-          />
-          <p>{meta.excerpt}</p>
-          <ReadMore slug={slug} />
-        </Post>
-      ))}
-    </Layout>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Layout>
+        {sortedPosts.map(({ slug, meta }) => (
+          <Post key={slug}>
+            <PostTitle>
+              <Link href={`/${slug}`} className="post-title-link">
+                {meta.title}
+              </Link>
+            </PostTitle>
+            <PostMeta
+              date={new Date(meta.date)}
+              author={meta.author}
+              twitterProfile={meta.twitterProfile}
+              tags={meta.tags}
+            />
+            <CoverImage
+              image={meta.coverImage}
+              alt={`${meta.title} Cover Image`}
+            />
+            <p>{meta.excerpt}</p>
+            <ReadMore slug={slug} />
+          </Post>
+        ))}
+      </Layout>
+    </>
   )
 }
