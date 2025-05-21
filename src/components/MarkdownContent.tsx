@@ -1,7 +1,9 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
-import CodeBlock from './SyntaxHighlighter'
+
+// Dynamically import CodeBlock to reduce initial bundle size
+const CodeBlock = lazy(() => import('./SyntaxHighlighter'))
 
 interface MarkdownContentProps {
   content: string
@@ -41,13 +43,28 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
             .replace(/&#39;/g, "'")
 
           return (
-            <CodeBlock
+            <Suspense
               key={`${index}-${theme}`}
-              language={language}
-              theme={theme}
+              fallback={
+                <pre
+                  style={{
+                    backgroundColor: 'var(--color-background-secondary)',
+                    color: 'var(--color-text)',
+                    padding: '1rem',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    overflow: 'auto',
+                    margin: '1rem 0',
+                  }}
+                >
+                  <code>{code}</code>
+                </pre>
+              }
             >
-              {code}
-            </CodeBlock>
+              <CodeBlock language={language} theme={theme}>
+                {code}
+              </CodeBlock>
+            </Suspense>
           )
         }
 

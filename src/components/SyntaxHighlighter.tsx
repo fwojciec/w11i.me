@@ -4,32 +4,30 @@ import {
   atomOneDark,
   atomOneLight,
 } from 'react-syntax-highlighter/dist/cjs/styles/hljs'
-import javascript from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript'
+// Only import languages actually used in blog posts
 import typescript from 'react-syntax-highlighter/dist/cjs/languages/hljs/typescript'
 import python from 'react-syntax-highlighter/dist/cjs/languages/hljs/python'
 import go from 'react-syntax-highlighter/dist/cjs/languages/hljs/go'
-import bash from 'react-syntax-highlighter/dist/cjs/languages/hljs/bash'
-import json from 'react-syntax-highlighter/dist/cjs/languages/hljs/json'
-import css from 'react-syntax-highlighter/dist/cjs/languages/hljs/css'
 import sql from 'react-syntax-highlighter/dist/cjs/languages/hljs/sql'
-import markdown from 'react-syntax-highlighter/dist/cjs/languages/hljs/markdown'
-import xml from 'react-syntax-highlighter/dist/cjs/languages/hljs/xml'
+import json from 'react-syntax-highlighter/dist/cjs/languages/hljs/json'
 import yaml from 'react-syntax-highlighter/dist/cjs/languages/hljs/yaml'
-import dockerfile from 'react-syntax-highlighter/dist/cjs/languages/hljs/dockerfile'
+import makefile from 'react-syntax-highlighter/dist/cjs/languages/hljs/makefile'
+import ini from 'react-syntax-highlighter/dist/cjs/languages/hljs/ini'
+import shell from 'react-syntax-highlighter/dist/cjs/languages/hljs/shell'
 
 // Register languages
-SyntaxHighlighter.registerLanguage('javascript', javascript)
 SyntaxHighlighter.registerLanguage('typescript', typescript)
+SyntaxHighlighter.registerLanguage('tsx', typescript) // Use typescript for tsx
 SyntaxHighlighter.registerLanguage('python', python)
 SyntaxHighlighter.registerLanguage('go', go)
-SyntaxHighlighter.registerLanguage('bash', bash)
-SyntaxHighlighter.registerLanguage('json', json)
-SyntaxHighlighter.registerLanguage('css', css)
 SyntaxHighlighter.registerLanguage('sql', sql)
-SyntaxHighlighter.registerLanguage('markdown', markdown)
-SyntaxHighlighter.registerLanguage('xml', xml)
+SyntaxHighlighter.registerLanguage('json', json)
 SyntaxHighlighter.registerLanguage('yaml', yaml)
-SyntaxHighlighter.registerLanguage('dockerfile', dockerfile)
+SyntaxHighlighter.registerLanguage('makefile', makefile)
+SyntaxHighlighter.registerLanguage('toml', ini) // Use ini for toml (similar syntax)
+SyntaxHighlighter.registerLanguage('ini', ini)
+SyntaxHighlighter.registerLanguage('shellsession', shell)
+SyntaxHighlighter.registerLanguage('shell', shell)
 
 interface CodeBlockProps {
   children: string
@@ -96,7 +94,7 @@ export default function CodeBlock({
 
   return (
     <SyntaxHighlighter
-      language={language || 'javascript'}
+      language={language || 'typescript'}
       style={theme === 'light' ? atomOneLight : atomOneDark}
       customStyle={{
         margin: '1rem 0',
