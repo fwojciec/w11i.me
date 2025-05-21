@@ -18,8 +18,12 @@ interface Props {
 }
 
 export const getStaticProps: GetStaticProps<Props, { tag: string }> = async ({
-  params: { tag },
+  params,
 }) => {
+  if (!params?.tag) {
+    throw new Error('Tag parameter is required')
+  }
+  const { tag } = params
   const posts = await getAllPosts()
   return {
     props: {

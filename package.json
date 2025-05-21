@@ -14,7 +14,7 @@
     "singleQuote": true
   },
   "engines": {
-    "node": ">=18.x"
+    "node": ">=20.x"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
@@ -27,7 +27,7 @@
     "sharp": "^0.34.2"
   },
   "devDependencies": {
-    "@types/node": "^18.18.0",
+    "@types/node": "^20.17.50",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
