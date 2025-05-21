@@ -1,5 +1,4 @@
 import { remark } from 'remark'
-import remarkPrism from 'remark-prism'
 import remarkHtml from 'remark-html'
 
 // Process MDX content as enhanced markdown with component conversion
@@ -19,9 +18,8 @@ export async function processContent(content: string) {
     '<div class="callout callout-$1"></div>',
   )
 
-  // Process as regular markdown
+  // Process as regular markdown (syntax highlighting will be added client-side)
   const result = await remark()
-    .use(remarkPrism)
     .use(remarkHtml as any, { sanitize: false })
     .process(processedContent)
   return result.toString()

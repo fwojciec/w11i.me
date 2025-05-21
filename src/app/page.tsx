@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import { getAllPosts } from '../lib/posts'
+import { getAllPostsMeta } from '../lib/posts'
 import { tsFromStr } from '../lib/date'
 import Layout from '../components/Layout'
 import PostMeta from '../components/PostMeta'
@@ -10,28 +9,15 @@ import PostTitle from '../components/PostTitle'
 import CoverImage from '../components/CoverImage'
 import ReadMore from '../components/ReadMore'
 
-interface Props {
-  posts: {
-    slug: string
-    meta: FrontMatter
-  }[]
-}
+export default async function HomePage() {
+  const posts = await getAllPostsMeta()
+  const sortedPosts = posts.sort(
+    (a, b) => (tsFromStr(a.meta.date) - tsFromStr(b.meta.date)) * -1,
+  )
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
-  const posts = await getAllPosts()
-  return {
-    props: {
-      posts: posts
-        .map(({ slug, meta }) => ({ slug, meta }))
-        .sort((a, b) => (tsFromStr(a.meta.date) - tsFromStr(b.meta.date)) * -1),
-    },
-  }
-}
-
-const IndexPage: NextPage<Props> = ({ posts }) => {
   return (
     <Layout>
-      {posts.map(({ slug, meta }) => (
+      {sortedPosts.map(({ slug, meta }) => (
         <Post key={slug}>
           <PostTitle>
             <Link href={`/${slug}`} className="post-title-link">
@@ -55,5 +41,3 @@ const IndexPage: NextPage<Props> = ({ posts }) => {
     </Layout>
   )
 }
-
-export default IndexPage
