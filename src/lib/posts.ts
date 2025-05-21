@@ -23,18 +23,27 @@ function isFrontMatter(arg: { [key: string]: any }): arg is FrontMatter {
 }
 
 export async function getPostBySlug(slug: string) {
-  const realSlug = slug.replace(/\.md$/, '')
-  const fullPath = join(postsDirectory, `${realSlug}.md`)
+  const realSlug = slug.replace(/\.mdx$/, '')
+  const fullPath = join(postsDirectory, `${realSlug}.mdx`)
   const fileContents = await fs.promises.readFile(fullPath, 'utf8')
   const { data, content } = matter(fileContents)
 
   if (!isFrontMatter(data)) {
     throw Error(`invalid front matter: ${slug}`)
   }
-  return { slug: realSlug, meta: data, content }
+
+  return {
+    slug: realSlug,
+    meta: data,
+    content,
+  }
 }
 
 export async function getAllPosts() {
-  const slugs = await fs.promises.readdir(postsDirectory)
+  const files = await fs.promises.readdir(postsDirectory)
+  const slugs = files
+    .filter((file) => file.endsWith('.mdx'))
+    .map((file) => file.replace(/\.mdx$/, ''))
+
   return Promise.all(slugs.map((slug) => getPostBySlug(slug)))
 }

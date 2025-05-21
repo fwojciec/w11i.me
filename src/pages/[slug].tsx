@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { getAllPosts, getPostBySlug } from '../lib/posts'
-import markdownToHtml from '../lib/markdown'
+import processContent from '../lib/markdown'
 import Layout from '../components/Layout'
 import Post from '../components/Post'
 import PostTitle from '../components/PostTitle'
@@ -17,7 +17,8 @@ export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({
   params: { slug },
 }) => {
   const post = await getPostBySlug(slug)
-  const content = await markdownToHtml(post.content)
+  const content = await processContent(post.content)
+
   return {
     props: {
       meta: post.meta,
