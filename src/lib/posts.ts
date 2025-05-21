@@ -1,33 +1,19 @@
 import fs from 'fs'
 import { join } from 'path'
 import matter from 'gray-matter'
+import {
+  validateFrontmatter,
+  type ValidatedFrontMatter,
+} from './content-validation'
 
 const postsDirectory = join(process.cwd(), 'posts')
 
 // Simple in-memory cache for build time
 let allPostsData: Array<{
   slug: string
-  meta: FrontMatter
+  meta: ValidatedFrontMatter
   content: string
 }> | null = null
-
-function isFrontMatter(arg: { [key: string]: any }): arg is FrontMatter {
-  return (
-    typeof arg.title === 'string' &&
-    typeof arg.date === 'string' &&
-    typeof arg.author === 'string' &&
-    (typeof arg.twitterProfile == 'string' ||
-      typeof arg.twitterProfile === 'undefined') &&
-    typeof arg.excerpt === 'string' &&
-    (typeof arg.coverImage == 'string' ||
-      typeof arg.coverImage === 'undefined') &&
-    (typeof arg.coverImageCreditText === 'string' ||
-      typeof arg.coverImageCreditText === 'undefined') &&
-    (typeof arg.coverImageCreditUrl === 'string' ||
-      typeof arg.coverImageCreditUrl === 'undefined') &&
-    Array.isArray(arg.tags)
-  )
-}
 
 // Load all posts once and cache them
 async function loadAllPostsData() {
@@ -48,14 +34,12 @@ async function loadAllPostsData() {
       const fileContents = await fs.promises.readFile(fullPath, 'utf8')
       const { data, content } = matter(fileContents)
 
-      if (!isFrontMatter(data)) {
-        console.error(`Invalid front matter: ${slug}`)
-        continue
-      }
+      // Validate frontmatter with Zod
+      const validatedMeta = validateFrontmatter(data, `${realSlug}.mdx`)
 
       posts.push({
         slug: realSlug,
-        meta: data,
+        meta: validatedMeta,
         content,
       })
     } catch (error) {
