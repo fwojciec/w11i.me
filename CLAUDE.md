@@ -2,92 +2,122 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
+## Development Commands
 
-This is a personal blog built with Next.js and TypeScript. The site generates static pages from markdown files stored in the `/posts` directory. Each markdown file contains frontmatter metadata that is parsed using gray-matter.
+**Core Development:**
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run typecheck` - Run TypeScript type checking
+- `npm run lint` - Run ESLint
 
-## Architecture
+**Testing:**
+- `npm test` - Run tests in watch mode
+- `npm run test:run` - Run tests once
+- `npm run test:ui` - Open Vitest UI interface
+- `npm run test:coverage` - Run tests with coverage report
 
-- **Pages**: Located in `/src/pages/`, follows Next.js routing conventions
-  - `index.tsx`: Homepage displaying a list of blog posts
-  - `[slug].tsx`: Dynamic route for individual blog posts
-  - `tags/[tag].tsx`: Dynamic route for tag-filtered blog posts
-  - `about.tsx`: Static about page
-  - `_app.tsx`: Custom App component with global styles
-  - `_document.tsx`: Custom Document component for HTML structure
+**Individual Test Execution:**
+- `npx vitest run src/__tests__/content-validation.test.ts` - Run specific test file
+- `npx vitest --reporter=verbose` - Detailed test output
 
-- **Components**: Reusable UI components in `/src/components/`
-  - `Layout.tsx`: Main layout wrapper with theme toggling
-  - Post-related components (Post, PostTitle, PostMeta, etc.)
-  - Navigation and footer components
+## Architecture Overview
 
-- **Lib**: Utility functions in `/src/lib/`
-  - `posts.ts`: Core functionality for fetching and parsing markdown posts
-  - `markdown.ts`: Markdown processing with remark
-  - `date.ts`: Date formatting utilities
+### Next.js App Router Structure
+This is a Next.js 15 blog using the App Router with TypeScript. The codebase follows these key patterns:
 
-- **Hooks**: Custom React hooks in `/src/hooks/`
-  - `useTheme.ts`: Theme management
-  - `useIsomorphicLayoutEffect.ts`: SSR-compatible layout effect
+**Page Structure:**
+- `src/app/page.tsx` - Home page listing all blog posts
+- `src/app/[slug]/page.tsx` - Individual blog post pages 
+- `src/app/tags/[tag]/page.tsx` - Tag-filtered post listings
+- `src/app/rss.xml/route.ts` - RSS feed API route
+- `src/app/sitemap.xml/route.ts` - XML sitemap API route
 
-- **Styles**: SCSS modules in `/src/styles/`
-  - Component-specific styles with `.module.scss` extension
-  - Global styles and variables
+### Content Management System
 
-## Commands
+**Blog Posts:**
+- Stored as `.mdx` files in the `/posts` directory
+- Frontmatter validated using Zod schemas in `src/lib/content-validation.ts`
+- Content processed via `src/lib/posts.ts` with in-memory caching
+- All posts must include: title, date, author, excerpt, tags (minimum required fields)
 
-### Development
+**Content Validation:**
+The site uses strict Zod validation for frontmatter. When adding new posts:
+1. Follow the frontmatter schema in `src/lib/content-validation.ts`
+2. Run `npm test` to validate all content
+3. Check validation errors in `src/__tests__/content-validation.test.ts`
 
-```bash
-# Start development server
-npm run dev
+### Theme System
 
-# Build for production
-npm run build
+**Implementation:**
+- Uses `next-themes` library for dark/light mode switching
+- CSS custom properties for theme variables in `src/styles/_vars.css`
+- Theme toggle in `src/components/Navbar.tsx`
+- Provider configured in `src/app/layout.tsx` with `suppressHydrationWarning={true}` on html element
 
-# Start production server
-npm run start
+**Theme Variables Pattern:**
+```css
+:root { /* light theme defaults */ }
+[data-theme="dark"] { /* dark theme overrides */ }
 ```
 
-### Linting
+### Component Architecture
 
-The project uses ESLint with TypeScript and React plugins. While there's no explicit lint script in package.json, you can run:
+**Key Component Patterns:**
+- CSS Modules for styling (`.module.css` files co-located with components)
+- Server components by default, `'use client'` only when needed
+- Path aliases: `@/components`, `@/lib`, `@/styles` configured in tsconfig.json
 
-```bash
-# Lint check
-npx eslint --ext .ts,.tsx .
+**Critical Components:**
+- `src/components/Layout.tsx` - Page wrapper with nav/footer
+- `src/components/MarkdownContent.tsx` - Client-side MDX renderer with syntax highlighting
+- `src/contexts/ThemeContext.tsx` - Legacy theme context (prefer next-themes)
 
-# Fix linting issues
-npx eslint --ext .ts,.tsx . --fix
-```
+### SEO and Metadata
 
-### TypeScript
+**SEO Implementation:**
+- Dynamic metadata generation in page components using Next.js metadata API
+- OpenGraph and Twitter Card support in root layout
+- JSON-LD structured data for blog posts
+- RSS feed and XML sitemap auto-generation
 
-```bash
-# Type checking
-npx tsc --noEmit
-```
+### Testing Infrastructure
 
-## Content Management
+**Test Setup:**
+- Vitest configured with TypeScript support and path aliases
+- Test files located in `src/__tests__/`
+- Content validation tests ensure all blog posts meet schema requirements
+- Integration tests validate post loading and metadata consistency
 
-Blog posts are written in Markdown format and stored in the `/posts` directory. Each post should include frontmatter with metadata such as:
+**Test Categories:**
+- `content-validation.test.ts` - Frontmatter schema validation
+- `posts.test.ts` - Blog post loading and integration tests  
+- `lib.test.ts` - Utility function tests
 
-```md
----
-title: Post Title
-date: YYYY-MM-DD
-tags: [tag1, tag2]
-excerpt: Brief excerpt of the post
-coverImage: /images/cover-image.jpg
-author:
-  name: Author Name
----
+## Development Guidelines
 
-Post content goes here...
-```
+**Adding New Blog Posts:**
+1. Create `.mdx` file in `/posts` directory
+2. Include all required frontmatter fields per Zod schema
+3. Run `npm test` to validate content
+4. Use `npm run typecheck` before committing
 
-## Styling Conventions
+**Code Quality:**
+- TypeScript strict mode enabled
+- Prettier with semicolon-free style and single quotes
+- ESLint with Next.js, accessibility, and React hooks plugins
+- CSS Modules with TypeScript plugin for type safety
 
-- CSS Modules are used for component-specific styling
-- Global variables and mixins are defined in `/src/styles/_vars.scss` and `/src/styles/_mixins.scss`
-- The site supports light/dark theme toggling
+**Performance Considerations:**
+- Posts are cached in memory during build
+- Syntax highlighting loads lazily on client side
+- Use Next.js Image component for optimized images
+- Static generation with `generateStaticParams` for post pages
+
+**Theme Development:**
+- Always test both light and dark themes
+- Use CSS custom properties for themeable values
+- Follow the data-attribute pattern: `[data-theme="dark"]`
+- Theme state persists across page loads via localStorage
+
+**Node.js Version:**
+- Requires Node.js >= 20.x (specified in package.json engines)

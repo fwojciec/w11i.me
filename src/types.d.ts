@@ -1,21 +1,14 @@
 declare module 'remark-prism'
 
+import type { ValidatedFrontMatter } from './lib/content-validation'
+
 type Theme = 'dark' | 'light'
 
-interface FrontMatter {
-  title: string
-  date: string
-  author: string
-  twitterProfile?: string
-  excerpt: string
-  coverImage?: string
-  coverImageCreditText?: string
-  coverImageCreditUrl?: string
-  tags: string[]
-}
+// Re-export the validated frontmatter type for backwards compatibility
+type FrontMatter = ValidatedFrontMatter
 
 interface Post {
   slug: string
-  meta: FrontMatter
+  meta: ValidatedFrontMatter
   content: string
 }
