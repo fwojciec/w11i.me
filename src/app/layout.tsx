@@ -17,6 +17,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+        <meta name="theme-color" content="#292a2d" />
+        <meta name="color-scheme" content="dark light" />
+      </head>
       <body className="dark-theme">
         <ThemeProvider>{children}</ThemeProvider>
       </body>

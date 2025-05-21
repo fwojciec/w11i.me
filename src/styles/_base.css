@@ -311,3 +311,13 @@ hr {
   height: 100%;
   border: 0;
 }
+
+/* Loading animation for skeletons */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
