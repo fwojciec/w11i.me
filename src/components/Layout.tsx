@@ -1,6 +1,6 @@
 'use client'
 import * as React from 'react'
-import { useTheme } from '../contexts/ThemeContext'
+import { useTheme } from 'next-themes'
 import Head from './Head'
 import Navbar from './Navbar'
 import Footer from './Footer'
@@ -13,7 +13,11 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = ({ children, title, description, path }) => {
-  const { toggleTheme } = useTheme()
+  const { setTheme, theme } = useTheme()
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
 
   return (
     <>
