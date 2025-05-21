@@ -26,10 +26,37 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tag } = await params
+  const tagUrl = `https://w11i.me/tags/${encodeURIComponent(tag)}`
+  const capitalizedTag = tag.charAt(0).toUpperCase() + tag.slice(1)
 
   return {
-    title: `Tag #${tag}`,
-    description: `Blog posts tagged with #${tag}`,
+    title: `${capitalizedTag} Articles`,
+    description: `Explore articles about ${tag} on w11i.me. Software development tutorials, insights, and best practices.`,
+    keywords: [tag, 'software development', 'programming', 'tutorials'],
+    openGraph: {
+      type: 'website',
+      url: tagUrl,
+      title: `${capitalizedTag} Articles - w11i.me`,
+      description: `Explore articles about ${tag} on w11i.me. Software development tutorials, insights, and best practices.`,
+      images: [
+        {
+          url: 'https://w11i.me/images/thumb_fb.png',
+          width: 1200,
+          height: 630,
+          alt: `${capitalizedTag} Articles - w11i.me`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${capitalizedTag} Articles - w11i.me`,
+      description: `Explore articles about ${tag}. Software development tutorials and insights.`,
+      creator: '@filipcodes',
+      images: ['https://w11i.me/images/thumb_tw.png'],
+    },
+    alternates: {
+      canonical: tagUrl,
+    },
   }
 }
 

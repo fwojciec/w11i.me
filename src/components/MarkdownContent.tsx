@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, lazy, Suspense } from 'react'
-import { useTheme } from '../contexts/ThemeContext'
+import { useTheme } from 'next-themes'
 
 // Dynamically import CodeBlock to reduce initial bundle size
 const CodeBlock = lazy(() => import('./SyntaxHighlighter'))
@@ -61,7 +61,10 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
                 </pre>
               }
             >
-              <CodeBlock language={language} theme={theme}>
+              <CodeBlock
+                language={language}
+                theme={theme as 'dark' | 'light' | undefined}
+              >
                 {code}
               </CodeBlock>
             </Suspense>
