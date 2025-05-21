@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styles from '../styles/PostTitle.module.scss'
+import styles from '../styles/PostTitle.module.css'
 
 interface PostTitleProps {
   children?: React.ReactNode

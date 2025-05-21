@@ -1,12 +1,9 @@
-@use 'vars' as v;
-@use 'mixins' as m;
-
 .root {
   display: flex;
   align-items: center;
   margin-bottom: 0.5em;
 
-  @include m.phone {
+  @media (max-width: 684px) {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -15,7 +12,7 @@
 .hyphen {
   margin: 0 0.5em;
 
-  @include m.phone {
+  @media (max-width: 684px) {
     display: none;
   }
 }
@@ -30,7 +27,7 @@
   align-items: center;
   font-weight: 600;
 
-  svg {
+  & svg {
     height: 28px;
   }
 }

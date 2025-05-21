@@ -1,5 +1,5 @@
 .root {
-  a {
+  & a {
     text-decoration: none;
   }
 }

@@ -1,0 +1,40 @@
+:root {
+  /* Light theme colors */
+  --color-background: #fff;
+  --color-background-secondary: #eaeaea;
+  --color-background-more: #fafafa;
+  --color-text: #222;
+  --color-text-secondary: #999;
+  --color-border: #dcdcdc;
+
+  /* Sizes */
+  --content-width: 800px;
+  --tablet-content-width: 660px;
+  --line-height: 1.5;
+
+  /* Breakpoints */
+  --phone-width: 684px;
+  --tablet-width: 900px;
+}
+
+[data-theme="dark"] {
+  /* Dark theme colors */
+  --color-background: #292a2d;
+  --color-background-secondary: #2c2f33;
+  --color-background-more: #252627;
+  --color-text: #a9a9b3;
+  --color-text-secondary: #73747b;
+  --color-border: #4a4b50;
+}
+
+/* Media query for system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-background: #292a2d;
+    --color-background-secondary: #2c2f33;
+    --color-background-more: #252627;
+    --color-text: #a9a9b3;
+    --color-text-secondary: #73747b;
+    --color-border: #4a4b50;
+  }
+}

@@ -1,18 +1,12 @@
-@use 'vars' as v;
-
 .root {
-  background: v.$light-background-more;
+  background: var(--color-background-more);
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
   padding: 20px;
 
-  :global .dark-theme :local & {
-    background: v.$dark-background-more;
-  }
-
-  a {
+  & a {
     text-decoration: none;
   }
 }
@@ -22,7 +16,7 @@
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
-  width: calc(#{v.$content-width} - 40px);
+  width: calc(var(--content-width) - 40px);
   max-width: 100%;
 }
 
@@ -40,14 +34,14 @@
   margin: 0 auto;
   padding: 0 15px;
   list-style: none;
-  border-right: 1px solid;
+  border-right: 1px solid var(--color-border);
   margin-right: 18px;
 
-  li {
+  & li {
     margin: 0 12px;
   }
 
-  a {
+  & a {
     display: inline-block;
     margin-right: 15px;
     text-decoration: none;

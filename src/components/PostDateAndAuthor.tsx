@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { formatDate } from '../lib/date'
-import styles from '../styles/PostDateAndTitle.module.scss'
+import styles from '../styles/PostDateAndTitle.module.css'
 
 interface Props {
   date: Date

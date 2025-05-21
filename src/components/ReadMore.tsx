@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
-import styles from '../styles/ReadMore.module.scss'
+import styles from '../styles/ReadMore.module.css'
 
 interface Props {
   slug: string

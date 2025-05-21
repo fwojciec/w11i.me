@@ -1,15 +1,8 @@
-@use 'vars' as v;
-@use 'mixins' as m;
-
 .root {
-  background-color: v.$light-background-more;
+  background-color: var(--color-background-more);
   font-size: 0.9rem;
   text-align: center;
   padding: 50px 0;
-
-  :global .dark-theme :local & {
-    background: v.$dark-background-more;
-  }
 }
 
 .list {
@@ -20,14 +13,14 @@
   margin: 0;
   padding: 0;
 
-  @include m.phone {
+  @media (max-width: 684px) {
     flex-direction: column;
   }
 }
 
 .item {
   padding: 0 18px;
-  border-right: 1px solid;
+  border-right: 1px solid var(--color-border);
 
   &:first-of-type {
     padding-left: 0;
@@ -38,7 +31,7 @@
     border-right: none;
   }
 
-  @include m.phone {
+  @media (max-width: 684px) {
     padding: 0;
     border: none;
   }

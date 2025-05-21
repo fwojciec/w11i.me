@@ -1,7 +1,7 @@
 import * as React from 'react'
 import PostDateAndAuthor from './PostDateAndAuthor'
 import PostTags from './PostTags'
-import styles from '../styles/PostMeta.module.scss'
+import styles from '../styles/PostMeta.module.css'
 
 interface Props {
   date: Date
