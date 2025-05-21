@@ -17,12 +17,24 @@
 - ✅ System dark mode preference detection
 - ✅ Cleaner build process
 
-## 2. Upgrade Markdown Processing
-- [ ] Migrate to unified v11+ and fix remark type issues
-- [ ] Remove `as any` type assertions in markdown.ts
-- [ ] Add MDX support for React components in markdown
-- [ ] Replace remark-prism with modern syntax highlighting (Shiki or Prism v2)
-- [ ] Test markdown rendering with new setup
+## 2. ✅ Upgrade Markdown Processing (COMPLETED)
+- [x] Convert all existing .md files to .mdx format
+- [x] Implement simplified MDX processing with component support
+- [x] Add custom `<Callout type="info|warning|error">` components
+- [x] Remove dual processing (markdown vs MDX) for cleaner codebase
+- [x] Update remark processing chain for enhanced markdown
+- [x] Remove unnecessary dependencies (unified, MDX runtime packages)
+- [x] Fix CSS nesting issues from SCSS to CSS migration
+- [x] Improve header and blockquote spacing for better typography
+
+**Key Features Added:**
+- ✅ Unified .mdx format for all posts with enhanced capabilities
+- ✅ Simplified processing pipeline - single `processContent()` function
+- ✅ Custom `<Callout>` components with proper styling (info/warning/error types)
+- ✅ Fixed CSS nesting syntax causing Fast Refresh warnings
+- ✅ Improved typography with better header spacing (more space above, less below)
+- ✅ Corrected blockquote margins to align with content container
+- ✅ Reduced dependencies and bundle size
 
 ## 3. TypeScript Configuration Improvements
 - [ ] Enable `strict: true` in tsconfig.json
