@@ -60,8 +60,8 @@ const TagIndexPage: NextPage<Props> = ({ tag, posts }) => {
       {posts.map(({ slug, meta }) => (
         <Post key={slug}>
           <PostTitle>
-            <Link href={`/${slug}`}>
-              <a>{meta.title}</a>
+            <Link href={`/${slug}`} className="post-title-link">
+              {meta.title}
             </Link>
           </PostTitle>
           <PostMeta

@@ -9,6 +9,7 @@ interface Props {
   title?: string
   description?: string
   path?: string
+  children?: React.ReactNode
 }
 
 const Layout: React.FC<Props> = ({ children, title, description, path }) => {

@@ -8,8 +8,8 @@ interface Props {
 
 const ReadMore: React.FC<Props> = ({ slug }) => {
   return (
-    <Link href={`/${slug}`}>
-      <a className={styles.root}>Read more &rarr;</a>
+    <Link href={`/${slug}`} className={styles.root}>
+      Read more &rarr;
     </Link>
   )
 }
