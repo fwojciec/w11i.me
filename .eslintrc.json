@@ -1,9 +1,7 @@
 {
   "extends": ["next/core-web-vitals", "prettier"],
-  "plugins": ["react", "jsx-a11y", "prettier", "react-hooks"],
+  "plugins": ["react", "jsx-a11y", "prettier"],
   "rules": {
-    "prettier/prettier": "error",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "prettier/prettier": "error"
   }
 }
