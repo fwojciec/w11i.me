@@ -1,6 +1,9 @@
 'use client'
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { atomOneDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs'
+import {
+  atomOneDark,
+  atomOneLight,
+} from 'react-syntax-highlighter/dist/cjs/styles/hljs'
 import javascript from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript'
 import typescript from 'react-syntax-highlighter/dist/cjs/languages/hljs/typescript'
 import python from 'react-syntax-highlighter/dist/cjs/languages/hljs/python'
@@ -31,6 +34,7 @@ SyntaxHighlighter.registerLanguage('dockerfile', dockerfile)
 interface CodeBlockProps {
   children: string
   language?: string
+  theme?: 'light' | 'dark'
 }
 
 function shouldHighlight(language?: string, code?: string): boolean {
@@ -63,16 +67,21 @@ function shouldHighlight(language?: string, code?: string): boolean {
   return true
 }
 
-export default function CodeBlock({ children, language }: CodeBlockProps) {
+export default function CodeBlock({
+  children,
+  language,
+  theme = 'dark',
+}: CodeBlockProps) {
   const shouldUseHighlighting = shouldHighlight(language, children)
 
   if (!shouldUseHighlighting) {
     // Return a simple pre/code block without syntax highlighting
     return (
       <pre
+        className="syntax-highlighter-fallback"
         style={{
-          backgroundColor: '#282c34',
-          color: '#abb2bf',
+          backgroundColor: theme === 'light' ? '#fafafa' : '#282c34',
+          color: theme === 'light' ? '#2c3e50' : '#abb2bf',
           padding: '1rem',
           borderRadius: '0.5rem',
           fontSize: '0.875rem',
@@ -80,7 +89,7 @@ export default function CodeBlock({ children, language }: CodeBlockProps) {
           margin: '1rem 0',
         }}
       >
-        <code>{children}</code>
+        <code style={{ color: 'inherit' }}>{children}</code>
       </pre>
     )
   }
@@ -88,7 +97,7 @@ export default function CodeBlock({ children, language }: CodeBlockProps) {
   return (
     <SyntaxHighlighter
       language={language || 'javascript'}
-      style={atomOneDark}
+      style={theme === 'light' ? atomOneLight : atomOneDark}
       customStyle={{
         margin: '1rem 0',
         borderRadius: '0.5rem',

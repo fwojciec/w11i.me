@@ -145,7 +145,7 @@ code {
 }
 
 pre {
-  background: #1a1a1d;
+  background: var(--color-background-secondary);
   padding: 20px;
   border-radius: 3px;
   font-size: 0.9rem;
@@ -161,10 +161,15 @@ pre {
 
 pre code {
   background: none !important;
-  color: #ccc;
+  color: var(--color-text);
   margin: 0;
   padding: 0;
   font-size: 0.9rem;
+}
+
+/* Override for syntax highlighter fallback */
+.syntax-highlighter-fallback code {
+  color: inherit !important;
 }
 
 blockquote {

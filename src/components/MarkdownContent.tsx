@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useTheme } from '../contexts/ThemeContext'
 import CodeBlock from './SyntaxHighlighter'
 
 interface MarkdownContentProps {
@@ -7,6 +8,7 @@ interface MarkdownContentProps {
 }
 
 export default function MarkdownContent({ content }: MarkdownContentProps) {
+  const { theme } = useTheme()
   const [processedContent, setProcessedContent] =
     useState<React.ReactNode>(null)
   const [mounted, setMounted] = useState(false)
@@ -39,7 +41,11 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
             .replace(/&#39;/g, "'")
 
           return (
-            <CodeBlock key={index} language={language}>
+            <CodeBlock
+              key={`${index}-${theme}`}
+              language={language}
+              theme={theme}
+            >
               {code}
             </CodeBlock>
           )
@@ -53,7 +59,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
     }
 
     processContent()
-  }, [content, mounted])
+  }, [content, mounted, theme])
 
   if (!mounted) {
     // Return unstyled content during SSR to avoid hydration mismatch

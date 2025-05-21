@@ -1,7 +1,6 @@
 'use client'
 import * as React from 'react'
-import { useTheme } from '../hooks/useTheme'
-import useLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
+import { useTheme } from '../contexts/ThemeContext'
 import Head from './Head'
 import Navbar from './Navbar'
 import Footer from './Footer'
@@ -14,11 +13,7 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = ({ children, title, description, path }) => {
-  const [theme, onThemeToggle] = useTheme('dark')
-
-  useLayoutEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
+  const { toggleTheme } = useTheme()
 
   return (
     <>
@@ -32,7 +27,7 @@ const Layout: React.FC<Props> = ({ children, title, description, path }) => {
         url={`https://w11i.me${path ? path : ''}`}
       />
       <main className="container">
-        <Navbar onThemeToggle={onThemeToggle} />
+        <Navbar onThemeToggle={toggleTheme} />
         <div className="content">{children}</div>
         <Footer />
       </main>
