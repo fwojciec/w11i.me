@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Image from 'next/image'
 import Layout from '../components/Layout'
-import styles from '../styles/Page.module.scss'
+import styles from '../styles/Page.module.css'
 
 const AboutPage: React.FC = () => {
   return (

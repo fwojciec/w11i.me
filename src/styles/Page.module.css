@@ -1,0 +1,22 @@
+.root {
+  width: 100%;
+  max-width: var(--content-width);
+  text-align: left;
+  padding: 20px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+@media (max-width: 900px) {
+  .root {
+    max-width: var(--tablet-content-width);
+  }
+}
+
+.root h1 {
+  margin: 0 0 10px;
+}
+
+.root img {
+  border-radius: 3px;
+}

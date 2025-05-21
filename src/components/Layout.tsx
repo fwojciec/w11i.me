@@ -16,11 +16,7 @@ const Layout: React.FC<Props> = ({ children, title, description, path }) => {
   const [theme, onThemeToggle] = useTheme('dark')
 
   useLayoutEffect(() => {
-    if (theme === 'light') {
-      document.querySelector('body').classList.add('dark-theme')
-    } else {
-      document.querySelector('body').classList.remove('dark-theme')
-    }
+    document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
 
   return (

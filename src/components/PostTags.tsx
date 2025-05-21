@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
-import styles from '../styles/PostTags.module.scss'
+import styles from '../styles/PostTags.module.css'
 
 interface Props {
   tags: string[]

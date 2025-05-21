@@ -1,20 +1,14 @@
-@use 'vars' as v;
-
 .root {
-  background: v.$light-background-more;
+  background: var(--color-background-more);
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
   padding: 20px;
+}
 
-  :global .dark-theme :local & {
-    background: v.$dark-background-more;
-  }
-
-  a {
-    text-decoration: none;
-  }
+.root a {
+  text-decoration: none;
 }
 
 .inner {
@@ -22,7 +16,7 @@
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
-  width: calc(#{v.$content-width} - 40px);
+  width: calc(var(--content-width) - 40px);
   max-width: 100%;
 }
 
@@ -40,22 +34,22 @@
   margin: 0 auto;
   padding: 0 15px;
   list-style: none;
-  border-right: 1px solid;
+  border-right: 1px solid var(--color-border);
   margin-right: 18px;
+}
 
-  li {
-    margin: 0 12px;
-  }
+.menu li {
+  margin: 0 12px;
+}
 
-  a {
-    display: inline-block;
-    margin-right: 15px;
-    text-decoration: none;
+.menu a {
+  display: inline-block;
+  margin-right: 15px;
+  text-decoration: none;
+}
 
-    &:last-of-type {
-      margin-right: 0;
-    }
-  }
+.menu a:last-of-type {
+  margin-right: 0;
 }
 
 .themeToggle {

@@ -3,10 +3,10 @@
   align-items: center;
   text-decoration: none;
   font-weight: 800;
+}
 
-  & img {
-    height: 44px;
-  }
+.root img {
+  height: 44px;
 }
 
 .mark {

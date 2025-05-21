@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styles from '../styles/Post.module.scss'
+import styles from '../styles/Post.module.css'
 
 interface PostProps {
   children?: React.ReactNode
