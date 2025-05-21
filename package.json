@@ -13,6 +13,9 @@
     "semi": false,
     "singleQuote": true
   },
+  "engines": {
+    "node": ">=18.x"
+  },
   "dependencies": {
     "gray-matter": "^4.0.3",
     "next": "^15.3.2",
