@@ -1,9 +1,16 @@
 import * as React from 'react'
 import Image from 'next/image'
-import Layout from '../components/Layout'
-import styles from '../styles/Page.module.css'
+import Layout from '../../components/Layout'
+import styles from '../../styles/Page.module.css'
+import { Metadata } from 'next'
 
-const AboutPage: React.FC = () => {
+export const metadata: Metadata = {
+  title: 'About',
+  description:
+    'Information about Filip Wojciechowski, the author of w11i.me blog.',
+}
+
+export default function AboutPage() {
   return (
     <Layout
       title="About"
@@ -40,5 +47,3 @@ const AboutPage: React.FC = () => {
     </Layout>
   )
 }
-
-export default AboutPage
