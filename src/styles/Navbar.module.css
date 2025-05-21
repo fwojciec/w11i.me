@@ -5,10 +5,10 @@
   justify-content: space-between;
   position: relative;
   padding: 20px;
+}
 
-  & a {
-    text-decoration: none;
-  }
+.root a {
+  text-decoration: none;
 }
 
 .inner {
@@ -36,20 +36,20 @@
   list-style: none;
   border-right: 1px solid var(--color-border);
   margin-right: 18px;
+}
 
-  & li {
-    margin: 0 12px;
-  }
+.menu li {
+  margin: 0 12px;
+}
 
-  & a {
-    display: inline-block;
-    margin-right: 15px;
-    text-decoration: none;
+.menu a {
+  display: inline-block;
+  margin-right: 15px;
+  text-decoration: none;
+}
 
-    &:last-of-type {
-      margin-right: 0;
-    }
-  }
+.menu a:last-of-type {
+  margin-right: 0;
 }
 
 .themeToggle {

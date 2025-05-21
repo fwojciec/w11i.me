@@ -5,20 +5,22 @@
   padding: 20px;
   margin: 0 auto 20px;
   position: relative;
+}
 
-  &:not(:last-of-type) {
-    border-bottom: 1px solid var(--color-border);
-  }
+.root:not(:last-of-type) {
+  border-bottom: 1px solid var(--color-border);
+}
 
-  @media (max-width: 900px) {
+@media (max-width: 900px) {
+  .root {
     max-width: var(--tablet-content-width);
   }
+}
 
-  & h1 {
-    margin: 0 0 10px;
-  }
+.root h1 {
+  margin: 0 0 10px;
+}
 
-  & img {
-    border-radius: 3px;
-  }
+.root img {
+  border-radius: 3px;
 }
