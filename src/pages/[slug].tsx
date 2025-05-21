@@ -14,8 +14,12 @@ interface Props {
 }
 
 export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({
-  params: { slug },
+  params,
 }) => {
+  if (!params?.slug) {
+    throw new Error('Slug parameter is required')
+  }
+  const { slug } = params
   const post = await getPostBySlug(slug)
   const content = await processContent(post.content)
 
