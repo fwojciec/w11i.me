@@ -15,13 +15,29 @@ let allPostsData: Array<{
   content: string
 }> | null = null
 
+interface CustomFileReader {
+  readdir: (path: string) => Promise<string[]>
+  readFile: (path: string, encoding: string) => Promise<string>
+}
+
 // Load all posts once and cache them
-async function loadAllPostsData() {
+async function loadAllPostsData(
+  customPostsDirectory?: string,
+  customFileReader?: CustomFileReader,
+) {
+  // Reset cache if custom arguments are provided, allowing tests to get a fresh state
+  if (customPostsDirectory || customFileReader) {
+    allPostsData = null
+  }
+
   if (allPostsData !== null) {
     return allPostsData
   }
 
-  const files = await fs.promises.readdir(postsDirectory)
+  const currentPostsDirectory = customPostsDirectory || postsDirectory
+  const reader = customFileReader || fs.promises
+
+  const files = await reader.readdir(currentPostsDirectory)
   const slugs = files
     .filter((file) => file.endsWith('.mdx'))
     .map((file) => file.replace(/\.mdx$/, ''))
@@ -30,8 +46,8 @@ async function loadAllPostsData() {
   for (const slug of slugs) {
     try {
       const realSlug = slug.replace(/\.mdx$/, '')
-      const fullPath = join(postsDirectory, `${realSlug}.mdx`)
-      const fileContents = await fs.promises.readFile(fullPath, 'utf8')
+      const fullPath = join(currentPostsDirectory, `${realSlug}.mdx`)
+      const fileContents = await reader.readFile(fullPath, 'utf8')
       const { data, content } = matter(fileContents)
 
       // Validate frontmatter with Zod
