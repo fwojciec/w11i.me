@@ -11,8 +11,15 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Inter UI', -apple-system, BlinkMacSystemFont, 'Roboto',
-    'Segoe UI', Helvetica, Arial, sans-serif;
+  font-family:
+    'Inter UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Roboto',
+    'Segoe UI',
+    Helvetica,
+    Arial,
+    sans-serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: var(--line-height);
@@ -134,7 +141,13 @@ figcaption.right {
 }
 
 code {
-  font-family: Iosevka, Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+  font-family:
+    Iosevka,
+    Consolas,
+    Monaco,
+    Andale Mono,
+    Ubuntu Mono,
+    monospace;
   font-feature-settings: normal;
   font-weight: normal;
   background: var(--color-background-secondary);
@@ -236,8 +249,15 @@ ol ol {
 button,
 input,
 textarea {
-  font-family: 'Inter UI', -apple-system, BlinkMacSystemFont, 'Roboto',
-    'Segoe UI', Helvetica, Arial, sans-serif;
+  font-family:
+    'Inter UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Roboto',
+    'Segoe UI',
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
 .container {
@@ -314,7 +334,8 @@ hr {
 
 /* Loading animation for skeletons */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

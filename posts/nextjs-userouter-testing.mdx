@@ -41,7 +41,7 @@ import { RouterContext } from 'next/dist/next-server/lib/router-context'
 
 export function withTestRouter(
   tree: React.ReactElement,
-  router: Partial<NextRouter> = {}
+  router: Partial<NextRouter> = {},
 ) {
   const {
     route = '',
@@ -106,7 +106,7 @@ const tree = withTestRouter(
     push,
     pathname: '/[lang]',
     asPath: '/en',
-  }
+  },
 )
 
 // an example test

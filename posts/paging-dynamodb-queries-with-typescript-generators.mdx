@@ -75,7 +75,7 @@ class DynamoDBCityRepo implements CityRepo {
   // ...
 
   private async *queryItemsGenerator(
-    queryInput: DynamoDB.DocumentClient.QueryInput
+    queryInput: DynamoDB.DocumentClient.QueryInput,
   ): AsyncGenerator<DynamoDB.DocumentClient.ItemList> {
     let lastEvaluatedKey: DynamoDB.DocumentClient.Key | undefined
     do {
@@ -116,7 +116,7 @@ class DynamoDBCityRepo implements CityRepo {
         ...page.map((item) => ({
           name: item.sk,
           population: item.population,
-        }))
+        })),
       )
     }
     return result
