@@ -22,37 +22,4 @@ jobs:
         run: npm ci
 
       - name: Run tests with coverage
-        id: test
         run: npm run test:coverage
-
-      - name: Generate coverage summary
-        id: coverage
-        if: always()
-        run: |
-          if [ -f coverage/coverage-summary.json ]; then
-            echo "COVERAGE_SUMMARY<<EOF" >> $GITHUB_OUTPUT
-            cat coverage/coverage-summary.json | jq -r '
-              .total | 
-              "**Coverage Summary:**\n" +
-              "- **Lines:** " + (.lines.pct|tostring) + "%\n" +
-              "- **Functions:** " + (.functions.pct|tostring) + "%\n" +
-              "- **Branches:** " + (.branches.pct|tostring) + "%\n" +
-              "- **Statements:** " + (.statements.pct|tostring) + "%"
-            '
-            echo "EOF" >> $GITHUB_OUTPUT
-          else
-            echo "COVERAGE_SUMMARY=No coverage data available" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Update job summary
-        if: always()
-        run: |
-          echo "## 🧪 Test Results" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.test.outcome }}" == "success" ]; then
-            echo "✅ All tests passed" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "${{ steps.coverage.outputs.COVERAGE_SUMMARY }}" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ Tests failed" >> $GITHUB_STEP_SUMMARY
-          fi
-

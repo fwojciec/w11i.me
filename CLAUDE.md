@@ -176,5 +176,5 @@ The site uses strict Zod validation for frontmatter. When adding new posts:
 **Test Pipeline:**
 
 - Tests run on Node 20.x (matching Vercel deployment environment)
-- Coverage summary displayed in job summary (visible in GitHub Actions UI)
-- Test results visible in PR status checks
+- Simple pass/fail status via GitHub PR status checks
+- Coverage reports generated but not displayed (available in logs)
