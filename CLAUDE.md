@@ -9,6 +9,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` - Build for production
 - `npm run typecheck` - Run TypeScript type checking
 - `npm run lint` - Run ESLint
+- `npm run prettier` - Format all files with Prettier
+- `npm run prettier:check` - Check if files are formatted correctly
 
 **Testing:**
 - `npm test` - Run tests in watch mode
@@ -19,6 +21,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Individual Test Execution:**
 - `npx vitest run src/__tests__/content-validation.test.ts` - Run specific test file
 - `npx vitest --reporter=verbose` - Detailed test output
+
+**Code Quality Workflow:**
+Run these commands before committing to ensure code quality:
+1. `npm run prettier` - Format code
+2. `npm run lint` - Check for linting issues
+3. `npm run typecheck` - Verify TypeScript types
+4. `npm run test:run` - Run all tests
+5. `npm run build` - Verify production build works
 
 ## Architecture Overview
 
@@ -84,14 +94,19 @@ The site uses strict Zod validation for frontmatter. When adding new posts:
 
 **Test Setup:**
 - Vitest configured with TypeScript support and path aliases
+- JSDOM environment for React component testing
+- React Testing Library for component tests
 - Test files located in `src/__tests__/`
 - Content validation tests ensure all blog posts meet schema requirements
 - Integration tests validate post loading and metadata consistency
 
 **Test Categories:**
 - `content-validation.test.ts` - Frontmatter schema validation
-- `posts.test.ts` - Blog post loading and integration tests  
-- `lib.test.ts` - Utility function tests
+- `posts.test.ts` - Blog post loading and integration tests
+- `markdown.test.ts` - Markdown processing and Callout component tests
+- `components/PostTitle.test.tsx` - React component tests with Testing Library
+- `date.test.ts` - Date utility function tests
+- `reading-time.test.ts` - Reading time estimation tests
 
 ## Development Guidelines
 

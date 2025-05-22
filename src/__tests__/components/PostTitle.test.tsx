@@ -27,10 +27,9 @@ describe('PostTitle Component', () => {
   })
 
   it('should apply the correct CSS class', () => {
-    const testTitle = "CSS Test"
+    const testTitle = 'CSS Test'
     const { container } = render(<PostTitle>{testTitle}</PostTitle>)
-    // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
     const h1Element = container.querySelector('h1') // Find h1 directly
-    expect(h1Element).toHaveClass('root') // From PostTitle.module.css
+    expect(h1Element?.className).toContain('root') // CSS modules hash the class names
   })
 })
