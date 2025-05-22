@@ -88,6 +88,7 @@ export default async function TagPage({ params }: Props) {
             author={meta.author}
             twitterProfile={meta.twitterProfile}
             tags={meta.tags}
+            readingTime={meta.readingTime}
           />
           <CoverImage image={meta.coverImage} />
           <p>{meta.excerpt}</p>

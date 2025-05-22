@@ -60,6 +60,7 @@ export default async function HomePage() {
               author={meta.author}
               twitterProfile={meta.twitterProfile}
               tags={meta.tags}
+              readingTime={meta.readingTime}
             />
             <CoverImage
               image={meta.coverImage}

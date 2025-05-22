@@ -6,12 +6,14 @@ interface Props {
   date: Date
   author: string
   twitterProfile?: string
+  readingTime: number
 }
 
 const PostDateAndAuthor: React.FC<Props> = ({
   date,
   author,
   twitterProfile,
+  readingTime,
 }) => {
   return (
     <div className={styles.root}>
@@ -26,6 +28,8 @@ const PostDateAndAuthor: React.FC<Props> = ({
         ) : (
           <span className={styles.author}>{author}</span>
         )}
+        <span className={styles.hyphen}>—</span>
+        <span>{readingTime} min read</span>
       </div>
     </div>
   )
