@@ -8,15 +8,23 @@ interface Props {
   author: string
   twitterProfile?: string
   tags: string[]
+  readingTime: number
 }
 
-const PostMeta: React.FC<Props> = ({ date, author, twitterProfile, tags }) => {
+const PostMeta: React.FC<Props> = ({
+  date,
+  author,
+  twitterProfile,
+  tags,
+  readingTime,
+}) => {
   return (
     <div className={styles.root}>
       <PostDateAndAuthor
         date={date}
         author={author}
         twitterProfile={twitterProfile}
+        readingTime={readingTime}
       />
       <PostTags tags={tags} />
     </div>

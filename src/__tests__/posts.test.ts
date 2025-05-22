@@ -25,6 +25,7 @@ describe('Posts', () => {
         expect(post.meta).toHaveProperty('author')
         expect(post.meta).toHaveProperty('excerpt')
         expect(post.meta).toHaveProperty('tags')
+        expect(post.meta).toHaveProperty('readingTime')
 
         expect(typeof post.meta.title).toBe('string')
         expect(typeof post.meta.date).toBe('string')
@@ -32,6 +33,8 @@ describe('Posts', () => {
         expect(typeof post.meta.excerpt).toBe('string')
         expect(Array.isArray(post.meta.tags)).toBe(true)
         expect(post.meta.tags.length).toBeGreaterThan(0)
+        expect(typeof post.meta.readingTime).toBe('number')
+        expect(post.meta.readingTime).toBeGreaterThan(0)
       })
     })
 
@@ -52,11 +55,11 @@ describe('Posts', () => {
 
       posts.forEach((post) => {
         if (post.meta.twitterProfile) {
-          expect(() => new URL(post.meta.twitterProfile)).not.toThrow()
+          expect(() => new URL(post.meta.twitterProfile!)).not.toThrow()
         }
 
         if (post.meta.coverImageCreditUrl) {
-          expect(() => new URL(post.meta.coverImageCreditUrl)).not.toThrow()
+          expect(() => new URL(post.meta.coverImageCreditUrl!)).not.toThrow()
         }
       })
     })

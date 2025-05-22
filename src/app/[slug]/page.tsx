@@ -118,6 +118,7 @@ export default async function PostPage({ params }: Props) {
             author={post.meta.author}
             twitterProfile={post.meta.twitterProfile}
             tags={post.meta.tags}
+            readingTime={post.meta.readingTime}
           />
           <CoverImage
             image={post.meta.coverImage}

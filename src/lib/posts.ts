@@ -6,12 +6,59 @@ import {
   type ValidatedFrontMatter,
 } from './content-validation'
 
+// Enhanced frontmatter with guaranteed readingTime
+export type EnhancedFrontMatter = ValidatedFrontMatter & {
+  readingTime: number
+}
+
+/**
+ * Calculate estimated reading time for content
+ * @param content - The markdown/MDX content
+ * @param wordsPerMinute - Average reading speed (default: 225 WPM)
+ * @returns Reading time in minutes, rounded up to nearest minute
+ */
+export function calculateReadingTime(
+  content: string,
+  wordsPerMinute = 225,
+): number {
+  // Remove MDX/markdown syntax and count words
+  const cleanContent = content
+    // Remove code blocks
+    .replace(/```[\s\S]*?```/g, '')
+    // Remove inline code
+    .replace(/`[^`]*`/g, '')
+    // Remove links but keep text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    // Remove image syntax
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '')
+    // Remove headings markers but keep text
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remove emphasis markers but keep text
+    .replace(/[*_]{1,2}([^*_]*)[*_]{1,2}/g, '$1')
+    // Remove HTML tags
+    .replace(/<[^>]*>/g, '')
+    // Remove frontmatter if any leaked through
+    .replace(/^---[\s\S]*?---/g, '')
+    .trim()
+
+  // Count words (split on whitespace and filter empty strings)
+  const words = cleanContent
+    .split(/\s+/)
+    .filter((word) => word.length > 0).length
+
+  // Calculate reading time and round up to nearest minute
+  const readingTimeMinutes = Math.ceil(words / wordsPerMinute)
+
+  // Return at least 1 minute for very short content
+  return Math.max(1, readingTimeMinutes)
+}
+
 const postsDirectory = join(process.cwd(), 'posts')
 
 // Simple in-memory cache for build time
 let allPostsData: Array<{
   slug: string
-  meta: ValidatedFrontMatter
+  meta: EnhancedFrontMatter
   content: string
 }> | null = null
 
@@ -37,9 +84,13 @@ async function loadAllPostsData() {
       // Validate frontmatter with Zod
       const validatedMeta = validateFrontmatter(data, `${realSlug}.mdx`)
 
+      // Calculate reading time if not provided in frontmatter
+      const readingTime =
+        validatedMeta.readingTime ?? calculateReadingTime(content)
+
       posts.push({
         slug: realSlug,
-        meta: validatedMeta,
+        meta: { ...validatedMeta, readingTime },
         content,
       })
     } catch (error) {
