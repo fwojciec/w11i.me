@@ -136,3 +136,21 @@ The site uses strict Zod validation for frontmatter. When adding new posts:
 
 **Node.js Version:**
 - Requires Node.js >= 20.x (specified in package.json engines)
+
+## Continuous Integration
+
+**GitHub Actions Workflows:**
+- `ci.yml` - Runs on all push/PR events with full test matrix (Node 20.x & 22.x)
+- `pr-checks.yml` - Enhanced PR validation with coverage reporting and auto-comments
+- `security.yml` - Weekly security audits and vulnerability scanning
+
+**CI Pipeline Steps:**
+1. Code formatting check (`prettier:check`)
+2. Linting (`lint`)
+3. Type checking (`typecheck`)
+4. Test execution (`test:run`)
+5. Build verification (`build`)
+6. Test coverage reporting (PRs only)
+
+**Required Status Checks:**
+All workflows must pass before merging PRs to main branch.
