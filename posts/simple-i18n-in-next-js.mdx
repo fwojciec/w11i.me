@@ -483,10 +483,10 @@ const LocaleSwitcher: React.FC = () => {
       const regex = new RegExp(`^/(${locales.join('|')})`)
       router.push(
         router.pathname,
-        router.asPath.replace(regex, `/${e.target.value}`)
+        router.asPath.replace(regex, `/${e.target.value}`),
       )
     },
-    [router]
+    [router],
   )
 
   return (

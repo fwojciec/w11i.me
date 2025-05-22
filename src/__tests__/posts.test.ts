@@ -1,10 +1,12 @@
-import { describe, it, expect } from 'vitest'
-import { getAllPosts, getAllPostsMeta, getPostBySlug } from '../lib/posts'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import * as postsLib from '../lib/posts'
+import { type CustomFileReader } from '../lib/posts'
 
-describe('Posts', () => {
+// Keep existing integration tests - they are valuable
+describe('Posts (Integration Tests)', () => {
   describe('getAllPosts', () => {
     it('should load all posts successfully', async () => {
-      const posts = await getAllPosts()
+      const posts = await postsLib.getAllPosts()
 
       expect(posts).toBeInstanceOf(Array)
       expect(posts.length).toBeGreaterThan(0)
@@ -39,7 +41,7 @@ describe('Posts', () => {
     })
 
     it('should have posts with valid dates', async () => {
-      const posts = await getAllPosts()
+      const posts = await postsLib.getAllPosts()
 
       posts.forEach((post) => {
         const date = new Date(post.meta.date)
@@ -51,7 +53,7 @@ describe('Posts', () => {
     })
 
     it('should have posts with valid URLs when present', async () => {
-      const posts = await getAllPosts()
+      const posts = await postsLib.getAllPosts()
 
       posts.forEach((post) => {
         if (post.meta.twitterProfile) {
@@ -67,7 +69,7 @@ describe('Posts', () => {
 
   describe('getAllPostsMeta', () => {
     it('should return posts metadata only', async () => {
-      const postsMeta = await getAllPostsMeta()
+      const postsMeta = await postsLib.getAllPostsMeta()
 
       expect(postsMeta).toBeInstanceOf(Array)
       expect(postsMeta.length).toBeGreaterThan(0)
@@ -81,8 +83,8 @@ describe('Posts', () => {
 
     it('should return same number of posts as getAllPosts', async () => {
       const [posts, postsMeta] = await Promise.all([
-        getAllPosts(),
-        getAllPostsMeta(),
+        postsLib.getAllPosts(),
+        postsLib.getAllPostsMeta(),
       ])
 
       expect(posts.length).toBe(postsMeta.length)
@@ -91,10 +93,10 @@ describe('Posts', () => {
 
   describe('getPostBySlug', () => {
     it('should return specific post by slug', async () => {
-      const posts = await getAllPosts()
-      const firstPost = posts[0]
+      const posts = await postsLib.getAllPosts()
+      const firstPost = posts[0] // Assuming there's at least one post
 
-      const post = await getPostBySlug(firstPost.slug)
+      const post = await postsLib.getPostBySlug(firstPost.slug)
 
       expect(post.slug).toBe(firstPost.slug)
       expect(post.meta.title).toBe(firstPost.meta.title)
@@ -102,7 +104,7 @@ describe('Posts', () => {
     })
 
     it('should throw error for non-existent slug', async () => {
-      await expect(getPostBySlug('non-existent-slug')).rejects.toThrow(
+      await expect(postsLib.getPostBySlug('non-existent-slug')).rejects.toThrow(
         'Post not found: non-existent-slug',
       )
     })
@@ -110,7 +112,7 @@ describe('Posts', () => {
 
   describe('Content expectations', () => {
     it('should have known blog posts', async () => {
-      const posts = await getAllPosts()
+      const posts = await postsLib.getAllPosts()
       const slugs = posts.map((p) => p.slug)
 
       // Verify some expected posts exist
@@ -126,7 +128,7 @@ describe('Posts', () => {
     })
 
     it('should have posts with reasonable content length', async () => {
-      const posts = await getAllPosts()
+      const posts = await postsLib.getAllPosts()
 
       posts.forEach((post) => {
         expect(post.content.length).toBeGreaterThan(100) // At least some content
@@ -136,7 +138,7 @@ describe('Posts', () => {
     })
 
     it('should have consistent author', async () => {
-      const posts = await getAllPosts()
+      const posts = await postsLib.getAllPosts()
 
       // All posts should be by Filip (for this blog)
       posts.forEach((post) => {

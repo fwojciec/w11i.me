@@ -10,7 +10,8 @@ pre[class*='language-'],
 pre[class*='language-'] > code {
   color: #a9a9b3;
   background: none;
-  font-family: Iosevka, Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-family:
+    Iosevka, Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   font-size: 1rem;
   text-align: left;
   white-space: pre;

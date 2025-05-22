@@ -17,7 +17,7 @@
   --tablet-width: 900px;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   /* Dark theme colors */
   --color-background: #292a2d;
   --color-background-secondary: #2c2f33;
@@ -29,7 +29,7 @@
 
 /* Media query for system preference */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme='light']) {
     --color-background: #292a2d;
     --color-background-secondary: #2c2f33;
     --color-background-more: #252627;
