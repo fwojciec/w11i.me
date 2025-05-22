@@ -19,7 +19,7 @@ const PostDateAndAuthor: React.FC<Props> = ({
     <div className={styles.root}>
       <span>{formatDate(date)}</span>
       <div className={styles.writtenBy}>
-        <span className={styles.hyphen}>—</span>
+        <span className={styles.hyphenBefore}>—</span>
         <span>by&nbsp;</span>
         {twitterProfile ? (
           <a className={styles.author} href={twitterProfile}>
@@ -28,7 +28,7 @@ const PostDateAndAuthor: React.FC<Props> = ({
         ) : (
           <span className={styles.author}>{author}</span>
         )}
-        <span className={styles.hyphen}>—</span>
+        <span className={styles.hyphenAfter}>—</span>
         <span>{readingTime} min read</span>
       </div>
     </div>

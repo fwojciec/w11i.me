@@ -62,7 +62,7 @@ let allPostsData: Array<{
   content: string
 }> | null = null
 
-interface CustomFileReader {
+export interface CustomFileReader {
   readdir: (path: string) => Promise<string[]>
   readFile: (path: string, encoding: string) => Promise<string>
 }
