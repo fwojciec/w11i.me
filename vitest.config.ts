@@ -8,6 +8,10 @@ export default defineConfig({
     include: ['**/*.test.{ts,tsx}'],
     exclude: ['node_modules', '.next', 'out'],
     setupFiles: ['./src/__tests__/setup.ts'],
+    coverage: {
+      reporter: ['text', 'json-summary', 'html'],
+      reportsDirectory: './coverage',
+    },
   },
   resolve: {
     alias: {
