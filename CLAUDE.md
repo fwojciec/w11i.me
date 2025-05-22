@@ -165,13 +165,13 @@ The site uses strict Zod validation for frontmatter. When adding new posts:
 
 **GitHub Actions Workflows:**
 
-- `tests.yml` - Runs tests with coverage on push/PR to main (Node 20.x only)
+- `tests.yml` - Runs tests with coverage on PR events only (Node 20.x only)
 
 **Vercel Integration:**
 
 - Vercel handles build, linting, and formatting checks on deployment
 - Prettier formatting issues cause lint failures, blocking deployment
-- GitHub Actions focus solely on test execution
+- GitHub Actions only run on PRs (main branch handled by Vercel)
 
 **Test Pipeline:**
 

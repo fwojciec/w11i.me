@@ -1,8 +1,6 @@
 name: Tests
 
 on:
-  push:
-    branches: [main]
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -62,7 +60,7 @@ jobs:
 
       - name: Comment PR with test results
         uses: actions/github-script@v7
-        if: always() && github.event_name == 'pull_request'
+        if: always()
         with:
           script: |
             const testSuccess = '${{ steps.test.outcome }}' === 'success';
