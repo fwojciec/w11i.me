@@ -1,3 +1,8 @@
+.root {
+  text-wrap: balance;
+}
+
 .root a {
   text-decoration: none;
+  display: block;
 }
