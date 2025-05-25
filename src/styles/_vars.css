@@ -7,34 +7,19 @@
   --color-text-secondary: #999;
   --color-border: #dcdcdc;
 
-  /* Typography Scale */
-  --font-size-base: 1.125rem; /* 18px - optimal for reading */
-  --type-scale-ratio: 1.333; /* Perfect fourth - harmonious scaling */
-  --line-height-base: 1.6; /* Optimal for readability */
-  --line-height-heading: 1.3; /* Tighter for headings */
+  /* Typography */
+  --font-size-base: 1rem; /* 16px - matching original theme */
+  --line-height-base: 1.54; /* Original Hello Friend line height */
+  --line-height-heading: 1.3; /* Original heading line height */
 
-  /* Calculated font sizes using modular scale */
-  --font-size-xs: calc(
-    var(--font-size-base) / var(--type-scale-ratio) / var(--type-scale-ratio)
-  ); /* ~0.63rem */
-  --font-size-sm: calc(
-    var(--font-size-base) / var(--type-scale-ratio)
-  ); /* ~0.84rem */
-  --font-size-md: var(--font-size-base); /* 1.125rem */
-  --font-size-lg: calc(
-    var(--font-size-base) * var(--type-scale-ratio)
-  ); /* ~1.5rem */
-  --font-size-xl: calc(
-    var(--font-size-base) * var(--type-scale-ratio) * var(--type-scale-ratio)
-  ); /* ~2rem */
-  --font-size-2xl: calc(
-    var(--font-size-base) * var(--type-scale-ratio) * var(--type-scale-ratio) *
-      var(--type-scale-ratio)
-  ); /* ~2.67rem */
-  --font-size-3xl: calc(
-    var(--font-size-base) * var(--type-scale-ratio) * var(--type-scale-ratio) *
-      var(--type-scale-ratio) * var(--type-scale-ratio)
-  ); /* ~3.56rem */
+  /* Font sizes - matching Hello Friend theme */
+  --font-size-xs: 0.875rem; /* 14px */
+  --font-size-sm: 0.9375rem; /* 15px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.375rem; /* 22px - h3 */
+  --font-size-2xl: 1.625rem; /* 26px - h2 */
+  --font-size-3xl: 2.625rem; /* 42px - h1 */
 
   /* Spacing scale based on 4px grid */
   --space-xs: 0.25rem; /* 4px */
@@ -45,9 +30,9 @@
   --space-2xl: 3rem; /* 48px */
   --space-3xl: 4rem; /* 64px */
 
-  /* Layout - adjusted for 18px base font to maintain optimal reading width */
-  --content-width: 900px; /* ~60-65 characters per line at 18px */
-  --tablet-content-width: 740px;
+  /* Layout - Hello Friend theme widths */
+  --content-width: 860px;
+  --tablet-content-width: 680px;
   --line-height: var(--line-height-base);
 
   /* Breakpoints */

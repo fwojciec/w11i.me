@@ -50,11 +50,11 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
                   style={{
                     backgroundColor: 'var(--color-background-secondary)',
                     color: 'var(--color-text)',
-                    padding: '1rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
+                    padding: '20px',
+                    borderRadius: '3px',
+                    fontSize: '0.95rem',
                     overflow: 'auto',
-                    margin: '1rem 0',
+                    margin: '40px 0',
                   }}
                 >
                   <code>{code}</code>

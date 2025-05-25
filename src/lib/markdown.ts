@@ -18,6 +18,12 @@ export async function processContent(content: string) {
     '<div class="callout callout-$1"></div>',
   )
 
+  // Convert Mark/Highlight components to HTML mark elements
+  processedContent = processedContent.replace(
+    /<(Mark|Highlight)>([\s\S]*?)<\/(Mark|Highlight)>/g,
+    '<mark class="mdx-highlight">$2</mark>',
+  )
+
   // Process as regular markdown (syntax highlighting will be added client-side)
   const result = await remark()
     .use(remarkHtml as any, { sanitize: false })
