@@ -1,0 +1,50 @@
+---
+title: 'The Friction Economy of Software Has Flipped'
+date: '2025-05-25'
+author: 'Filip Wojciechowski'
+excerpt: 'The economic calculations that shaped how we build software for decades just inverted. What if startup culture has become too conservative for the AI age?'
+coverImage: 'friction-economy-of-software.png'
+tags: ['ai', 'software-engineering', 'testing', 'development-practices']
+---
+
+## Testing Is Back In
+
+Last weekend, I rewrote an entire test suite. Not because I had to - because I could. What would have taken days of mind-numbing work took hours of thoughtful design. The drudgery vanished, but the thinking remained.
+
+This isn't about AI writing websites from prompts. It's about something more profound: the economic calculations that shaped how we build software for decades just inverted. What if startup culture has become too conservative for the AI age?
+
+## The Three-Day Refactor That Takes Three Hours
+
+Every programming decision used to be a friction calculation. Should we refactor this mess? Cost: 3 days. Benefit: marginally cleaner code. Decision: live with it.
+
+Now those three days are three hours. The practices we avoided because of friction became my weekend project. Generate comprehensive test suites at the perfect abstraction level. Systematically eliminate dead code using coverage tools. Refactor not just implementation but the entire test architecture.
+
+The friction didn't just decrease - it dropped by an order of magnitude for certain classes of work. This isn't about typing faster or generating boilerplate. It's about previously uneconomical practices suddenly becoming viable.
+
+## Your AI Collaborator Has Goldfish Memory
+
+The insight that changed my perspective - and I don't mean to be provocative here - <Highlight>LLM development should learn from open source maintenance.</Highlight> Both involve accepting code from contributors who don't share your full context. It's like switching from a first-person shooter to tower defense: different game, different strategies.
+
+Open source projects solved this with rigid practices - comprehensive tests, clear interfaces, assumption of transient contributors. We called this "overhead" in closed teams. But when your AI collaborator loses context between sessions, those practices become survival tools.
+
+Consider DuckDB: Mark Raasveldt gave a talk at DBTest 2022 about their testing approach. They use an extended version of the SQL logic test suite, adopted from SQLite - thousands of SQL queries with expected results. This lets them completely rewrite their implementation repeatedly - something that would be prohibitively expensive without such tests. That's exactly the state we need for effective LLM collaboration.
+
+## When Copying Disappeared, Monasteries Fell
+
+Friction economies create revolutionary gaps. When the printing press eliminated copying friction, it didn't make scribes faster - <Highlight>it destroyed the monastery's monopoly on knowledge.</Highlight> The revolution wasn't in the writing; it was in what became possible when copying wasn't the constraint.
+
+We're at a similar moment. What happens to software development when the friction of changing code approaches zero?
+
+The opportunity gap is opening. Those who recognize this will attempt to build systems of unprecedented quality and evolvability. Those who don't might end up wondering why their "AI-accelerated" development feels so clunky.
+
+## Moth to Flame
+
+Twenty years of vim, and I've loved every minute of it. So believe me that it is with a heavy heart that I say this: programming might no longer be about writing code.
+
+When refactoring friction disappears, we can actually leverage agentic coding tools at scale in real codebases. When the foundational practices are right, LLMs transform from clever demos into reliable collaborators on complex systems.
+
+The real opportunity isn't in using AI as a faster typewriter. <Highlight>It's in reorganizing our entire practice around capabilities that didn't exist six months ago.</Highlight>
+
+We may be entering an era where code becomes almost ephemeral - where the tests and interfaces matter more than implementations, where continuous refactoring becomes the norm rather than the exception. The solid ground we built our careers on is dissolving beneath our feet.
+
+The friction that defined our craft for 50 years just evaporated. Time to discover what software development becomes next.
