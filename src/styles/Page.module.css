@@ -20,3 +20,30 @@
 .root img {
   border-radius: 3px;
 }
+
+.socialLinks {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--primary-text);
+  transition: opacity 0.2s ease;
+}
+
+.socialLink:hover {
+  opacity: 0.7;
+}
+
+.socialIcon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
