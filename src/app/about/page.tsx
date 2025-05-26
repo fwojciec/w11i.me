@@ -28,19 +28,38 @@ export default function AboutPage() {
           style={{ width: '100%', height: 'auto', marginBottom: '2rem' }}
         />
         <p>
-          Hello! I&apos;m Filip. I took the scenic route to software engineering—from political theory PhD candidate to literary agent to staff engineer at <a href="https://www.acuitymd.com/">AcuityMD</a>. After making the leap to tech in my forties, I discovered my favorite career yet.
+          Hello! I&apos;m Filip. I took the scenic route to software
+          engineering—from political theory PhD candidate to literary agent to
+          staff engineer at <a href="https://www.acuitymd.com/">AcuityMD</a>.
+          After making the leap to tech in my forties, I discovered my favorite
+          career yet.
         </p>
         <p>
-          Based in the Bay Area, I write about AI, evolving software practices, and how technology is reshaping the way we build. When I&apos;m not coding, you&apos;ll find me running trails, playing with my son, or wondering what plot twist life has planned next.
+          Based in the Bay Area, I write about AI, evolving software practices,
+          and how technology is reshaping the way we build. When I&apos;m not
+          coding, you&apos;ll find me running trails, playing with my son, or
+          wondering what plot twist life has planned next.
         </p>
         <p className={styles.socialLinks}>
-          <a href="https://www.linkedin.com/in/filipwojciechowski/" className={styles.socialLink} aria-label="LinkedIn">
+          <a
+            href="https://www.linkedin.com/in/filipwojciechowski/"
+            className={styles.socialLink}
+            aria-label="LinkedIn"
+          >
             <LinkedInIcon className={styles.socialIcon} />
           </a>
-          <a href="https://twitter.com/filipcodes" className={styles.socialLink} aria-label="X (Twitter)">
+          <a
+            href="https://twitter.com/filipcodes"
+            className={styles.socialLink}
+            aria-label="X (Twitter)"
+          >
             <XIcon className={styles.socialIcon} />
           </a>
-          <a href="https://bsky.app/profile/fwojciec.bsky.social" className={styles.socialLink} aria-label="Bluesky">
+          <a
+            href="https://bsky.app/profile/fwojciec.bsky.social"
+            className={styles.socialLink}
+            aria-label="Bluesky"
+          >
             <BlueskyIcon className={styles.socialIcon} />
           </a>
         </p>
