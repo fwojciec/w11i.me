@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Layout from '../../components/Layout'
 import styles from '../../styles/Page.module.css'
 import { Metadata } from 'next'
+import { LinkedInIcon, XIcon, BlueskyIcon } from '../../components/SocialIcons'
 
 export const metadata: Metadata = {
   title: 'About',
@@ -24,24 +25,24 @@ export default function AboutPage() {
           alt="Filip Wojciechowski"
           width={860}
           height={540}
-          style={{ width: '100%', height: 'auto' }}
+          style={{ width: '100%', height: 'auto', marginBottom: '2rem' }}
         />
         <p>
-          Hi there, my name is Filip. I&apos;m a software engineer from Poland,
-          currently living in northern California. I started this blog as part
-          of my transition to a career as a software developer. I post about
-          technical topics I&apos;m passionate about: Go, Python,
-          JavaScript/TypeScript, software design, code quality, testing, and
-          various other software building practices. When not coding, I love
-          playing with my 3 year old son and running in Trione-Annadel State
-          Park.
+          Hello! I&apos;m Filip. I took the scenic route to software engineering—from political theory PhD candidate to literary agent to staff engineer at <a href="https://www.acuitymd.com/">AcuityMD</a>. After making the leap to tech in my forties, I discovered my favorite career yet.
         </p>
         <p>
-          This blog is written in React/Next.js and the source code is available
-          on <a href="https://github.com/fwojciec/w11i.me">Github</a>, along
-          with some of my other projects. You can reach me on{' '}
-          <a href="https://www.linkedin.com/in/filipwojciechowski/">LinkedIn</a>{' '}
-          or <a href="https://twitter.com/filipcodes">Twitter</a>.
+          Based in the Bay Area, I write about AI, evolving software practices, and how technology is reshaping the way we build. When I&apos;m not coding, you&apos;ll find me running trails, playing with my son, or wondering what plot twist life has planned next.
+        </p>
+        <p className={styles.socialLinks}>
+          <a href="https://www.linkedin.com/in/filipwojciechowski/" className={styles.socialLink} aria-label="LinkedIn">
+            <LinkedInIcon className={styles.socialIcon} />
+          </a>
+          <a href="https://twitter.com/filipcodes" className={styles.socialLink} aria-label="X (Twitter)">
+            <XIcon className={styles.socialIcon} />
+          </a>
+          <a href="https://bsky.app/profile/fwojciec.bsky.social" className={styles.socialLink} aria-label="Bluesky">
+            <BlueskyIcon className={styles.socialIcon} />
+          </a>
         </p>
       </div>
     </Layout>
