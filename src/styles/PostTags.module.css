@@ -14,7 +14,9 @@
   padding: 4px 10px;
   border-radius: 4px;
   background: var(--color-accent-subtle);
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .tag:hover {

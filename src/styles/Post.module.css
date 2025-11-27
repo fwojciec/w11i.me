@@ -29,7 +29,9 @@
 
 .root img {
   border-radius: 6px;
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
 .root img:hover {

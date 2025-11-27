@@ -1,0 +1,131 @@
+.root {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  max-width: var(--content-width);
+  padding: 24px 20px;
+  margin: 0 auto;
+  text-align: left;
+  transition: border-color var(--transition-slow);
+}
+
+.root:not(:last-of-type) {
+  border-bottom: 1px solid var(--color-border);
+}
+
+@media (max-width: 900px) {
+  .root {
+    max-width: var(--tablet-content-width);
+  }
+}
+
+@media (max-width: 600px) {
+  .root {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+/* Posts without cover images */
+.noImage {
+  padding-left: 24px;
+  border-left: 3px solid var(--color-accent);
+  transition: border-color var(--transition-slow);
+}
+
+@media (max-width: 600px) {
+  .noImage {
+    padding-left: 20px;
+  }
+}
+
+.imageLink {
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 200px;
+  height: 125px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.imageWrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .imageWrapper:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .imageWrapper {
+    width: 100%;
+    height: 180px;
+  }
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.title a {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.title a:hover {
+  color: var(--color-accent);
+}
+
+.excerpt {
+  margin: 0 0 12px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.readMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  transition:
+    gap var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.readMore:hover {
+  gap: 10px;
+  color: var(--color-accent-hover);
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .readMore {
+    transition: color var(--transition-fast);
+  }
+  .readMore:hover {
+    gap: 6px;
+  }
+}

@@ -7,7 +7,9 @@
   margin: 1em 0 0;
   font-size: var(--font-size-sm);
   color: var(--color-accent);
-  transition: gap var(--transition-fast), color var(--transition-fast);
+  transition:
+    gap var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .root:hover {
