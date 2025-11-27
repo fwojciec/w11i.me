@@ -15,3 +15,12 @@
   color: var(--color-accent-hover);
   text-decoration: none;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: color var(--transition-fast);
+  }
+  .root:hover {
+    gap: 6px;
+  }
+}

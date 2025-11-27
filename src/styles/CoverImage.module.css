@@ -15,6 +15,12 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .image:hover {
+    transform: none;
+  }
+}
+
 .credit {
   display: block;
   font-size: var(--font-size-xs);

@@ -77,3 +77,9 @@
   background-color: var(--color-background-secondary);
   transform: scale(1.05);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .themeToggle:hover {
+    transform: none;
+  }
+}

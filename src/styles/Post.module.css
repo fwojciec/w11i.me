@@ -37,6 +37,12 @@
   box-shadow: var(--shadow-lg);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .root img:hover {
+    transform: none;
+  }
+}
+
 /* MDX-specific styling */
 .root :global(.callout) {
   margin: 20px 0;
