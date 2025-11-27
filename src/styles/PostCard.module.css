@@ -6,6 +6,7 @@
   padding: 24px 20px;
   margin: 0 auto;
   text-align: left;
+  transition: border-color var(--transition-slow);
 }
 
 .root:not(:last-of-type) {
@@ -29,6 +30,7 @@
 .noImage {
   padding-left: 24px;
   border-left: 3px solid var(--color-accent);
+  transition: border-color var(--transition-slow);
 }
 
 @media (max-width: 600px) {
