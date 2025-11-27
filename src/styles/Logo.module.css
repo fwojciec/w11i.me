@@ -17,10 +17,11 @@
   display: inline-block;
   width: 10px;
   height: 1rem;
-  background: #fe5186;
+  background: var(--color-accent);
   margin-left: 5px;
-  border-radius: 1px;
+  border-radius: 2px;
   animation: cursor 1s infinite;
+  transition: background-color var(--transition-slow);
 }
 
 .text,
@@ -37,5 +38,12 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+    opacity: 1;
   }
 }

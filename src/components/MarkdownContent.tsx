@@ -16,6 +16,8 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // This is a valid pattern for detecting client-side hydration
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
   }, [])
 

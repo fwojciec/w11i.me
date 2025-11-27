@@ -1,9 +1,24 @@
 .root {
-  margin-top: 5px;
-  opacity: 0.5;
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
 }
 
 .tag {
   display: inline-block;
-  margin-right: 10px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--color-accent-subtle);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.tag:hover {
+  background: var(--color-accent);
+  color: #fff;
+  text-decoration: none;
 }

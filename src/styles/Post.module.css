@@ -2,9 +2,10 @@
   width: 100%;
   max-width: var(--content-width);
   text-align: left;
-  padding: 20px;
-  margin: 0 auto 20px;
+  padding: 32px 20px;
+  margin: 0 auto;
   position: relative;
+  transition: background-color var(--transition-base);
 }
 
 .root:not(:last-of-type) {
@@ -18,11 +19,28 @@
 }
 
 .root h1 {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
+  transition: color var(--transition-fast);
+}
+
+.root h1:hover {
+  color: var(--color-accent);
 }
 
 .root img {
-  border-radius: 3px;
+  border-radius: 6px;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.root img:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root img:hover {
+    transform: none;
+  }
 }
 
 /* MDX-specific styling */

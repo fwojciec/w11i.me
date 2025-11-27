@@ -1,20 +1,39 @@
 .root {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .image {
   position: relative;
   overflow: hidden;
-  border-radius: 3px;
-  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.image:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image:hover {
+    transform: none;
+  }
 }
 
 .credit {
   display: block;
-  font-size: 0.7rem;
-  font-weight: 600;
-  margin-top: 15px;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  margin-top: 12px;
   text-decoration: none;
   text-transform: uppercase;
   text-align: right;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+  transition: color var(--transition-fast);
+}
+
+.credit:hover {
+  color: var(--color-accent);
 }

@@ -9,7 +9,7 @@ describe('Reading Time Calculation', () => {
     expect(posts.length).toBeGreaterThan(0)
 
     // Check that all posts have readingTime
-    posts.forEach(({ slug, meta }) => {
+    posts.forEach(({ meta }) => {
       expect(meta.readingTime).toBeDefined()
       expect(typeof meta.readingTime).toBe('number')
       expect(meta.readingTime).toBeGreaterThan(0)
@@ -31,7 +31,7 @@ describe('Reading Time Calculation', () => {
   it('should provide reasonable reading times', async () => {
     const posts = await getAllPostsMeta()
 
-    posts.forEach(({ slug, meta }) => {
+    posts.forEach(({ meta }) => {
       // Reading time should be reasonable (1-60 minutes for blog posts)
       expect(meta.readingTime).toBeGreaterThanOrEqual(1)
       expect(meta.readingTime).toBeLessThanOrEqual(60)
