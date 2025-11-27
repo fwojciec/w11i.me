@@ -22,7 +22,9 @@ body {
   font-feature-settings: 'liga', 'tnum', 'case', 'calt', 'zero', 'ss01', 'locl';
   -webkit-overflow-scrolling: touch;
   -webkit-text-size-adjust: 100%;
-  transition: background-color var(--transition-slow), color var(--transition-slow);
+  transition:
+    background-color var(--transition-slow),
+    color var(--transition-slow);
 }
 
 h1,
@@ -84,7 +86,9 @@ a {
   color: var(--color-link);
   text-decoration-color: var(--color-border);
   text-underline-offset: 0.15em;
-  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    text-decoration-color var(--transition-fast);
 }
 
 a:hover {
@@ -400,70 +404,5 @@ mark.mdx-highlight:hover {
   }
   50% {
     opacity: 0.5;
-  }
-}
-
-/* Entrance animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Apply to posts with staggered delay */
-.content > article,
-.content > div {
-  animation: fadeInUp 0.5s ease-out both;
-}
-
-.content > article:nth-child(1),
-.content > div:nth-child(1) {
-  animation-delay: 0ms;
-}
-
-.content > article:nth-child(2),
-.content > div:nth-child(2) {
-  animation-delay: 50ms;
-}
-
-.content > article:nth-child(3),
-.content > div:nth-child(3) {
-  animation-delay: 100ms;
-}
-
-.content > article:nth-child(4),
-.content > div:nth-child(4) {
-  animation-delay: 150ms;
-}
-
-.content > article:nth-child(5),
-.content > div:nth-child(5) {
-  animation-delay: 200ms;
-}
-
-.content > article:nth-child(n + 6),
-.content > div:nth-child(n + 6) {
-  animation-delay: 250ms;
-}
-
-/* Respect reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .content > article,
-  .content > div {
-    animation: none;
   }
 }

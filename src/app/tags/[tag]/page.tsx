@@ -1,10 +1,5 @@
-import Link from 'next/link'
-import CoverImage from '../../../components/CoverImage'
 import Layout from '../../../components/Layout'
-import Post from '../../../components/Post'
-import PostMeta from '../../../components/PostMeta'
-import PostTitle from '../../../components/PostTitle'
-import ReadMore from '../../../components/ReadMore'
+import PostCard from '../../../components/PostCard'
 import { tsFromStr } from '../../../lib/date'
 import { getAllPostsMeta } from '../../../lib/posts'
 import { Metadata } from 'next'
@@ -77,23 +72,18 @@ export default async function TagPage({ params }: Props) {
         Posts tagged with: <span>{`#${tag}`}</span>
       </div>
       {filteredPosts.map(({ slug, meta }) => (
-        <Post key={slug}>
-          <PostTitle>
-            <Link href={`/${slug}`} className="post-title-link">
-              {meta.title}
-            </Link>
-          </PostTitle>
-          <PostMeta
-            date={new Date(meta.date)}
-            author={meta.author}
-            twitterProfile={meta.twitterProfile}
-            tags={meta.tags}
-            readingTime={meta.readingTime}
-          />
-          <CoverImage image={meta.coverImage} />
-          <p>{meta.excerpt}</p>
-          <ReadMore slug={slug} />
-        </Post>
+        <PostCard
+          key={slug}
+          slug={slug}
+          title={meta.title}
+          date={new Date(meta.date)}
+          author={meta.author}
+          twitterProfile={meta.twitterProfile}
+          tags={meta.tags}
+          readingTime={meta.readingTime}
+          excerpt={meta.excerpt}
+          coverImage={meta.coverImage}
+        />
       ))}
     </Layout>
   )

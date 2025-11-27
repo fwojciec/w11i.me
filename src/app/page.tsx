@@ -1,13 +1,8 @@
 import * as React from 'react'
-import Link from 'next/link'
 import { getAllPostsMeta } from '../lib/posts'
 import { tsFromStr } from '../lib/date'
 import Layout from '../components/Layout'
-import PostMeta from '../components/PostMeta'
-import Post from '../components/Post'
-import PostTitle from '../components/PostTitle'
-import CoverImage from '../components/CoverImage'
-import ReadMore from '../components/ReadMore'
+import PostCard from '../components/PostCard'
 
 export default async function HomePage() {
   const posts = await getAllPostsMeta()
@@ -49,26 +44,18 @@ export default async function HomePage() {
       />
       <Layout>
         {sortedPosts.map(({ slug, meta }) => (
-          <Post key={slug}>
-            <PostTitle>
-              <Link href={`/${slug}`} className="post-title-link">
-                {meta.title}
-              </Link>
-            </PostTitle>
-            <PostMeta
-              date={new Date(meta.date)}
-              author={meta.author}
-              twitterProfile={meta.twitterProfile}
-              tags={meta.tags}
-              readingTime={meta.readingTime}
-            />
-            <CoverImage
-              image={meta.coverImage}
-              alt={`${meta.title} Cover Image`}
-            />
-            <p>{meta.excerpt}</p>
-            <ReadMore slug={slug} />
-          </Post>
+          <PostCard
+            key={slug}
+            slug={slug}
+            title={meta.title}
+            date={new Date(meta.date)}
+            author={meta.author}
+            twitterProfile={meta.twitterProfile}
+            tags={meta.tags}
+            readingTime={meta.readingTime}
+            excerpt={meta.excerpt}
+            coverImage={meta.coverImage}
+          />
         ))}
       </Layout>
     </>
